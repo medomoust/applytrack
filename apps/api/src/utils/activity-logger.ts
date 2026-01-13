@@ -4,7 +4,7 @@ import prisma from '../db/prisma';
 interface CreateActivityLogParams {
   userId: string;
   jobApplicationId?: string;
-  eventType: ActivityEventType;
+  eventType: typeof ActivityEventType[keyof typeof ActivityEventType];
   description: string;
   metadata?: Record<string, any>;
 }

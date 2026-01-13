@@ -1,5 +1,5 @@
-// Types
-export * from './types.js';
+// Runtime constants (includes enum objects)
+export * from './constants.js';
 
 // Auth schemas
 export * from './auth.schemas.js';

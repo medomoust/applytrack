@@ -1,22 +1,16 @@
 import { z } from 'zod';
-import { WorkMode, EmploymentType, ApplicationStatus, Priority } from './types';
+import type { WorkMode, EmploymentType, ApplicationStatus, Priority } from './types.js';
+import { WORK_MODES, EMPLOYMENT_TYPES, APPLICATION_STATUSES, PRIORITIES, ApplicationStatus as ApplicationStatusEnum } from './constants.js';
 
 // Create job application
 export const createJobApplicationSchema = z.object({
   company: z.string().min(1, 'Company is required').max(200),
   roleTitle: z.string().min(1, 'Role title is required').max(200),
   location: z.string().max(200).optional(),
-  workMode: z.enum([WorkMode.REMOTE, WorkMode.HYBRID, WorkMode.ONSITE]),
-  employmentType: z.enum([EmploymentType.FULLTIME, EmploymentType.CONTRACT, EmploymentType.INTERN]),
-  status: z.enum([
-    ApplicationStatus.WISHLIST,
-    ApplicationStatus.APPLIED,
-    ApplicationStatus.INTERVIEW,
-    ApplicationStatus.OFFER,
-    ApplicationStatus.REJECTED,
-    ApplicationStatus.GHOSTED,
-  ]).default(ApplicationStatus.WISHLIST),
-  priority: z.enum([Priority.LOW, Priority.MEDIUM, Priority.HIGH]).default(Priority.MEDIUM),
+  workMode: z.enum(WORK_MODES),
+  employmentType: z.enum(EMPLOYMENT_TYPES),
+  status: z.enum(APPLICATION_STATUSES).default(ApplicationStatusEnum.WISHLIST),
+  priority: z.enum(PRIORITIES).default('medium'),
   appliedDate: z.string().datetime().optional(),
   nextFollowUpDate: z.string().datetime().optional(),
   salaryTarget: z.number().positive().optional(),
@@ -38,17 +32,10 @@ export const jobApplicationSchema = z.object({
   company: z.string(),
   roleTitle: z.string(),
   location: z.string().nullable(),
-  workMode: z.enum([WorkMode.REMOTE, WorkMode.HYBRID, WorkMode.ONSITE]),
-  employmentType: z.enum([EmploymentType.FULLTIME, EmploymentType.CONTRACT, EmploymentType.INTERN]),
-  status: z.enum([
-    ApplicationStatus.WISHLIST,
-    ApplicationStatus.APPLIED,
-    ApplicationStatus.INTERVIEW,
-    ApplicationStatus.OFFER,
-    ApplicationStatus.REJECTED,
-    ApplicationStatus.GHOSTED,
-  ]),
-  priority: z.enum([Priority.LOW, Priority.MEDIUM, Priority.HIGH]),
+  workMode: z.enum(WORK_MODES),
+  employmentType: z.enum(EMPLOYMENT_TYPES),
+  status: z.enum(APPLICATION_STATUSES),
+  priority: z.enum(PRIORITIES),
   appliedDate: z.string().nullable(),
   nextFollowUpDate: z.string().nullable(),
   salaryTarget: z.number().nullable(),
@@ -65,17 +52,10 @@ export type JobApplication = z.infer<typeof jobApplicationSchema>;
 export const listJobApplicationsQuerySchema = z.object({
   page: z.coerce.number().int().positive().default(1),
   pageSize: z.coerce.number().int().positive().max(100).default(20),
-  status: z.enum([
-    ApplicationStatus.WISHLIST,
-    ApplicationStatus.APPLIED,
-    ApplicationStatus.INTERVIEW,
-    ApplicationStatus.OFFER,
-    ApplicationStatus.REJECTED,
-    ApplicationStatus.GHOSTED,
-  ]).optional(),
-  workMode: z.enum([WorkMode.REMOTE, WorkMode.HYBRID, WorkMode.ONSITE]).optional(),
-  employmentType: z.enum([EmploymentType.FULLTIME, EmploymentType.CONTRACT, EmploymentType.INTERN]).optional(),
-  priority: z.enum([Priority.LOW, Priority.MEDIUM, Priority.HIGH]).optional(),
+  status: z.enum(APPLICATION_STATUSES).optional(),
+  workMode: z.enum(WORK_MODES).optional(),
+  employmentType: z.enum(EMPLOYMENT_TYPES).optional(),
+  priority: z.enum(PRIORITIES).optional(),
   archived: z.preprocess((val) => {
     // Handle string boolean values from query params
     if (val === 'true') return true;

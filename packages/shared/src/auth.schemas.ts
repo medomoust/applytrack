@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { UserRole } from './types';
+import type { UserRole } from './types.js';
+import { USER_ROLES } from './constants.js';
 
 // Sign up
 export const signUpSchema = z.object({
@@ -35,7 +36,7 @@ export const userSchema = z.object({
   id: z.string(),
   email: z.string(),
   name: z.string().nullable(),
-  role: z.enum([UserRole.USER, UserRole.ADMIN]),
+  role: z.enum(USER_ROLES),
   isActive: z.boolean(),
   createdAt: z.string(),
   updatedAt: z.string(),
