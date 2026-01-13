@@ -28,6 +28,23 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Root route - API info
+app.get('/', (req, res) => {
+  res.json({
+    name: 'ApplyTrack API',
+    version: '1.0.0',
+    status: 'running',
+    endpoints: {
+      auth: '/api/auth',
+      users: '/api/users',
+      applications: '/api/applications',
+      activity: '/api/activity',
+      dashboard: '/api/dashboard',
+      health: '/health',
+    },
+  });
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
