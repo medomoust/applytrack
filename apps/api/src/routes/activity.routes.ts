@@ -49,7 +49,7 @@ router.get('/', async (req: AuthRequest, res: Response, next) => {
     });
 
     res.json({
-      data: logs.map(log => ({
+      data: logs.map((log: any) => ({
         id: log.id,
         userId: log.userId,
         jobApplicationId: log.jobApplicationId,

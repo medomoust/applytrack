@@ -64,7 +64,7 @@ router.get('/', async (req: AuthRequest, res: Response, next) => {
     });
 
     res.json({
-      data: applications.map(app => ({
+      data: applications.map((app: any) => ({
         ...app,
         salaryTarget: app.salaryTarget ? Number(app.salaryTarget) : null,
         appliedDate: app.appliedDate?.toISOString() || null,

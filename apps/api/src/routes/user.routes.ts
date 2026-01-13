@@ -57,7 +57,7 @@ router.get('/', async (req: AuthRequest, res: Response, next) => {
     });
 
     res.json({
-      data: users.map(user => ({
+      data: users.map((user: any) => ({
         id: user.id,
         email: user.email,
         name: user.name,

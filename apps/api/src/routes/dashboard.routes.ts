@@ -65,7 +65,7 @@ router.get('/stats', async (req: AuthRequest, res: Response, next) => {
     });
 
     // Applications by status
-    const byStatus = statusCounts.reduce((acc, item) => {
+    const byStatus = statusCounts.reduce((acc: any, item: any) => {
       acc[item.status] = item._count;
       return acc;
     }, {} as Record<string, number>);
@@ -87,7 +87,7 @@ router.get('/stats', async (req: AuthRequest, res: Response, next) => {
     });
 
     // Group by date
-    const timeline = timelineData.reduce((acc, item) => {
+    const timeline = timelineData.reduce((acc: any, item: any) => {
       const date = item.createdAt.toISOString().split('T')[0];
       if (!acc[date]) {
         acc[date] = { date, count: 0 };
@@ -133,7 +133,7 @@ router.get('/activity', async (req: AuthRequest, res: Response, next) => {
     });
 
     res.json(
-      logs.map(log => ({
+      logs.map((log: any) => ({
         id: log.id,
         eventType: log.eventType,
         description: log.description,
