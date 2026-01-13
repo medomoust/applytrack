@@ -1,0 +1,21 @@
+# Screenshots
+
+This directory contains screenshots of the ApplyTrack application for documentation purposes.
+
+## Required Screenshots
+
+Please add the following screenshots after deployment:
+
+1. **dashboard.png** - Main dashboard view showing KPI cards and charts
+2. **applications.png** - Applications list with filters and pagination
+3. **application-details.png** - Detailed view of a single application (modal or drawer)
+4. **activity.png** - Activity log showing recent changes
+5. **admin.png** - Admin panel for user management
+6. **dark-mode.png** - Application in dark mode
+
+## Screenshot Guidelines
+
+- Resolution: 1920x1080 or higher
+- Format: PNG
+- Include browser chrome to show URL
+- Use demo account data for privacy
