@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api';
-import { ApplicationStatus } from '@applytrack/shared';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
@@ -47,7 +46,7 @@ export function ApplicationsPage() {
   });
 
   const updateStatusMutation = useMutation({
-    mutationFn: ({ id, status }: { id: string; status: ApplicationStatus }) =>
+    mutationFn: ({ id, status }: { id: string; status: typeof ApplicationStatus[keyof typeof ApplicationStatus] }) =>
       apiClient.updateApplication(id, { status }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['applications'] });
@@ -90,7 +89,7 @@ export function ApplicationsPage() {
     setIsModalOpen(true);
   };
 
-  const handleStatusChange = (appId: string, newStatus: ApplicationStatus) => {
+  const handleStatusChange = (appId: string, newStatus: typeof ApplicationStatus[keyof typeof ApplicationStatus]) => {
     updateStatusMutation.mutate({ id: appId, status: newStatus });
   };
 

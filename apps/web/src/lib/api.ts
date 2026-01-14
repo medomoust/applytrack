@@ -12,7 +12,7 @@ import {
   ListActivityLogsQuery,
 } from '@applytrack/shared';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_URL = (import.meta as any).env.VITE_API_URL || 'http://localhost:3001';
 
 class ApiClient {
   private accessToken: string | null = null;
@@ -25,9 +25,9 @@ class ApiClient {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      ...options.headers,
+      ...(options.headers as Record<string, string>),
     };
 
     if (this.accessToken) {

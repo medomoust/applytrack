@@ -23,7 +23,7 @@ interface Application {
   id: string;
   company: string;
   roleTitle: string;
-  status: ApplicationStatus;
+  status: typeof ApplicationStatus[keyof typeof ApplicationStatus];
   priority: string;
   appliedDate: string;
   location?: string;
@@ -32,7 +32,7 @@ interface Application {
 }
 
 interface KanbanColumnProps {
-  status: ApplicationStatus;
+  status: typeof ApplicationStatus[keyof typeof ApplicationStatus];
   applications: Application[];
   title: string;
   count: number;
@@ -169,7 +169,7 @@ function KanbanColumn({ status, applications, title, count, color, onEdit }: Kan
 
 interface KanbanBoardProps {
   applications: Application[];
-  onStatusChange: (appId: string, newStatus: ApplicationStatus) => void;
+  onStatusChange: (appId: string, newStatus: typeof ApplicationStatus[keyof typeof ApplicationStatus]) => void;
   onEdit: (app: Application) => void;
 }
 
@@ -184,13 +184,13 @@ export function KanbanBoard({ applications, onStatusChange, onEdit }: KanbanBoar
     })
   );
 
-  const columns: { status: ApplicationStatus; title: string; color: string }[] = [
-    { status: 'wishlist' as ApplicationStatus, title: 'Wishlist', color: 'border-gray-300' },
-    { status: 'applied' as ApplicationStatus, title: 'Applied', color: 'border-blue-400' },
-    { status: 'interview' as ApplicationStatus, title: 'Interview', color: 'border-purple-400' },
-    { status: 'offer' as ApplicationStatus, title: 'Offer', color: 'border-green-400' },
-    { status: 'rejected' as ApplicationStatus, title: 'Rejected', color: 'border-red-400' },
-    { status: 'ghosted' as ApplicationStatus, title: 'Ghosted', color: 'border-orange-400' },
+  const columns: { status: typeof ApplicationStatus[keyof typeof ApplicationStatus]; title: string; color: string }[] = [
+    { status: 'wishlist' as typeof ApplicationStatus[keyof typeof ApplicationStatus], title: 'Wishlist', color: 'border-gray-300' },
+    { status: 'applied' as typeof ApplicationStatus[keyof typeof ApplicationStatus], title: 'Applied', color: 'border-blue-400' },
+    { status: 'interview' as typeof ApplicationStatus[keyof typeof ApplicationStatus], title: 'Interview', color: 'border-purple-400' },
+    { status: 'offer' as typeof ApplicationStatus[keyof typeof ApplicationStatus], title: 'Offer', color: 'border-green-400' },
+    { status: 'rejected' as typeof ApplicationStatus[keyof typeof ApplicationStatus], title: 'Rejected', color: 'border-red-400' },
+    { status: 'ghosted' as typeof ApplicationStatus[keyof typeof ApplicationStatus], title: 'Ghosted', color: 'border-orange-400' },
   ];
 
   const handleDragStart = (event: DragStartEvent) => {
