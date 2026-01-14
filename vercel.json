@@ -1,6 +1,6 @@
 {
-  "buildCommand": "npm run build:web:vercel",
+  "buildCommand": "npm install && cd packages/shared && npm run build && cd ../.. && cd apps/web && npm run build",
   "outputDirectory": "apps/web/dist",
-  "installCommand": "npm install",
+  "installCommand": null,
   "framework": null
 }
