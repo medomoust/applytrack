@@ -12,6 +12,7 @@
     "build": "npm run build --workspaces --if-present",
     "build:api": "npm run build --workspace=apps/api",
     "build:web": "npm run build --workspace=apps/web",
+    "build:web:vercel": "npm install --workspace=packages/shared && npm run build --workspace=packages/shared && npm install --workspace=apps/web && npm run build --workspace=apps/web",
     "build:render": "npm run build --workspace=packages/shared && npx prisma generate --schema=apps/api/prisma/schema.prisma && npm run build --workspace=apps/api",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
