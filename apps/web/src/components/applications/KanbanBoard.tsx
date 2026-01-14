@@ -209,7 +209,7 @@ export function KanbanBoard({ applications, onStatusChange, onEdit }: KanbanBoar
 
     // Check if dropped over another application or column
     const overApp = applications.find((a) => a.id === over.id);
-    const newStatus = overApp ? overApp.status : (over.data.current?.status as ApplicationStatus);
+    const newStatus = overApp ? overApp.status : (over.data.current?.status as typeof ApplicationStatus[keyof typeof ApplicationStatus]);
 
     if (newStatus && activeApp.status !== newStatus) {
       onStatusChange(activeApp.id, newStatus);

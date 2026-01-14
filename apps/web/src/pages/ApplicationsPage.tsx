@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api';
+import { ApplicationStatus } from '@applytrack/shared';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
@@ -33,7 +34,7 @@ export function ApplicationsPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('kanban');
   const [filters, setFilters] = useState({
     search: '',
-    status: undefined as ApplicationStatus | undefined,
+    status: undefined as typeof ApplicationStatus[keyof typeof ApplicationStatus] | undefined,
     archived: false,
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
