@@ -9,11 +9,9 @@ export function ProtectedLayout() {
   const { isAuthenticated, isLoading, checkAuth } = useAuthStore();
 
   useEffect(() => {
-    // Only check auth if not already authenticated
-    if (!isAuthenticated) {
-      checkAuth();
-    }
-  }, [checkAuth, isAuthenticated]);
+    // Check auth once on mount
+    checkAuth();
+  }, []); // Empty dependency array - only run once
 
   if (isLoading) {
     return (

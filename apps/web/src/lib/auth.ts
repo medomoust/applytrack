@@ -47,10 +47,15 @@ export const useAuthStore = create<AuthStore>()(
         try {
           // Try to refresh token
           const response = await apiClient.refresh();
-          set({ user: response.user, isAuthenticated: true });
+          set({ 
+            user: response.user, 
+            isAuthenticated: true,
+            accessToken: response.accessToken 
+          });
           apiClient.setAccessToken(response.accessToken);
         } catch (error) {
-          set({ user: null, isAuthenticated: false });
+          console.error('Auth check failed:', error);
+          set({ user: null, isAuthenticated: false, accessToken: null });
           apiClient.setAccessToken(null);
         } finally {
           set({ isLoading: false });
