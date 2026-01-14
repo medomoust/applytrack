@@ -2,5 +2,6 @@
   "buildCommand": "npm install --workspace=@applytrack/shared --workspace=@applytrack/web && npm run build --workspace=@applytrack/shared && npm run build --workspace=@applytrack/web",
   "outputDirectory": "apps/web/dist",
   "installCommand": null,
-  "framework": null
+  "framework": null,
+  "rootDirectory": "/"
 }
