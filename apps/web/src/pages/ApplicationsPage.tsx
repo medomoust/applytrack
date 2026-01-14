@@ -104,7 +104,7 @@ export function ApplicationsPage() {
   };
 
   const applications = data?.data || [];
-  const filteredApplications = applications.filter((app) => {
+  const filteredApplications = applications.filter((app: any) => {
     if (filters.search) {
       const search = filters.search.toLowerCase();
       return (
@@ -168,9 +168,9 @@ export function ApplicationsPage() {
       >
         {[
           { label: 'Total', count: applications.length, color: 'blue' },
-          { label: 'Applied', count: applications.filter((a) => a.status === 'applied').length, color: 'green' },
-          { label: 'Interviews', count: applications.filter((a) => a.status === 'interview').length, color: 'purple' },
-          { label: 'Offers', count: applications.filter((a) => a.status === 'offer').length, color: 'yellow' },
+          { label: 'Applied', count: applications.filter((a: any) => a.status === 'applied').length, color: 'green' },
+          { label: 'Interviews', count: applications.filter((a: any) => a.status === 'interview').length, color: 'purple' },
+          { label: 'Offers', count: applications.filter((a: any) => a.status === 'offer').length, color: 'yellow' },
         ].map((stat) => (
           <Card key={stat.label} className="p-4">
             <div className="flex items-center justify-between">
@@ -272,7 +272,7 @@ export function ApplicationsPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredApplications.map((app) => (
+                      {filteredApplications.map((app: any) => (
                         <motion.tr
                           key={app.id}
                           initial={{ opacity: 0 }}
