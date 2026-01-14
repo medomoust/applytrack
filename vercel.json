@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm install && cd packages/shared && npm run build && cd ../.. && cd apps/web && npm run build",
+  "buildCommand": "ls -la && pwd && npm run build --workspace=@applytrack/shared && npm run build --workspace=@applytrack/web",
   "outputDirectory": "apps/web/dist",
   "installCommand": null,
   "framework": null
