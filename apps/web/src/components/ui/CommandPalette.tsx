@@ -1,10 +1,9 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Command } from 'cmdk';
-import { Search, FileText, LayoutDashboard, Activity, Users } from 'lucide-react';
+import { Search, FileText, LayoutDashboard, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api';
-import { cn } from '@/lib/utils';
 
 interface CommandPaletteProps {
   open: boolean;

@@ -130,7 +130,7 @@ function KanbanCard({ application, onEdit }: KanbanCardProps) {
   );
 }
 
-function KanbanColumn({ status, applications, title, count, color, onEdit }: KanbanColumnProps) {
+function KanbanColumn({ applications, title, count, color, onEdit }: KanbanColumnProps) {
   return (
     <div className="flex flex-col min-w-[320px] max-w-[320px]">
       <div className={cn('rounded-t-lg p-3 border-b-2 bg-card', color)}>

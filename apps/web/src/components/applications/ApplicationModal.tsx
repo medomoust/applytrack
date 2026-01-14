@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { createJobApplicationSchema, updateJobApplicationSchema, ApplicationStatus, WorkMode, EmploymentType, Priority } from '@applytrack/shared';
 import { apiClient } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
