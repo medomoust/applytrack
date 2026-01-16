@@ -6,11 +6,13 @@ import { Header } from '@/components/layout/Header';
 import { DemoBanner } from '@/components/layout/DemoBanner';
 
 export function ProtectedLayout() {
-  const { isAuthenticated, isLoading, checkAuth } = useAuthStore();
+  const { isAuthenticated, isLoading, checkAuth, user } = useAuthStore();
 
   useEffect(() => {
-    // Check auth once on mount
-    checkAuth();
+    // Only check auth if not already authenticated
+    if (!isAuthenticated && !user) {
+      checkAuth();
+    }
   }, []); // Empty dependency array - only run once
 
   if (isLoading) {
