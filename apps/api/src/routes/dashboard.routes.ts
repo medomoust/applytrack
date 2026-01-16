@@ -18,29 +18,30 @@ router.get('/stats', async (req: AuthRequest, res: Response, next) => {
     }
 
     const userId = req.user.userId;
+    const isAdmin = req.user.role === 'admin';
+
+    // Build where clause - admins see all data, users see only their own
+    const where: any = { archived: false };
+    if (!isAdmin) {
+      where.userId = userId;
+    }
 
     // Get counts by status
     const statusCounts = await prisma.jobApplication.groupBy({
       by: ['status'],
-      where: {
-        userId,
-        archived: false,
-      },
+      where,
       _count: true,
     });
 
     // Total applications
-    const total = await prisma.jobApplication.count({
-      where: { userId, archived: false },
-    });
+    const total = await prisma.jobApplication.count({ where });
 
     // Applications this week
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
     const appliedThisWeek = await prisma.jobApplication.count({
       where: {
-        userId,
-        archived: false,
+        ...where,
         status: 'applied',
         appliedDate: { gte: weekAgo },
       },
@@ -49,8 +50,7 @@ router.get('/stats', async (req: AuthRequest, res: Response, next) => {
     // Interviews
     const interviews = await prisma.jobApplication.count({
       where: {
-        userId,
-        archived: false,
+        ...where,
         status: 'interview',
       },
     });
@@ -58,8 +58,7 @@ router.get('/stats', async (req: AuthRequest, res: Response, next) => {
     // Offers
     const offers = await prisma.jobApplication.count({
       where: {
-        userId,
-        archived: false,
+        ...where,
         status: 'offer',
       },
     });
@@ -76,7 +75,7 @@ router.get('/stats', async (req: AuthRequest, res: Response, next) => {
 
     const timelineData = await prisma.jobApplication.findMany({
       where: {
-        userId,
+        ...where,
         createdAt: { gte: thirtyDaysAgo },
       },
       select: {

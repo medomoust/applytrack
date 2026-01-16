@@ -28,9 +28,12 @@ router.get('/', async (req: AuthRequest, res: Response, next) => {
     const { page, pageSize, sortBy, sortOrder, ...filters } = query;
 
     // Build where clause
-    const where: any = {
-      userId: req.user.userId,
-    };
+    const where: any = {};
+    
+    // Admins can see all applications, regular users only see their own
+    if (req.user.role !== 'admin') {
+      where.userId = req.user.userId;
+    }
 
     if (filters.status) where.status = filters.status;
     if (filters.workMode) where.workMode = filters.workMode;
@@ -99,7 +102,8 @@ router.get('/:id', async (req: AuthRequest, res: Response, next) => {
       throw new AppError(404, 'Application not found');
     }
 
-    if (application.userId !== req.user.userId) {
+    // Only check ownership if not admin
+    if (req.user.role !== 'admin' && application.userId !== req.user.userId) {
       throw new AppError(403, 'Access denied');
     }
 
@@ -179,7 +183,8 @@ router.patch('/:id', async (req: AuthRequest, res: Response, next) => {
       throw new AppError(404, 'Application not found');
     }
 
-    if (existing.userId !== req.user.userId) {
+    // Only check ownership if not admin
+    if (req.user.role !== 'admin' && existing.userId !== req.user.userId) {
       throw new AppError(403, 'Access denied');
     }
 
@@ -251,7 +256,8 @@ router.post('/:id/archive', async (req: AuthRequest, res: Response, next) => {
       throw new AppError(404, 'Application not found');
     }
 
-    if (existing.userId !== req.user.userId) {
+    // Only check ownership if not admin
+    if (req.user.role !== 'admin' && existing.userId !== req.user.userId) {
       throw new AppError(403, 'Access denied');
     }
 
@@ -296,7 +302,8 @@ router.post('/:id/restore', async (req: AuthRequest, res: Response, next) => {
       throw new AppError(404, 'Application not found');
     }
 
-    if (existing.userId !== req.user.userId) {
+    // Only check ownership if not admin
+    if (req.user.role !== 'admin' && existing.userId !== req.user.userId) {
       throw new AppError(403, 'Access denied');
     }
 
@@ -341,7 +348,8 @@ router.delete('/:id', async (req: AuthRequest, res: Response, next) => {
       throw new AppError(404, 'Application not found');
     }
 
-    if (existing.userId !== req.user.userId) {
+    // Only check ownership if not admin
+    if (req.user.role !== 'admin' && existing.userId !== req.user.userId) {
       throw new AppError(403, 'Access denied');
     }
 
