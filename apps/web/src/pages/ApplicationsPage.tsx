@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api';
-import { ApplicationStatus } from '@applytrack/shared';
+import { ApplicationStatus, Priority } from '@applytrack/shared';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/Sheet';
 import { KanbanBoard } from '@/components/applications/KanbanBoard';
 import { ApplicationModal } from '@/components/applications/ApplicationModal';
 import { formatDate } from '@/lib/utils';
@@ -21,7 +22,8 @@ import {
   Archive,
   Trash2,
   Edit,
-  FileText
+  FileText,
+  X
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -35,9 +37,11 @@ export function ApplicationsPage() {
   const [filters, setFilters] = useState({
     search: '',
     status: undefined as typeof ApplicationStatus[keyof typeof ApplicationStatus] | undefined,
+    priority: undefined as typeof Priority[keyof typeof Priority] | undefined,
     archived: false,
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [editingApplication, setEditingApplication] = useState<any>(null);
 
   const { data, isLoading, error, isError } = useQuery({
@@ -105,15 +109,41 @@ export function ApplicationsPage() {
 
   const applications = data?.data || [];
   const filteredApplications = applications.filter((app: any) => {
+    // Search filter
     if (filters.search) {
       const search = filters.search.toLowerCase();
-      return (
+      const matchesSearch = 
         app.company.toLowerCase().includes(search) ||
-        app.roleTitle.toLowerCase().includes(search)
-      );
+        app.roleTitle.toLowerCase().includes(search);
+      if (!matchesSearch) return false;
     }
+    
+    // Status filter
+    if (filters.status && app.status !== filters.status) {
+      return false;
+    }
+    
+    // Priority filter
+    if (filters.priority && app.priority !== filters.priority) {
+      return false;
+    }
+    
     return true;
   });
+
+  const clearFilters = () => {
+    setFilters({
+      search: '',
+      status: undefined,
+      priority: undefined,
+      archived: false,
+    });
+  };
+
+  const activeFilterCount = [
+    filters.status,
+    filters.priority,
+  ].filter(Boolean).length;
 
   // Show error state
   if (isError) {
@@ -196,10 +226,87 @@ export function ApplicationsPage() {
                 className="pl-9"
               />
             </div>
-            <Button variant="outline" className="gap-2">
-              <Filter className="h-4 w-4" />
-              Filters
-            </Button>
+            <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline" className="gap-2 relative">
+                  <Filter className="h-4 w-4" />
+                  Filters
+                  {activeFilterCount > 0 && (
+                    <Badge variant="default" className="ml-1 px-1.5 py-0 h-5 min-w-5 text-xs">
+                      {activeFilterCount}
+                    </Badge>
+                  )}
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right">
+                <SheetHeader>
+                  <SheetTitle>Filter Applications</SheetTitle>
+                </SheetHeader>
+                <div className="mt-6 space-y-6">
+                  {/* Status Filter */}
+                  <div>
+                    <label className="text-sm font-medium mb-3 block">Status</label>
+                    <div className="space-y-2">
+                      {Object.entries(ApplicationStatus).map(([key, value]) => (
+                        <button
+                          key={value}
+                          onClick={() => setFilters({ 
+                            ...filters, 
+                            status: filters.status === value ? undefined : value 
+                          })}
+                          className={`w-full text-left px-3 py-2 rounded-md border transition-colors ${
+                            filters.status === value
+                              ? 'bg-primary text-primary-foreground border-primary'
+                              : 'hover:bg-muted border-border'
+                          }`}
+                        >
+                          <Badge variant={filters.status === value ? 'secondary' : 'outline'} className="capitalize">
+                            {value}
+                          </Badge>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Priority Filter */}
+                  <div>
+                    <label className="text-sm font-medium mb-3 block">Priority</label>
+                    <div className="space-y-2">
+                      {Object.entries(Priority).map(([key, value]) => (
+                        <button
+                          key={value}
+                          onClick={() => setFilters({ 
+                            ...filters, 
+                            priority: filters.priority === value ? undefined : value 
+                          })}
+                          className={`w-full text-left px-3 py-2 rounded-md border transition-colors ${
+                            filters.priority === value
+                              ? 'bg-primary text-primary-foreground border-primary'
+                              : 'hover:bg-muted border-border'
+                          }`}
+                        >
+                          <Badge variant={filters.priority === value ? 'secondary' : 'outline'} className="capitalize">
+                            {value}
+                          </Badge>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Clear Filters */}
+                  {activeFilterCount > 0 && (
+                    <Button 
+                      variant="outline" 
+                      className="w-full gap-2" 
+                      onClick={clearFilters}
+                    >
+                      <X className="h-4 w-4" />
+                      Clear All Filters
+                    </Button>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
           
           <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)}>
