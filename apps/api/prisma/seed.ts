@@ -1,7 +1,12 @@
-import { PrismaClient, Company, UserRole } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
+
+// Define constants directly since we're using String types
+const COMPANIES = ['GOOGLE', 'APPLE', 'MICROSOFT', 'AMAZON', 'META', 'NETFLIX', 'TESLA', 'TWITTER', 'SPOTIFY', 'ADOBE'];
+const USER_ROLES = { recruiter: 'recruiter', applicant: 'applicant' };
+type Company = typeof COMPANIES[number];
 
 const roles = [
   'Senior Software Engineer',
@@ -64,15 +69,15 @@ async function main() {
 
   // Create recruiters (one for each company)
   console.log('👔 Creating recruiters...');
-  const recruiters: Record<Company, any> = {} as any;
+  const recruiters: Record<string, any> = {};
   
-  for (const company of Object.values(Company)) {
+  for (const company of COMPANIES) {
     const recruiter = await prisma.user.create({
       data: {
         email: `recruiter@${company.toLowerCase()}.com`,
         password: hashedPassword,
         name: `${company} Recruiter`,
-        role: UserRole.recruiter,
+        role: USER_ROLES.recruiter,
         company: company,
       },
     });
@@ -102,7 +107,7 @@ async function main() {
         email: `${name.toLowerCase().replace(' ', '.')}@email.com`,
         password: hashedPassword,
         name,
-        role: UserRole.applicant,
+        role: USER_ROLES.applicant,
       },
     });
     applicants.push(applicant);
