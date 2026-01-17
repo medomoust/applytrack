@@ -19,6 +19,16 @@ router.post('/signup', authLimiter, async (req, res, next) => {
   try {
     const data = signUpSchema.parse(req.body);
 
+    // Validate: recruiters must have a company
+    if (data.role === 'recruiter' && !data.company) {
+      throw new AppError(400, 'Company is required for recruiters');
+    }
+
+    // Validate: applicants should not have a company
+    if (data.role === 'applicant' && data.company) {
+      throw new AppError(400, 'Applicants cannot have a company');
+    }
+
     // Check if user exists
     const existingUser = await prisma.user.findUnique({
       where: { email: data.email },
@@ -35,12 +45,15 @@ router.post('/signup', authLimiter, async (req, res, next) => {
         email: data.email,
         password: hashedPassword,
         name: data.name,
+        role: data.role,
+        company: data.company,
       },
       select: {
         id: true,
         email: true,
         name: true,
         role: true,
+        company: true,
         isActive: true,
         createdAt: true,
         updatedAt: true,

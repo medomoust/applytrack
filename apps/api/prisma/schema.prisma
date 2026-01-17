@@ -8,8 +8,26 @@ datasource db {
 }
 
 enum UserRole {
-  user
-  admin
+  applicant
+  recruiter
+}
+
+enum Company {
+  GOOGLE
+  APPLE
+  MICROSOFT
+  AMAZON
+  META
+  NETFLIX
+  TESLA
+  TWITTER
+  SPOTIFY
+  ADOBE
+}
+
+enum JobPostingStatus {
+  open
+  closed
 }
 
 enum WorkMode {
@@ -53,12 +71,14 @@ model User {
   email     String   @unique
   password  String
   name      String?
-  role      UserRole @default(user)
+  role      UserRole @default(applicant)
+  company   Company? // Only for recruiters
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   jobApplications JobApplication[]
+  jobPostings     JobPosting[]
   activityLogs    ActivityLog[]
   refreshTokens   RefreshToken[]
 
@@ -66,29 +86,56 @@ model User {
   @@map("users")
 }
 
+model JobPosting {
+  id             String           @id @default(uuid())
+  recruiterId    String
+  company        Company
+  roleTitle      String
+  location       String?
+  workMode       WorkMode
+  employmentType EmploymentType
+  description    String?
+  requirements   String?
+  salaryRange    String?
+  status         JobPostingStatus @default(open)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  recruiter       User             @relation(fields: [recruiterId], references: [id], onDelete: Cascade)
+  jobApplications JobApplication[]
+
+  @@index([recruiterId])
+  @@index([company])
+  @@index([status])
+  @@map("job_postings")
+}
+
 model JobApplication {
   id               String            @id @default(uuid())
   userId           String
-  company          String
-  roleTitle        String
+  jobPostingId     String
+  applicantName    String
+  company          String // Denormalized from JobPosting
+  roleTitle        String // Denormalized from JobPosting
   location         String?
   workMode         WorkMode
   employmentType   EmploymentType
-  status           ApplicationStatus @default(wishlist)
+  status           ApplicationStatus @default(applied)
   priority         Priority          @default(medium)
-  appliedDate      DateTime?
+  appliedDate      DateTime          @default(now())
   nextFollowUpDate DateTime?
   salaryTarget     Float?
-  link             String?
   notes            String?
   archived         Boolean           @default(false)
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
 
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobPosting   JobPosting    @relation(fields: [jobPostingId], references: [id], onDelete: Cascade)
   activityLogs ActivityLog[]
 
   @@index([userId])
+  @@index([jobPostingId])
   @@index([status])
   @@index([archived])
   @@index([updatedAt])

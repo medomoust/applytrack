@@ -1,6 +1,5 @@
 import { Router, Response } from 'express';
 import {
-  createJobApplicationSchema,
   updateJobApplicationSchema,
   listJobApplicationsQuerySchema,
   ActivityEventType,
@@ -30,9 +29,21 @@ router.get('/', async (req: AuthRequest, res: Response, next) => {
     // Build where clause
     const where: any = {};
     
-    // Admins can see all applications, regular users only see their own
-    if (req.user.role !== 'admin') {
+    // Applicants see their own applications
+    if (req.user.role === 'applicant') {
       where.userId = req.user.userId;
+    }
+    
+    // Recruiters see applications to their company's jobs
+    if (req.user.role === 'recruiter') {
+      const recruiter = await prisma.user.findUnique({
+        where: { id: req.user.userId },
+        select: { company: true },
+      });
+      
+      if (recruiter?.company) {
+        where.company = recruiter.company;
+      }
     }
 
     if (filters.status) where.status = filters.status;
@@ -45,6 +56,7 @@ router.get('/', async (req: AuthRequest, res: Response, next) => {
       where.OR = [
         { company: { contains: filters.search, mode: 'insensitive' } },
         { roleTitle: { contains: filters.search, mode: 'insensitive' } },
+        { applicantName: { contains: filters.search, mode: 'insensitive' } },
         { notes: { contains: filters.search, mode: 'insensitive' } },
       ];
     }
@@ -70,7 +82,7 @@ router.get('/', async (req: AuthRequest, res: Response, next) => {
       data: applications.map((app: any) => ({
         ...app,
         salaryTarget: app.salaryTarget ? Number(app.salaryTarget) : null,
-        appliedDate: app.appliedDate?.toISOString() || null,
+        appliedDate: app.appliedDate.toISOString(),
         nextFollowUpDate: app.nextFollowUpDate?.toISOString() || null,
         createdAt: app.createdAt.toISOString(),
         updatedAt: app.updatedAt.toISOString(),
@@ -102,63 +114,26 @@ router.get('/:id', async (req: AuthRequest, res: Response, next) => {
       throw new AppError(404, 'Application not found');
     }
 
-    // Only check ownership if not admin
-    if (req.user.role !== 'admin' && application.userId !== req.user.userId) {
+    // Check access: applicants see their own, recruiters see their company's
+    if (req.user.role === 'applicant' && application.userId !== req.user.userId) {
       throw new AppError(403, 'Access denied');
+    }
+
+    if (req.user.role === 'recruiter') {
+      const recruiter = await prisma.user.findUnique({
+        where: { id: req.user.userId },
+        select: { company: true },
+      });
+      
+      if (application.company !== recruiter?.company) {
+        throw new AppError(403, 'Access denied');
+      }
     }
 
     res.json({
       ...application,
       salaryTarget: application.salaryTarget ? Number(application.salaryTarget) : null,
-      appliedDate: application.appliedDate?.toISOString() || null,
-      nextFollowUpDate: application.nextFollowUpDate?.toISOString() || null,
-      createdAt: application.createdAt.toISOString(),
-      updatedAt: application.updatedAt.toISOString(),
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Create job application
-router.post('/', async (req: AuthRequest, res: Response, next) => {
-  try {
-    if (!req.user) {
-      throw new AppError(401, 'Authentication required');
-    }
-
-    const data = createJobApplicationSchema.parse(req.body);
-
-    const application = await prisma.jobApplication.create({
-      data: {
-        userId: req.user.userId,
-        company: data.company,
-        roleTitle: data.roleTitle,
-        location: data.location,
-        workMode: data.workMode,
-        employmentType: data.employmentType,
-        status: data.status,
-        priority: data.priority,
-        appliedDate: data.appliedDate ? new Date(data.appliedDate) : null,
-        nextFollowUpDate: data.nextFollowUpDate ? new Date(data.nextFollowUpDate) : null,
-        salaryTarget: data.salaryTarget,
-        link: data.link || null,
-        notes: data.notes,
-      },
-    });
-
-    // Log activity
-    await createActivityLog({
-      userId: req.user.userId,
-      jobApplicationId: application.id,
-      eventType: ActivityEventType.CREATED,
-      description: `Created application for ${data.roleTitle} at ${data.company}`,
-    });
-
-    res.status(201).json({
-      ...application,
-      salaryTarget: application.salaryTarget ? Number(application.salaryTarget) : null,
-      appliedDate: application.appliedDate?.toISOString() || null,
+      appliedDate: application.appliedDate.toISOString(),
       nextFollowUpDate: application.nextFollowUpDate?.toISOString() || null,
       createdAt: application.createdAt.toISOString(),
       updatedAt: application.updatedAt.toISOString(),
@@ -169,6 +144,8 @@ router.post('/', async (req: AuthRequest, res: Response, next) => {
 });
 
 // Update job application
+// Applicants can update their own applications
+// Recruiters can update applications to their company (for status changes)
 router.patch('/:id', async (req: AuthRequest, res: Response, next) => {
   try {
     if (!req.user) {
@@ -183,25 +160,31 @@ router.patch('/:id', async (req: AuthRequest, res: Response, next) => {
       throw new AppError(404, 'Application not found');
     }
 
-    // Only check ownership if not admin
-    if (req.user.role !== 'admin' && existing.userId !== req.user.userId) {
+    // Check access
+    if (req.user.role === 'applicant' && existing.userId !== req.user.userId) {
       throw new AppError(403, 'Access denied');
+    }
+
+    if (req.user.role === 'recruiter') {
+      const recruiter = await prisma.user.findUnique({
+        where: { id: req.user.userId },
+        select: { company: true },
+      });
+      
+      if (existing.company !== recruiter?.company) {
+        throw new AppError(403, 'Access denied');
+      }
     }
 
     const data = updateJobApplicationSchema.parse(req.body);
 
     const updateData: any = {};
-    if (data.company !== undefined) updateData.company = data.company;
-    if (data.roleTitle !== undefined) updateData.roleTitle = data.roleTitle;
-    if (data.location !== undefined) updateData.location = data.location;
-    if (data.workMode !== undefined) updateData.workMode = data.workMode;
-    if (data.employmentType !== undefined) updateData.employmentType = data.employmentType;
     if (data.status !== undefined) updateData.status = data.status;
     if (data.priority !== undefined) updateData.priority = data.priority;
-    if (data.appliedDate !== undefined) updateData.appliedDate = data.appliedDate ? new Date(data.appliedDate) : null;
-    if (data.nextFollowUpDate !== undefined) updateData.nextFollowUpDate = data.nextFollowUpDate ? new Date(data.nextFollowUpDate) : null;
+    if (data.nextFollowUpDate !== undefined) {
+      updateData.nextFollowUpDate = data.nextFollowUpDate ? new Date(data.nextFollowUpDate) : null;
+    }
     if (data.salaryTarget !== undefined) updateData.salaryTarget = data.salaryTarget;
-    if (data.link !== undefined) updateData.link = data.link || null;
     if (data.notes !== undefined) updateData.notes = data.notes;
 
     const application = await prisma.jobApplication.update({
@@ -231,7 +214,7 @@ router.patch('/:id', async (req: AuthRequest, res: Response, next) => {
     res.json({
       ...application,
       salaryTarget: application.salaryTarget ? Number(application.salaryTarget) : null,
-      appliedDate: application.appliedDate?.toISOString() || null,
+      appliedDate: application.appliedDate.toISOString(),
       nextFollowUpDate: application.nextFollowUpDate?.toISOString() || null,
       createdAt: application.createdAt.toISOString(),
       updatedAt: application.updatedAt.toISOString(),
@@ -241,7 +224,7 @@ router.patch('/:id', async (req: AuthRequest, res: Response, next) => {
   }
 });
 
-// Archive job application
+// Archive job application (applicants only)
 router.post('/:id/archive', async (req: AuthRequest, res: Response, next) => {
   try {
     if (!req.user) {
@@ -256,8 +239,8 @@ router.post('/:id/archive', async (req: AuthRequest, res: Response, next) => {
       throw new AppError(404, 'Application not found');
     }
 
-    // Only check ownership if not admin
-    if (req.user.role !== 'admin' && existing.userId !== req.user.userId) {
+    // Only applicants can archive their own applications
+    if (existing.userId !== req.user.userId) {
       throw new AppError(403, 'Access denied');
     }
 
@@ -277,7 +260,7 @@ router.post('/:id/archive', async (req: AuthRequest, res: Response, next) => {
     res.json({
       ...application,
       salaryTarget: application.salaryTarget ? Number(application.salaryTarget) : null,
-      appliedDate: application.appliedDate?.toISOString() || null,
+      appliedDate: application.appliedDate.toISOString(),
       nextFollowUpDate: application.nextFollowUpDate?.toISOString() || null,
       createdAt: application.createdAt.toISOString(),
       updatedAt: application.updatedAt.toISOString(),
@@ -287,7 +270,7 @@ router.post('/:id/archive', async (req: AuthRequest, res: Response, next) => {
   }
 });
 
-// Restore job application
+// Restore job application (applicants only)
 router.post('/:id/restore', async (req: AuthRequest, res: Response, next) => {
   try {
     if (!req.user) {
@@ -302,8 +285,8 @@ router.post('/:id/restore', async (req: AuthRequest, res: Response, next) => {
       throw new AppError(404, 'Application not found');
     }
 
-    // Only check ownership if not admin
-    if (req.user.role !== 'admin' && existing.userId !== req.user.userId) {
+    // Only applicants can restore their own applications
+    if (existing.userId !== req.user.userId) {
       throw new AppError(403, 'Access denied');
     }
 
@@ -323,7 +306,7 @@ router.post('/:id/restore', async (req: AuthRequest, res: Response, next) => {
     res.json({
       ...application,
       salaryTarget: application.salaryTarget ? Number(application.salaryTarget) : null,
-      appliedDate: application.appliedDate?.toISOString() || null,
+      appliedDate: application.appliedDate.toISOString(),
       nextFollowUpDate: application.nextFollowUpDate?.toISOString() || null,
       createdAt: application.createdAt.toISOString(),
       updatedAt: application.updatedAt.toISOString(),
@@ -333,7 +316,7 @@ router.post('/:id/restore', async (req: AuthRequest, res: Response, next) => {
   }
 });
 
-// Delete job application
+// Delete job application (applicants only)
 router.delete('/:id', async (req: AuthRequest, res: Response, next) => {
   try {
     if (!req.user) {
@@ -348,8 +331,8 @@ router.delete('/:id', async (req: AuthRequest, res: Response, next) => {
       throw new AppError(404, 'Application not found');
     }
 
-    // Only check ownership if not admin
-    if (req.user.role !== 'admin' && existing.userId !== req.user.userId) {
+    // Only applicants can delete their own applications
+    if (existing.userId !== req.user.userId) {
       throw new AppError(403, 'Access denied');
     }
 

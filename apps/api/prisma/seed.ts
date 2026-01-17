@@ -1,14 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Company, UserRole } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
-
-const companies = [
-  'Google', 'Meta', 'Amazon', 'Microsoft', 'Apple',
-  'Netflix', 'Tesla', 'Stripe', 'Airbnb', 'Uber',
-  'Lyft', 'Spotify', 'Dropbox', 'Slack', 'Zoom',
-  'Shopify', 'Square', 'Twitter', 'LinkedIn', 'Adobe',
-];
 
 const roles = [
   'Senior Software Engineer',
@@ -17,10 +10,15 @@ const roles = [
   'Full Stack Developer',
   'DevOps Engineer',
   'Solutions Architect',
+  'Data Engineer',
+  'Machine Learning Engineer',
+  'Product Manager',
   'Engineering Manager',
   'Staff Engineer',
   'Principal Engineer',
   'Tech Lead',
+  'Mobile Developer',
+  'QA Engineer',
 ];
 
 const locations = [
@@ -30,16 +28,16 @@ const locations = [
   'Austin, TX',
   'Boston, MA',
   'Remote',
-  'London, UK',
-  'Toronto, Canada',
-  'Berlin, Germany',
-  'Singapore',
+  'Los Angeles, CA',
+  'Chicago, IL',
+  'Denver, CO',
+  'Portland, OR',
 ];
 
-const statuses = ['wishlist', 'applied', 'interview', 'offer', 'rejected', 'ghosted'];
-const priorities = ['low', 'medium', 'high'];
 const workModes = ['remote', 'hybrid', 'onsite'];
 const employmentTypes = ['fulltime', 'contract', 'intern'];
+const applicationStatuses = ['wishlist', 'applied', 'interview', 'offer', 'rejected', 'ghosted'];
+const priorities = ['low', 'medium', 'high'];
 
 function randomItem<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -54,155 +52,200 @@ function randomDate(daysBack: number): Date {
 async function main() {
   console.log('🌱 Starting seed...');
 
-  // Clean existing data
-  console.log('🧹 Cleaning existing data...');
+  // Clear existing data
+  console.log('🗑️  Clearing existing data...');
   await prisma.activityLog.deleteMany();
   await prisma.jobApplication.deleteMany();
+  await prisma.jobPosting.deleteMany();
   await prisma.refreshToken.deleteMany();
   await prisma.user.deleteMany();
 
-  // Create admin user
-  console.log('👤 Creating admin user...');
-  const adminPassword = await bcrypt.hash('Password123!', 10);
-  const admin = await prisma.user.create({
-    data: {
-      email: 'admin@applytrack.dev',
-      password: adminPassword,
-      name: 'Admin User',
-      role: 'admin',
-    },
-  });
-  console.log(`✅ Admin created: ${admin.email}`);
+  const hashedPassword = await bcrypt.hash('Password123!', 10);
 
-  // Create demo user
-  console.log('👤 Creating demo user...');
-  const demoPassword = await bcrypt.hash('Password123!', 10);
-  const demo = await prisma.user.create({
-    data: {
-      email: 'demo@applytrack.dev',
-      password: demoPassword,
-      name: 'Demo User',
-      role: 'user',
-    },
-  });
-  console.log(`✅ Demo user created: ${demo.email}`);
-
-  // Create job applications for demo user
-  console.log('📝 Creating job applications...');
-  const applications = [];
-
-  for (let i = 0; i < 35; i++) {
-    const company = randomItem(companies);
-    const roleTitle = randomItem(roles);
-    const status = randomItem(statuses);
-    const createdAt = randomDate(60);
-
-    const application = await prisma.jobApplication.create({
+  // Create recruiters (one for each company)
+  console.log('👔 Creating recruiters...');
+  const recruiters: Record<Company, any> = {} as any;
+  
+  for (const company of Object.values(Company)) {
+    const recruiter = await prisma.user.create({
       data: {
-        userId: demo.id,
-        company,
-        roleTitle,
-        location: randomItem(locations),
-        workMode: randomItem(workModes),
-        employmentType: randomItem(employmentTypes),
-        status,
-        priority: randomItem(priorities),
-        appliedDate: ['applied', 'interview', 'offer', 'rejected', 'ghosted'].includes(status)
-          ? randomDate(45)
-          : null,
-        nextFollowUpDate: ['applied', 'interview'].includes(status)
-          ? new Date(Date.now() + Math.random() * 14 * 24 * 60 * 60 * 1000)
-          : null,
-        salaryTarget: Math.floor(Math.random() * 100000) + 100000,
-        link: `https://jobs.${company.toLowerCase().replace(/\s+/g, '')}.com/positions/${i}`,
-        notes: `Application for ${roleTitle} position. ${
-          status === 'interview' ? 'Scheduled for next week.' : 
-          status === 'offer' ? 'Great offer received!' :
-          status === 'rejected' ? 'Not a good fit.' :
-          'Waiting for response.'
-        }`,
-        archived: Math.random() > 0.9,
-        createdAt,
-        updatedAt: createdAt,
+        email: `recruiter@${company.toLowerCase()}.com`,
+        password: hashedPassword,
+        name: `${company} Recruiter`,
+        role: UserRole.recruiter,
+        company: company,
       },
     });
-
-    applications.push(application);
-
-    // Create activity logs
-    await prisma.activityLog.create({
-      data: {
-        userId: demo.id,
-        jobApplicationId: application.id,
-        eventType: 'created',
-        description: `Created application for ${roleTitle} at ${company}`,
-        createdAt,
-      },
-    });
-
-    if (['applied', 'interview', 'offer', 'rejected', 'ghosted'].includes(status)) {
-      const statusChangeDate = new Date(createdAt);
-      statusChangeDate.setDate(statusChangeDate.getDate() + Math.floor(Math.random() * 10));
-
-      await prisma.activityLog.create({
-        data: {
-          userId: demo.id,
-          jobApplicationId: application.id,
-          eventType: 'status_changed',
-          description: `Changed status to ${status}`,
-          metadata: { oldStatus: 'wishlist', newStatus: status },
-          createdAt: statusChangeDate,
-        },
-      });
-    }
-
-    if (application.archived) {
-      await prisma.activityLog.create({
-        data: {
-          userId: demo.id,
-          jobApplicationId: application.id,
-          eventType: 'archived',
-          description: `Archived application for ${roleTitle} at ${company}`,
-          createdAt: new Date(application.updatedAt.getTime() + 1000),
-        },
-      });
-    }
+    recruiters[company] = recruiter;
+    console.log(`  ✓ Created recruiter for ${company}`);
   }
 
-  console.log(`✅ Created ${applications.length} job applications`);
+  // Create applicants
+  console.log('🧑 Creating applicants...');
+  const applicants = [];
+  
+  const applicantNames = [
+    'John Doe',
+    'Jane Smith',
+    'Michael Johnson',
+    'Emily Brown',
+    'David Wilson',
+    'Sarah Davis',
+    'Chris Martinez',
+    'Amanda Garcia',
+  ];
 
-  // Create a few applications for admin
-  console.log('📝 Creating admin applications...');
-  for (let i = 0; i < 5; i++) {
-    const company = randomItem(companies);
-    const roleTitle = randomItem(roles);
-    const createdAt = randomDate(30);
-
-    await prisma.jobApplication.create({
+  for (let i = 0; i < applicantNames.length; i++) {
+    const name = applicantNames[i];
+    const applicant = await prisma.user.create({
       data: {
-        userId: admin.id,
-        company,
-        roleTitle,
-        location: randomItem(locations),
-        workMode: randomItem(workModes),
-        employmentType: randomItem(employmentTypes),
-        status: randomItem(statuses),
-        priority: randomItem(priorities),
-        createdAt,
-        updatedAt: createdAt,
+        email: `${name.toLowerCase().replace(' ', '.')}@email.com`,
+        password: hashedPassword,
+        name,
+        role: UserRole.applicant,
       },
     });
+    applicants.push(applicant);
+    console.log(`  ✓ Created applicant: ${name}`);
   }
 
-  console.log('✅ Seed completed successfully!');
-  console.log('\n📋 Login credentials:');
-  console.log('Admin: admin@applytrack.dev / Password123!');
-  console.log('Demo:  demo@applytrack.dev / Password123!');
+  // Create job postings for each company
+  console.log('📋 Creating job postings...');
+  const jobPostings = [];
+  
+  for (const [companyKey, recruiter] of Object.entries(recruiters)) {
+    const company = companyKey as Company;
+    // Create 3-5 job postings per company
+    const numPostings = 3 + Math.floor(Math.random() * 3);
+    
+    for (let i = 0; i < numPostings; i++) {
+      const jobPosting = await prisma.jobPosting.create({
+        data: {
+          recruiterId: recruiter.id,
+          company: company,
+          roleTitle: randomItem(roles),
+          location: randomItem(locations),
+          workMode: randomItem(workModes) as any,
+          employmentType: randomItem(employmentTypes) as any,
+          description: `We are looking for an exceptional engineer to join our ${company} team. You will work on cutting-edge technology and solve challenging problems at scale.`,
+          requirements: `• 5+ years of experience\n• Strong problem-solving skills\n• Excellent communication\n• Bachelor's degree in Computer Science or related field`,
+          salaryRange: `$${150 + Math.floor(Math.random() * 100)}k - $${250 + Math.floor(Math.random() * 100)}k`,
+          status: Math.random() > 0.2 ? 'open' : 'closed',
+          createdAt: randomDate(60),
+        },
+      });
+      jobPostings.push(jobPosting);
+    }
+    
+    console.log(`  ✓ Created ${numPostings} job postings for ${company}`);
+  }
+
+  // Create applications (applicants applying to job postings)
+  console.log('📝 Creating applications...');
+  let totalApplications = 0;
+  
+  for (const applicant of applicants) {
+    // Each applicant applies to 5-15 random job postings
+    const numApplications = 5 + Math.floor(Math.random() * 11);
+    const appliedPostings = new Set<string>();
+    
+    for (let i = 0; i < numApplications; i++) {
+      // Pick a random open job posting that they haven't applied to yet
+      let jobPosting;
+      let attempts = 0;
+      do {
+        jobPosting = randomItem(jobPostings.filter(jp => jp.status === 'open'));
+        attempts++;
+      } while (appliedPostings.has(jobPosting.id) && attempts < 20);
+      
+      if (appliedPostings.has(jobPosting.id)) continue;
+      appliedPostings.add(jobPosting.id);
+
+      const appliedDate = randomDate(45);
+      const status = randomItem(applicationStatuses);
+      
+      // Set next follow-up date for certain statuses
+      let nextFollowUpDate = null;
+      if (status === 'applied' || status === 'interview') {
+        nextFollowUpDate = new Date(appliedDate);
+        nextFollowUpDate.setDate(nextFollowUpDate.getDate() + 7);
+      }
+
+      const application = await prisma.jobApplication.create({
+        data: {
+          userId: applicant.id,
+          jobPostingId: jobPosting.id,
+          applicantName: applicant.name!,
+          company: jobPosting.company,
+          roleTitle: jobPosting.roleTitle,
+          location: jobPosting.location,
+          workMode: jobPosting.workMode,
+          employmentType: jobPosting.employmentType,
+          status: status as any,
+          priority: randomItem(priorities) as any,
+          appliedDate,
+          nextFollowUpDate,
+          salaryTarget: 150000 + Math.floor(Math.random() * 150000),
+          notes: `Applied via ${randomItem(['LinkedIn', 'Company Website', 'Referral', 'Indeed', 'Glassdoor'])}`,
+          createdAt: appliedDate,
+        },
+      });
+
+      // Create activity log for the application
+      await prisma.activityLog.create({
+        data: {
+          userId: applicant.id,
+          jobApplicationId: application.id,
+          eventType: 'created',
+          description: `Applied to ${jobPosting.roleTitle} at ${jobPosting.company}`,
+          createdAt: appliedDate,
+        },
+      });
+
+      // Add status change activity if not in initial 'applied' state
+      if (status !== 'applied' && status !== 'wishlist') {
+        const statusDate = new Date(appliedDate);
+        statusDate.setDate(statusDate.getDate() + Math.floor(Math.random() * 10) + 1);
+        
+        await prisma.activityLog.create({
+          data: {
+            userId: applicant.id,
+            jobApplicationId: application.id,
+            eventType: 'status_changed',
+            description: `Status changed to ${status}`,
+            metadata: { oldStatus: 'applied', newStatus: status },
+            createdAt: statusDate,
+          },
+        });
+      }
+
+      totalApplications++;
+    }
+    
+    console.log(`  ✓ Created ${appliedPostings.size} applications for ${applicant.name}`);
+  }
+
+  console.log('\n✨ Seed completed successfully!');
+  console.log(`\n📊 Summary:`);
+  console.log(`  • Recruiters: ${Object.keys(recruiters).length} (one per company)`);
+  console.log(`  • Applicants: ${applicants.length}`);
+  console.log(`  • Job Postings: ${jobPostings.length}`);
+  console.log(`  • Applications: ${totalApplications}`);
+  console.log(`\n🔐 Login Credentials:`);
+  console.log(`  • All users have password: Password123!`);
+  console.log(`\n👔 Recruiter Accounts:`);
+  for (const company of Object.values(Company)) {
+    console.log(`  • recruiter@${company.toLowerCase()}.com (${company})`);
+  }
+  console.log(`\n🧑 Applicant Accounts:`);
+  for (const applicant of applicants) {
+    console.log(`  • ${applicant.email} (${applicant.name})`);
+  }
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Seed failed:', e);
+    console.error('❌ Error seeding database:', e);
     process.exit(1);
   })
   .finally(async () => {

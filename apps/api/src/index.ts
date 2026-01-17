@@ -7,6 +7,7 @@ import { errorHandler } from './middleware/error-handler';
 import { requestLogger } from './middleware/request-logger';
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
+import jobPostingRoutes from './routes/job-posting.routes';
 import jobApplicationRoutes from './routes/job-application.routes';
 import activityRoutes from './routes/activity.routes';
 import dashboardRoutes from './routes/dashboard.routes';
@@ -37,6 +38,7 @@ app.get('/', (req, res) => {
     endpoints: {
       auth: '/api/auth',
       users: '/api/users',
+      jobPostings: '/api/job-postings',
       applications: '/api/applications',
       activity: '/api/activity',
       dashboard: '/api/dashboard',
@@ -48,6 +50,7 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/job-postings', jobPostingRoutes);
 app.use('/api/applications', jobApplicationRoutes);
 app.use('/api/activity', activityRoutes);
 app.use('/api/dashboard', dashboardRoutes);

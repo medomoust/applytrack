@@ -2,26 +2,17 @@ import { z } from 'zod';
 import type { WorkMode, EmploymentType, ApplicationStatus, Priority } from './types.js';
 import { WORK_MODES, EMPLOYMENT_TYPES, APPLICATION_STATUSES, PRIORITIES, ApplicationStatus as ApplicationStatusEnum } from './constants.js';
 
-// Create job application
-export const createJobApplicationSchema = z.object({
-  company: z.string().min(1, 'Company is required').max(200),
-  roleTitle: z.string().min(1, 'Role title is required').max(200),
-  location: z.string().max(200).optional(),
-  workMode: z.enum(WORK_MODES),
-  employmentType: z.enum(EMPLOYMENT_TYPES),
-  status: z.enum(APPLICATION_STATUSES).default(ApplicationStatusEnum.WISHLIST),
-  priority: z.enum(PRIORITIES).default('medium'),
-  appliedDate: z.string().datetime().optional(),
-  nextFollowUpDate: z.string().datetime().optional(),
-  salaryTarget: z.number().positive().optional(),
-  link: z.string().url().optional().or(z.literal('')),
-  notes: z.string().max(5000).optional(),
-});
-
-export type CreateJobApplicationInput = z.infer<typeof createJobApplicationSchema>;
+// Note: Job applications are now created by applying to job postings
+// Direct creation is not allowed
 
 // Update job application
-export const updateJobApplicationSchema = createJobApplicationSchema.partial();
+export const updateJobApplicationSchema = z.object({
+  status: z.enum(APPLICATION_STATUSES).optional(),
+  priority: z.enum(PRIORITIES).optional(),
+  nextFollowUpDate: z.string().datetime().optional(),
+  salaryTarget: z.number().positive().optional(),
+  notes: z.string().max(5000).optional(),
+});
 
 export type UpdateJobApplicationInput = z.infer<typeof updateJobApplicationSchema>;
 
@@ -29,6 +20,8 @@ export type UpdateJobApplicationInput = z.infer<typeof updateJobApplicationSchem
 export const jobApplicationSchema = z.object({
   id: z.string(),
   userId: z.string(),
+  jobPostingId: z.string(),
+  applicantName: z.string(),
   company: z.string(),
   roleTitle: z.string(),
   location: z.string().nullable(),
@@ -36,10 +29,9 @@ export const jobApplicationSchema = z.object({
   employmentType: z.enum(EMPLOYMENT_TYPES),
   status: z.enum(APPLICATION_STATUSES),
   priority: z.enum(PRIORITIES),
-  appliedDate: z.string().nullable(),
+  appliedDate: z.string(),
   nextFollowUpDate: z.string().nullable(),
   salaryTarget: z.number().nullable(),
-  link: z.string().nullable(),
   notes: z.string().nullable(),
   archived: z.boolean(),
   createdAt: z.string(),

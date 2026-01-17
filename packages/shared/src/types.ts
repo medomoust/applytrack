@@ -1,6 +1,20 @@
 // Type definitions only - no runtime code
 
-export type UserRole = 'user' | 'admin';
+export type UserRole = 'applicant' | 'recruiter';
+
+export type Company = 
+  | 'GOOGLE'
+  | 'APPLE'
+  | 'MICROSOFT'
+  | 'AMAZON'
+  | 'META'
+  | 'NETFLIX'
+  | 'TESLA'
+  | 'TWITTER'
+  | 'SPOTIFY'
+  | 'ADOBE';
+
+export type JobPostingStatus = 'open' | 'closed';
 
 export type WorkMode = 'remote' | 'hybrid' | 'onsite';
 

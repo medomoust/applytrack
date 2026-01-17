@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { UserRole } from './types.js';
-import { USER_ROLES } from './constants.js';
+import { USER_ROLES, COMPANIES } from './constants.js';
 
 // Sign up
 export const signUpSchema = z.object({
@@ -11,7 +11,9 @@ export const signUpSchema = z.object({
     .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
     .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
     .regex(/[0-9]/, 'Password must contain at least one number'),
-  name: z.string().min(2, 'Name must be at least 2 characters').optional(),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  role: z.enum(USER_ROLES),
+  company: z.enum(COMPANIES).optional(),
 });
 
 export type SignUpInput = z.infer<typeof signUpSchema>;
@@ -37,6 +39,7 @@ export const userSchema = z.object({
   email: z.string(),
   name: z.string().nullable(),
   role: z.enum(USER_ROLES),
+  company: z.enum(COMPANIES).nullable(),
   isActive: z.boolean(),
   createdAt: z.string(),
   updatedAt: z.string(),

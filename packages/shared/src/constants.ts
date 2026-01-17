@@ -1,6 +1,21 @@
 // Runtime constants for Zod enums and validation
 
-export const USER_ROLES = ['user', 'admin'] as const;
+export const USER_ROLES = ['applicant', 'recruiter'] as const;
+
+export const COMPANIES = [
+  'GOOGLE',
+  'APPLE',
+  'MICROSOFT',
+  'AMAZON',
+  'META',
+  'NETFLIX',
+  'TESLA',
+  'TWITTER',
+  'SPOTIFY',
+  'ADOBE',
+] as const;
+
+export const JOB_POSTING_STATUSES = ['open', 'closed'] as const;
 
 export const WORK_MODES = ['remote', 'hybrid', 'onsite'] as const;
 
@@ -28,8 +43,26 @@ export const ACTIVITY_EVENT_TYPES = [
 
 // Runtime enum objects for convenient access
 export const UserRole = {
-  USER: 'user',
-  ADMIN: 'admin',
+  APPLICANT: 'applicant',
+  RECRUITER: 'recruiter',
+} as const;
+
+export const Company = {
+  GOOGLE: 'GOOGLE',
+  APPLE: 'APPLE',
+  MICROSOFT: 'MICROSOFT',
+  AMAZON: 'AMAZON',
+  META: 'META',
+  NETFLIX: 'NETFLIX',
+  TESLA: 'TESLA',
+  TWITTER: 'TWITTER',
+  SPOTIFY: 'SPOTIFY',
+  ADOBE: 'ADOBE',
+} as const;
+
+export const JobPostingStatus = {
+  OPEN: 'open',
+  CLOSED: 'closed',
 } as const;
 
 export const WorkMode = {

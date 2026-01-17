@@ -18,11 +18,23 @@ router.get('/stats', async (req: AuthRequest, res: Response, next) => {
     }
 
     const userId = req.user.userId;
-    const isAdmin = req.user.role === 'admin';
+    const isRecruiter = req.user.role === 'recruiter';
 
-    // Build where clause - admins see all data, users see only their own
+    // Build where clause
     const where: any = { archived: false };
-    if (!isAdmin) {
+    
+    if (isRecruiter) {
+      // Recruiters see applications to their company's jobs
+      const recruiter = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { company: true },
+      });
+      
+      if (recruiter?.company) {
+        where.company = recruiter.company;
+      }
+    } else {
+      // Applicants see only their own applications
       where.userId = userId;
     }
 
@@ -42,7 +54,6 @@ router.get('/stats', async (req: AuthRequest, res: Response, next) => {
     const appliedThisWeek = await prisma.jobApplication.count({
       where: {
         ...where,
-        status: 'applied',
         appliedDate: { gte: weekAgo },
       },
     });
@@ -95,12 +106,40 @@ router.get('/stats', async (req: AuthRequest, res: Response, next) => {
       return acc;
     }, {} as Record<string, { date: string; count: number }>);
 
+    // Additional stats for recruiters
+    let recruiterStats = {};
+    if (isRecruiter) {
+      const recruiter = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { company: true },
+      });
+
+      if (recruiter?.company) {
+        // Count open job postings
+        const openPositions = await prisma.jobPosting.count({
+          where: {
+            company: recruiter.company,
+            status: 'open',
+          },
+        });
+
+        recruiterStats = {
+          openPositions,
+          uniqueApplicants: await prisma.jobApplication.findMany({
+            where: { company: recruiter.company },
+            distinct: ['userId'],
+          }).then(apps => apps.length),
+        };
+      }
+    }
+
     res.json({
       kpis: {
         total,
         appliedThisWeek,
         interviews,
         offers,
+        ...recruiterStats,
       },
       byStatus,
       timeline: Object.values(timeline),

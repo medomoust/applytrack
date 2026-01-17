@@ -7,9 +7,9 @@ import { apiLimiter } from '../middleware/rate-limit';
 
 const router = Router();
 
-// All routes require authentication and admin role
+// All routes require authentication and recruiter role
 router.use(authenticate);
-router.use(requireRole(UserRole.ADMIN));
+router.use(requireRole(UserRole.RECRUITER));
 router.use(apiLimiter);
 
 // List users with filters and pagination
