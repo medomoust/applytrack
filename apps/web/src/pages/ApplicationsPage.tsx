@@ -247,7 +247,7 @@ export function ApplicationsPage() {
                   <div>
                     <label className="text-sm font-medium mb-3 block">Status</label>
                     <div className="space-y-2">
-                      {Object.entries(ApplicationStatus).map(([key, value]) => (
+                      {Object.entries(ApplicationStatus).map(([_, value]) => (
                         <button
                           key={value}
                           onClick={() => setFilters({ 
@@ -272,7 +272,7 @@ export function ApplicationsPage() {
                   <div>
                     <label className="text-sm font-medium mb-3 block">Priority</label>
                     <div className="space-y-2">
-                      {Object.entries(Priority).map(([key, value]) => (
+                      {Object.entries(Priority).map(([_, value]) => (
                         <button
                           key={value}
                           onClick={() => setFilters({ 
