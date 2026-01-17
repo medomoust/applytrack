@@ -4,10 +4,15 @@ import {
   SignUpInput,
   AuthResponse,
   JobApplication,
-  CreateJobApplicationInput,
+  JobPosting,
   UpdateJobApplicationInput,
+  CreateJobPostingInput,
+  UpdateJobPostingInput,
+  ApplyToJobPostingInput,
   ListJobApplicationsQuery,
+  ListJobPostingsQuery,
   PaginatedJobApplications,
+  PaginatedJobPostings,
   PaginatedActivityLogs,
   ListActivityLogsQuery,
 } from '@applytrack/shared';
@@ -80,6 +85,46 @@ class ApiClient {
     return this.request<User>('/api/auth/me');
   }
 
+  // Job Postings
+  async getJobPostings(query: Partial<ListJobPostingsQuery> = {}): Promise<PaginatedJobPostings> {
+    const params = new URLSearchParams();
+    Object.entries(query).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        params.append(key, String(value));
+      }
+    });
+    return this.request<PaginatedJobPostings>(`/api/job-postings?${params}`);
+  }
+
+  async getJobPosting(id: string): Promise<JobPosting> {
+    return this.request<JobPosting>(`/api/job-postings/${id}`);
+  }
+
+  async createJobPosting(data: CreateJobPostingInput): Promise<JobPosting> {
+    return this.request<JobPosting>('/api/job-postings', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateJobPosting(id: string, data: UpdateJobPostingInput): Promise<JobPosting> {
+    return this.request<JobPosting>(`/api/job-postings/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteJobPosting(id: string): Promise<void> {
+    return this.request(`/api/job-postings/${id}`, { method: 'DELETE' });
+  }
+
+  async applyToJobPosting(id: string, data: ApplyToJobPostingInput = {}): Promise<JobApplication> {
+    return this.request<JobApplication>(`/api/job-postings/${id}/apply`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
   // Job Applications
   async getApplications(query: Partial<ListJobApplicationsQuery> = {}): Promise<PaginatedJobApplications> {
     const params = new URLSearchParams();
@@ -93,13 +138,6 @@ class ApiClient {
 
   async getApplication(id: string): Promise<JobApplication> {
     return this.request<JobApplication>(`/api/applications/${id}`);
-  }
-
-  async createApplication(data: CreateJobApplicationInput): Promise<JobApplication> {
-    return this.request<JobApplication>('/api/applications', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
   }
 
   async updateApplication(id: string, data: UpdateJobApplicationInput): Promise<JobApplication> {

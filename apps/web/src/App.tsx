@@ -5,6 +5,8 @@ import { DashboardPage } from './pages/DashboardPage';
 import { ApplicationsPage } from './pages/ApplicationsPage';
 import { ActivityPage } from './pages/ActivityPage';
 import { AdminUsersPage } from './pages/AdminUsersPage';
+import { JobsPage } from './pages/JobsPage';
+import { JobManagementPage } from './pages/JobManagementPage';
 import { ProtectedLayout } from './components/layout/ProtectedLayout';
 import { Toaster } from './components/ui/Toaster';
 
@@ -17,6 +19,8 @@ function App() {
         
         <Route element={<ProtectedLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/jobs" element={<JobsPage />} />
+          <Route path="/job-postings" element={<JobManagementPage />} />
           <Route path="/applications" element={<ApplicationsPage />} />
           <Route path="/activity" element={<ActivityPage />} />
           <Route path="/admin/users" element={<AdminUsersPage />} />

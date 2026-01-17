@@ -1,10 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api';
+import { useAuthStore } from '@/lib/auth';
+import { UserRole } from '@applytrack/shared';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export function DashboardPage() {
+  const user = useAuthStore((state) => state.user);
+  const isRecruiter = user?.role === UserRole.RECRUITER;
   const { data: stats, isLoading, error, isError } = useQuery({
     queryKey: ['dashboard-stats'],
     queryFn: () => apiClient.getDashboardStats(),
@@ -48,14 +52,18 @@ export function DashboardPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-muted-foreground">Overview of your job applications</p>
+        <p className="text-muted-foreground">
+          {isRecruiter ? 'Overview of your company\'s recruitment' : 'Overview of your job applications'}
+        </p>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Total Applications</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              {isRecruiter ? 'Total Applications' : 'Total Applications'}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{stats?.kpis.total || 0}</div>
@@ -64,19 +72,27 @@ export function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Applied This Week</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              {isRecruiter ? 'Open Positions' : 'Applied This Week'}
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{stats?.kpis.appliedThisWeek || 0}</div>
+            <div className="text-3xl font-bold">
+              {isRecruiter ? (stats?.recruiterStats?.openPositions || 0) : (stats?.kpis.appliedThisWeek || 0)}
+            </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Interviews</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              {isRecruiter ? 'Unique Applicants' : 'Interviews'}
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{stats?.kpis.interviews || 0}</div>
+            <div className="text-3xl font-bold">
+              {isRecruiter ? (stats?.recruiterStats?.uniqueApplicants || 0) : (stats?.kpis.interviews || 0)}
+            </div>
           </CardContent>
         </Card>
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { SignUpInput, signUpSchema } from '@applytrack/shared';
+import { SignUpInput, signUpSchema, UserRole, Company } from '@applytrack/shared';
 import { apiClient } from '@/lib/api';
 import { useAuthStore } from '@/lib/auth';
 import { Button } from '@/components/ui/Button';
@@ -11,7 +11,12 @@ import { toast } from 'sonner';
 export function SignupPage() {
   const navigate = useNavigate();
   const { setUser, setAccessToken } = useAuthStore();
-  const [formData, setFormData] = useState<SignUpInput>({ email: '', password: '', name: '' });
+  const [formData, setFormData] = useState<SignUpInput>({ 
+    email: '', 
+    password: '', 
+    name: '',
+    role: UserRole.APPLICANT,
+  });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,6 +41,8 @@ export function SignupPage() {
     }
   };
 
+  const companies = Object.values(Company);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted p-4">
       <Card className="w-full max-w-md">
@@ -51,7 +58,7 @@ export function SignupPage() {
             )}
             <div>
               <label htmlFor="name" className="block text-sm font-medium mb-2">
-                Name (Optional)
+                Full Name
               </label>
               <Input
                 id="name"
@@ -59,6 +66,7 @@ export function SignupPage() {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="John Doe"
+                required
               />
             </div>
             <div>
@@ -74,6 +82,50 @@ export function SignupPage() {
                 required
               />
             </div>
+            <div>
+              <label htmlFor="role" className="block text-sm font-medium mb-2">
+                I am a
+              </label>
+              <select
+                id="role"
+                value={formData.role}
+                onChange={(e) => setFormData({ 
+                  ...formData, 
+                  role: e.target.value as typeof UserRole[keyof typeof UserRole],
+                  // Clear company if switching to applicant
+                  company: e.target.value === UserRole.APPLICANT ? undefined : formData.company
+                })}
+                className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                required
+              >
+                <option value={UserRole.APPLICANT}>Job Applicant</option>
+                <option value={UserRole.RECRUITER}>Recruiter</option>
+              </select>
+            </div>
+            {formData.role === UserRole.RECRUITER && (
+              <div>
+                <label htmlFor="company" className="block text-sm font-medium mb-2">
+                  Company
+                </label>
+                <select
+                  id="company"
+                  value={formData.company || ''}
+                  onChange={(e) => setFormData({ 
+                    ...formData, 
+                    company: e.target.value as typeof Company[keyof typeof Company]
+                  })}
+                  className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  required
+                >
+                  <option value="">Select a company</option>
+                  {companies.map((company) => (
+                    <option key={company} value={company}>
+                      {company}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div>
               <label htmlFor="password" className="block text-sm font-medium mb-2">
                 Password

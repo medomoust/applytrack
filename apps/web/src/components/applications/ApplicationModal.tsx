@@ -29,11 +29,10 @@ export function ApplicationModal({ application, onClose, onSuccess }: Applicatio
 
   const mutation = useMutation({
     mutationFn: async (data: any) => {
-      if (application) {
-        return apiClient.updateApplication(application.id, data);
-      } else {
-        return apiClient.createApplication(data);
+      if (!application) {
+        throw new Error('Application is required');
       }
+      return apiClient.updateApplication(application.id, data);
     },
     onSuccess: () => {
       onSuccess();
@@ -70,9 +69,7 @@ export function ApplicationModal({ application, onClose, onSuccess }: Applicatio
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-card rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="p-6 border-b">
-          <h2 className="text-2xl font-bold">
-            {application ? 'Edit Application' : 'New Application'}
-          </h2>
+          <h2 className="text-2xl font-bold">Edit Application</h2>
         </div>
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && (

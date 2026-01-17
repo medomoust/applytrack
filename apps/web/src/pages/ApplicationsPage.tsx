@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api';
-import { ApplicationStatus, Priority } from '@applytrack/shared';
+import { useAuthStore } from '@/lib/auth';
+import { ApplicationStatus, Priority, UserRole } from '@applytrack/shared';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
@@ -16,7 +17,6 @@ import { formatDate } from '@/lib/utils';
 import { 
   LayoutGrid, 
   Table as TableIcon, 
-  Plus, 
   Search, 
   Filter,
   Archive,
@@ -32,6 +32,7 @@ type ViewMode = 'kanban' | 'table';
 
 export function ApplicationsPage() {
   const queryClient = useQueryClient();
+  const user = useAuthStore((state) => state.user);
   const [page, setPage] = useState(1);
   const [viewMode, setViewMode] = useState<ViewMode>('kanban');
   const [filters, setFilters] = useState({
@@ -84,10 +85,7 @@ export function ApplicationsPage() {
     },
   });
 
-  const handleCreate = () => {
-    setEditingApplication(null);
-    setIsModalOpen(true);
-  };
+
 
   const handleEdit = (app: any) => {
     setEditingApplication(app);
@@ -172,21 +170,16 @@ export function ApplicationsPage() {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between"
       >
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <FileText className="h-8 w-8 text-primary" />
-            Applications
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Track and manage your job applications
-          </p>
-        </div>
-        <Button onClick={handleCreate} className="gap-2">
-          <Plus className="h-4 w-4" />
-          New Application
-        </Button>
+        <h1 className="text-3xl font-bold flex items-center gap-2">
+          <FileText className="h-8 w-8 text-primary" />
+          Applications
+        </h1>
+        <p className="text-muted-foreground mt-1">
+          {user?.role === UserRole.APPLICANT
+            ? 'Track and manage your job applications'
+            : 'View and manage applications to your company\'s jobs'}
+        </p>
       </motion.div>
 
       {/* Stats Cards */}
@@ -335,12 +328,10 @@ export function ApplicationsPage() {
         <EmptyState
           icon={FileText}
           title="No applications yet"
-          description="Get started by creating your first job application"
-          action={
-            <Button onClick={handleCreate} className="gap-2">
-              <Plus className="h-4 w-4" />
-              Create Application
-            </Button>
+          description={
+            user?.role === UserRole.APPLICANT
+              ? 'Browse available jobs and apply to start tracking your applications'
+              : 'Applications to your company\'s job postings will appear here'
           }
         />
       ) : (

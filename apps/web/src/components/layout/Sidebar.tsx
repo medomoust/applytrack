@@ -1,18 +1,29 @@
 import { NavLink } from 'react-router-dom';
 import { useAuthStore } from '@/lib/auth';
 import { UserRole } from '@applytrack/shared';
-import { LayoutDashboard, FileText, Activity, Users, Briefcase } from 'lucide-react';
+import { LayoutDashboard, FileText, Activity, Users, Briefcase, Building2 } from 'lucide-react';
 
 export function Sidebar() {
   const { user } = useAuthStore();
 
   const links = [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { to: '/applications', label: 'Applications', icon: Briefcase },
-    { to: '/activity', label: 'Activity', icon: Activity },
-    ...(user?.role === UserRole.ADMIN
-      ? [{ to: '/admin/users', label: 'Admin', icon: Users }]
+    // Applicant-specific links
+    ...(user?.role === UserRole.APPLICANT
+      ? [
+          { to: '/jobs', label: 'Browse Jobs', icon: Building2 },
+          { to: '/applications', label: 'My Applications', icon: Briefcase },
+        ]
       : []),
+    // Recruiter-specific links
+    ...(user?.role === UserRole.RECRUITER
+      ? [
+          { to: '/job-postings', label: 'Job Postings', icon: Building2 },
+          { to: '/applications', label: 'Applications', icon: Briefcase },
+          { to: '/admin/users', label: 'Users', icon: Users },
+        ]
+      : []),
+    { to: '/activity', label: 'Activity', icon: Activity },
   ];
 
   return (
