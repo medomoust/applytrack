@@ -239,7 +239,7 @@ async function main() {
   console.log(`\n🔐 Login Credentials:`);
   console.log(`  • All users have password: Password123!`);
   console.log(`\n👔 Recruiter Accounts:`);
-  for (const company of Object.values(Company)) {
+  for (const company of COMPANIES) {
     console.log(`  • recruiter@${company.toLowerCase()}.com (${company})`);
   }
   console.log(`\n🧑 Applicant Accounts:`);
