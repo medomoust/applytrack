@@ -7,40 +7,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-  applicant
-  recruiter
-}
+// Temporarily using String instead of enums to match database
+// enum UserRole {
+//   applicant
+//   recruiter
+// }
 
-enum Company {
-  GOOGLE
-  APPLE
-  MICROSOFT
-  AMAZON
-  META
-  NETFLIX
-  TESLA
-  TWITTER
-  SPOTIFY
-  ADOBE
-}
+// enum Company {
+//   GOOGLE
+//   APPLE
+//   MICROSOFT
+//   AMAZON
+//   META
+//   NETFLIX
+//   TESLA
+//   TWITTER
+//   SPOTIFY
+//   ADOBE
+// }
 
-enum JobPostingStatus {
-  open
-  closed
-}
+// enum JobPostingStatus {
+//   open
+//   closed
+// }
 
-enum WorkMode {
-  remote
-  hybrid
-  onsite
-}
+// enum WorkMode {
+//   remote
+//   hybrid
+//   onsite
+// }
 
-enum EmploymentType {
-  fulltime
-  contract
-  intern
-}
+// enum EmploymentType {
+//   fulltime
+//   contract
+//   intern
+// }
 
 enum ApplicationStatus {
   wishlist
@@ -71,8 +72,8 @@ model User {
   email     String   @unique
   password  String
   name      String?
-  role      UserRole @default(applicant)
-  company   Company? // Only for recruiters
+  role      String   @default("applicant")
+  company   String? // Only for recruiters
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -89,15 +90,15 @@ model User {
 model JobPosting {
   id             String           @id @default(uuid())
   recruiterId    String
-  company        Company
+  company        String
   roleTitle      String
   location       String?
-  workMode       WorkMode
-  employmentType EmploymentType
+  workMode       String
+  employmentType String
   description    String?
   requirements   String?
   salaryRange    String?
-  status         JobPostingStatus @default(open)
+  status         String           @default("open")
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
 
@@ -118,10 +119,10 @@ model JobApplication {
   company          String // Denormalized from JobPosting
   roleTitle        String // Denormalized from JobPosting
   location         String?
-  workMode         WorkMode
-  employmentType   EmploymentType
-  status           ApplicationStatus @default(applied)
-  priority         Priority          @default(medium)
+  workMode         String
+  employmentType   String
+  status           String            @default("applied")
+  priority         String            @default("medium")
   appliedDate      DateTime          @default(now())
   nextFollowUpDate DateTime?
   salaryTarget     Float?
@@ -146,7 +147,7 @@ model ActivityLog {
   id               String            @id @default(uuid())
   userId           String
   jobApplicationId String?
-  eventType        ActivityEventType
+  eventType        String
   description      String
   metadata         Json?
   createdAt        DateTime          @default(now())
