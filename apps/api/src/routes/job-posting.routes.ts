@@ -66,18 +66,22 @@ router.get('/', async (req: AuthRequest, res, next) => {
       });
       
       where.company = recruiter?.company;
+      
+      // Recruiters can filter by status
+      if (status) where.status = status;
     }
 
     // Applicants only see open postings
     if (req.user!.role === 'applicant') {
       where.status = 'open';
+      
+      // Applicants can filter by company
+      if (company) where.company = company;
     }
 
-    // Apply filters
-    if (company) where.company = company;
+    // Apply other filters (available to both roles)
     if (workMode) where.workMode = workMode;
     if (employmentType) where.employmentType = employmentType;
-    if (status && req.user!.role === 'recruiter') where.status = status;
     
     if (search) {
       where.OR = [
