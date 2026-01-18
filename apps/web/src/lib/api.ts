@@ -100,21 +100,21 @@ class ApiClient {
     return this.request<JobPosting>(`/api/job-postings/${id}`);
   }
 
-  async createJobPosting(data: CreateJobPostingInput): Promise<JobPosting> {
+  createJobPosting = async (data: CreateJobPostingInput): Promise<JobPosting> => {
     return this.request<JobPosting>('/api/job-postings', {
       method: 'POST',
       body: JSON.stringify(data),
     });
   }
 
-  async updateJobPosting(id: string, data: UpdateJobPostingInput): Promise<JobPosting> {
+  updateJobPosting = async (id: string, data: UpdateJobPostingInput): Promise<JobPosting> => {
     return this.request<JobPosting>(`/api/job-postings/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   }
 
-  async deleteJobPosting(id: string): Promise<void> {
+  deleteJobPosting = async (id: string): Promise<void> => {
     return this.request(`/api/job-postings/${id}`, { method: 'DELETE' });
   }
 
