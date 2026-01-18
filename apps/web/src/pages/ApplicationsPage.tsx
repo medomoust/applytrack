@@ -49,6 +49,7 @@ export function ApplicationsPage() {
     queryKey: ['applications', page, filters],
     queryFn: () => apiClient.getApplications({ page, pageSize: 100, ...filters }),
     retry: 1,
+    staleTime: 0, // Always refetch to ensure fresh data
   });
 
   const updateStatusMutation = useMutation({
@@ -106,6 +107,16 @@ export function ApplicationsPage() {
   };
 
   const applications = data?.data || [];
+  
+  console.log('📱 Frontend Applications:', {
+    dataExists: !!data,
+    totalApps: applications.length,
+    companies: [...new Set(applications.map((a: any) => a.company))],
+    filters,
+    isLoading,
+    isError,
+  });
+  
   const filteredApplications = applications.filter((app: any) => {
     // Search filter
     if (filters.search) {
