@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/Input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
-import { Briefcase, TrendingUp, Users, Sparkles, ArrowRight } from 'lucide-react';
+import { Briefcase, TrendingUp, Users, Sparkles, ArrowRight, User, Lock } from 'lucide-react';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -218,6 +218,65 @@ export function LoginPage() {
               </form>
             </CardContent>
           </Card>
+
+          {/* Demo Credentials Banner */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mt-6"
+          >
+            <Card className="border-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 backdrop-blur-sm">
+              <CardContent className="p-4">
+                <div className="text-center mb-3">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    Try Demo Accounts
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* Recruiter Demo */}
+                  <div className="bg-white/50 dark:bg-slate-800/50 rounded-lg p-3 border border-blue-200/50 dark:border-blue-800/50">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="p-1.5 bg-blue-500/10 rounded">
+                        <Briefcase className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <span className="text-xs font-semibold text-blue-600 dark:text-blue-400">Recruiter</span>
+                    </div>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <User className="h-3 w-3 text-muted-foreground" />
+                        <code className="text-xs text-foreground">recruiter@meta.com</code>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Lock className="h-3 w-3 text-muted-foreground" />
+                        <code className="text-xs text-foreground">Password123!</code>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Applicant Demo */}
+                  <div className="bg-white/50 dark:bg-slate-800/50 rounded-lg p-3 border border-purple-200/50 dark:border-purple-800/50">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="p-1.5 bg-purple-500/10 rounded">
+                        <Users className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+                      </div>
+                      <span className="text-xs font-semibold text-purple-600 dark:text-purple-400">Applicant</span>
+                    </div>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <User className="h-3 w-3 text-muted-foreground" />
+                        <code className="text-xs text-foreground">john.doe@email.com</code>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Lock className="h-3 w-3 text-muted-foreground" />
+                        <code className="text-xs text-foreground">Password123!</code>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
 
           <p className="text-center text-xs text-muted-foreground mt-6">
             By continuing, you agree to our Terms of Service and Privacy Policy
