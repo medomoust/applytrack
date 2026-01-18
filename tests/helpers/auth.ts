@@ -1,7 +1,11 @@
 import { Page, expect } from '@playwright/test';
 
 export async function loginAsRecruiter(page: Page) {
-  await page.goto('/login');
+  await page.goto('/login', { waitUntil: 'networkidle' });
+  
+  // Wait for the login form to be fully loaded
+  await page.waitForSelector('#email', { state: 'visible', timeout: 10000 });
+  
   await page.fill('#email', 'recruiter@meta.com');
   await page.fill('#password', 'Password123!');
   await page.click('button[type="submit"]');
@@ -12,7 +16,11 @@ export async function loginAsRecruiter(page: Page) {
 }
 
 export async function loginAsApplicant(page: Page) {
-  await page.goto('/login');
+  await page.goto('/login', { waitUntil: 'networkidle' });
+  
+  // Wait for the login form to be fully loaded
+  await page.waitForSelector('#email', { state: 'visible', timeout: 10000 });
+  
   await page.fill('#email', 'john.doe@email.com');
   await page.fill('#password', 'Password123!');
   await page.click('button[type="submit"]');
