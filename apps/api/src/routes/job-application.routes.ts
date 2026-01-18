@@ -46,12 +46,6 @@ router.get('/', async (req: AuthRequest, res: Response, next) => {
       }
     }
 
-    console.log('🔍 Applications Query:', {
-      userRole: req.user.role,
-      userId: req.user.userId,
-      whereClause: JSON.stringify(where),
-    });
-
     if (filters.status) where.status = filters.status;
     if (filters.workMode) where.workMode = filters.workMode;
     if (filters.employmentType) where.employmentType = filters.employmentType;
@@ -83,8 +77,6 @@ router.get('/', async (req: AuthRequest, res: Response, next) => {
       skip: (page - 1) * pageSize,
       take: pageSize,
     });
-
-    console.log('📊 Applications found:', applications.length, 'companies:', [...new Set(applications.map(a => a.company))]);
 
     res.json({
       data: applications.map((app: any) => ({

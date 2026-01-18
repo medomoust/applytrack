@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api';
 import { useAuthStore } from '@/lib/auth';
-import { ApplicationStatus, Priority, UserRole } from '@applytrack/shared';
+import { ApplicationStatus, Priority } from '@applytrack/shared';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
@@ -107,16 +107,6 @@ export function ApplicationsPage() {
   };
 
   const applications = data?.data || [];
-  
-  console.log('📱 Frontend Applications:', {
-    dataExists: !!data,
-    totalApps: applications.length,
-    companies: [...new Set(applications.map((a: any) => a.company))],
-    filters,
-    isLoading,
-    isError,
-  });
-  
   const filteredApplications = applications.filter((app: any) => {
     // Search filter
     if (filters.search) {
@@ -208,7 +198,7 @@ export function ApplicationsPage() {
           Applications
         </h1>
         <p className="text-muted-foreground mt-1">
-          {user?.role === UserRole.APPLICANT
+          {user?.role === 'applicant'
             ? 'Track and manage your job applications'
             : 'View and manage applications to your company\'s jobs'}
         </p>
@@ -376,7 +366,7 @@ export function ApplicationsPage() {
             title={applications.length === 0 ? "No applications yet" : "No matching applications"}
             description={
               applications.length === 0
-                ? (user?.role === UserRole.APPLICANT
+                ? (user?.role === 'applicant'
                     ? 'Browse available jobs and apply to start tracking your applications'
                     : 'Applications to your company\'s job postings will appear here')
                 : 'Try adjusting your filters to see more results'
