@@ -12,14 +12,14 @@ export function DemoBanner() {
         <div className="flex items-center gap-6 flex-wrap justify-center">
           <span className="font-semibold">🎯 Demo Mode</span>
           <div className="flex items-center gap-2">
-            <span className="opacity-90">Admin:</span>
-            <code className="bg-white/20 px-2 py-0.5 rounded text-xs">admin@applytrack.dev</code>
+            <span className="opacity-90">Recruiter:</span>
+            <code className="bg-white/20 px-2 py-0.5 rounded text-xs">recruiter@meta.com</code>
             <span className="opacity-70">/</span>
             <code className="bg-white/20 px-2 py-0.5 rounded text-xs">Password123!</code>
           </div>
           <div className="flex items-center gap-2">
-            <span className="opacity-90">User:</span>
-            <code className="bg-white/20 px-2 py-0.5 rounded text-xs">demo@applytrack.dev</code>
+            <span className="opacity-90">Applicant:</span>
+            <code className="bg-white/20 px-2 py-0.5 rounded text-xs">john.doe@email.com</code>
             <span className="opacity-70">/</span>
             <code className="bg-white/20 px-2 py-0.5 rounded text-xs">Password123!</code>
           </div>
