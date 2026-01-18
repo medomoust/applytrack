@@ -211,6 +211,7 @@ export function DashboardPage() {
                       border: 'none',
                       borderRadius: '8px',
                       boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                      color: '#1f2937',
                     }}
                     cursor={{ fill: 'rgba(139, 92, 246, 0.1)' }}
                   />
@@ -264,6 +265,7 @@ export function DashboardPage() {
                         border: 'none',
                         borderRadius: '8px',
                         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                        color: '#1f2937',
                       }}
                     />
                   </PieChart>
