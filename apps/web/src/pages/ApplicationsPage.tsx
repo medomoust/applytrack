@@ -177,7 +177,7 @@ export function ApplicationsPage() {
         </div>
         <Card className="p-8">
           <EmptyState
-            icon={FileText}
+            icon={<FileText className="h-12 w-12" />}
             title="No data available"
             description="Unable to load applications. Please try refreshing the page."
           />
@@ -362,7 +362,7 @@ export function ApplicationsPage() {
       ) : filteredApplications.length === 0 ? (
         <Card className="p-8">
           <EmptyState
-            icon={FileText}
+            icon={<FileText className="h-12 w-12" />}
             title={applications.length === 0 ? "No applications yet" : "No matching applications"}
             description={
               applications.length === 0
