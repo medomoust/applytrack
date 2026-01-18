@@ -111,8 +111,8 @@ export function ApplicationsPage() {
     if (filters.search) {
       const search = filters.search.toLowerCase();
       const matchesSearch = 
-        app.company.toLowerCase().includes(search) ||
-        app.roleTitle.toLowerCase().includes(search);
+        (app.company?.toLowerCase() || '').includes(search) ||
+        (app.roleTitle?.toLowerCase() || '').includes(search);
       if (!matchesSearch) return false;
     }
     
@@ -338,17 +338,19 @@ export function ApplicationsPage() {
           ))}
         </div>
       ) : filteredApplications.length === 0 ? (
-        <EmptyState
-          icon={FileText}
-          title={applications.length === 0 ? "No applications yet" : "No matching applications"}
-          description={
-            applications.length === 0
-              ? (user?.role === UserRole.APPLICANT
-                  ? 'Browse available jobs and apply to start tracking your applications'
-                  : 'Applications to your company\'s job postings will appear here')
-              : 'Try adjusting your filters to see more results'
-          }
-        />
+        <Card className="p-8">
+          <EmptyState
+            icon={FileText}
+            title={applications.length === 0 ? "No applications yet" : "No matching applications"}
+            description={
+              applications.length === 0
+                ? (user?.role === UserRole.APPLICANT
+                    ? 'Browse available jobs and apply to start tracking your applications'
+                    : 'Applications to your company\'s job postings will appear here')
+                : 'Try adjusting your filters to see more results'
+            }
+          />
+        </Card>
       ) : (
         <AnimatePresence mode="wait">
           {viewMode === 'kanban' ? (
