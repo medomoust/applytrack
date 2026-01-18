@@ -20,8 +20,11 @@ export function Sidebar() {
       ? [
           { to: '/job-postings', label: 'Job Postings', icon: Building2 },
           { to: '/applications', label: 'Applications', icon: Briefcase },
-          { to: '/admin/users', label: 'Users', icon: Users },
         ]
+      : []),
+    // Admin-only link
+    ...(user?.isAdmin
+      ? [{ to: '/admin/users', label: 'Users', icon: Users }]
       : []),
     { to: '/activity', label: 'Activity', icon: Activity },
   ];

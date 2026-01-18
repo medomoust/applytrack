@@ -7,10 +7,19 @@ import { apiLimiter } from '../middleware/rate-limit';
 
 const router = Router();
 
-// All routes require authentication and recruiter role
+// All routes require authentication and admin access
 router.use(authenticate);
-router.use(requireRole(UserRole.RECRUITER));
 router.use(apiLimiter);
+
+// Middleware to check if user is admin
+const requireAdmin = (req: AuthRequest, res: Response, next: any) => {
+  if (!req.user?.isAdmin) {
+    throw new AppError(403, 'Admin access required');
+  }
+  next();
+};
+
+router.use(requireAdmin);
 
 // List users with filters and pagination
 router.get('/', async (req: AuthRequest, res: Response, next) => {

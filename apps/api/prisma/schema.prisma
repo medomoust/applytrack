@@ -74,6 +74,7 @@ model User {
   name      String?
   role      String   @default("applicant")
   company   String? // Only for recruiters
+  isAdmin   Boolean  @default(false) // Master admin access
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

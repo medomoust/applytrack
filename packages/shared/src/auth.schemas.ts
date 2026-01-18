@@ -41,6 +41,7 @@ export const userSchema = z.object({
   role: z.enum(USER_ROLES),
   company: z.enum(COMPANIES).nullable(),
   isActive: z.boolean(),
+  isAdmin: z.boolean().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

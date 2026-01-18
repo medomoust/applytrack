@@ -12,12 +12,12 @@ export const comparePassword = async (password: string, hash: string): Promise<b
   return bcrypt.compare(password, hash);
 };
 
-export const generateAccessToken = (userId: string, role: string): string => {
+export const generateAccessToken = (userId: string, role: string, isAdmin: boolean = false): string => {
   const options: SignOptions = {
     expiresIn: config.jwt.accessExpiresIn as any,
   };
   return jwt.sign(
-    { userId, role },
+    { userId, role, isAdmin },
     config.jwt.accessSecret,
     options
   );
@@ -34,8 +34,8 @@ export const generateRefreshToken = (userId: string): string => {
   );
 };
 
-export const verifyAccessToken = (token: string): { userId: string; role: string } => {
-  const decoded = jwt.verify(token, config.jwt.accessSecret) as { userId: string; role: string };
+export const verifyAccessToken = (token: string): { userId: string; role: string; isAdmin?: boolean } => {
+  const decoded = jwt.verify(token, config.jwt.accessSecret) as { userId: string; role: string; isAdmin?: boolean };
   return decoded;
 };
 

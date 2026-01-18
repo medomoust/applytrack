@@ -55,13 +55,14 @@ router.post('/signup', authLimiter, async (req, res, next) => {
         role: true,
         company: true,
         isActive: true,
+        isAdmin: true,
         createdAt: true,
         updatedAt: true,
       },
     });
 
     // Generate tokens
-    const accessToken = generateAccessToken(user.id, user.role);
+    const accessToken = generateAccessToken(user.id, user.role, user.isAdmin || false);
     const refreshToken = generateRefreshToken(user.id);
 
     // Store refresh token
@@ -86,6 +87,7 @@ router.post('/signup', authLimiter, async (req, res, next) => {
     res.status(201).json({
       user: {
         ...user,
+        isAdmin: user.isAdmin || false,
         createdAt: user.createdAt.toISOString(),
         updatedAt: user.updatedAt.toISOString(),
       },
@@ -121,7 +123,7 @@ router.post('/login', authLimiter, async (req, res, next) => {
     }
 
     // Generate tokens
-    const accessToken = generateAccessToken(user.id, user.role);
+    const accessToken = generateAccessToken(user.id, user.role, user.isAdmin || false);
     const refreshToken = generateRefreshToken(user.id);
 
     // Store refresh token
@@ -150,6 +152,7 @@ router.post('/login', authLimiter, async (req, res, next) => {
         name: user.name,
         role: user.role,
         isActive: user.isActive,
+        isAdmin: user.isAdmin || false,
         createdAt: user.createdAt.toISOString(),
         updatedAt: user.updatedAt.toISOString(),
       },
@@ -187,7 +190,7 @@ router.post('/refresh', async (req, res, next) => {
     }
 
     // Generate new tokens
-    const accessToken = generateAccessToken(tokenRecord.user.id, tokenRecord.user.role);
+    const accessToken = generateAccessToken(tokenRecord.user.id, tokenRecord.user.role, tokenRecord.user.isAdmin || false);
     const newRefreshToken = generateRefreshToken(tokenRecord.user.id);
 
     // Delete old refresh token and create new one in a transaction

@@ -7,6 +7,7 @@ export const updateUserSchema = z.object({
   name: z.string().min(2).optional(),
   role: z.enum(USER_ROLES).optional(),
   isActive: z.boolean().optional(),
+  isAdmin: z.boolean().optional(),
 });
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;

@@ -67,6 +67,21 @@ async function main() {
 
   const hashedPassword = await bcrypt.hash('Password123!', 10);
 
+  // Create admin account
+  console.log('👑 Creating admin account...');
+  const adminPassword = await bcrypt.hash('Medo1234$', 10);
+  const admin = await prisma.user.create({
+    data: {
+      email: 'medomoust@gmail.com',
+      password: adminPassword,
+      name: 'Admin User',
+      role: 'recruiter', // Can access both recruiter and admin features
+      isAdmin: true,
+      company: 'GOOGLE', // Placeholder company
+    },
+  });
+  console.log('  ✓ Created admin account');
+
   // Create recruiters (one for each company)
   console.log('👔 Creating recruiters...');
   const recruiters: Record<string, any> = {};
