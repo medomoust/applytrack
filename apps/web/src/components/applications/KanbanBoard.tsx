@@ -39,14 +39,16 @@ interface KanbanColumnProps {
   count: number;
   color: string;
   onEdit: (app: Application) => void;
+  userRole?: string;
 }
 
 interface KanbanCardProps {
   application: Application;
   onEdit: (app: Application) => void;
+  userRole?: string;
 }
 
-function KanbanCard({ application, onEdit }: KanbanCardProps) {
+function KanbanCard({ application, onEdit, userRole }: KanbanCardProps) {
   const {
     attributes,
     listeners,
@@ -82,7 +84,7 @@ function KanbanCard({ application, onEdit }: KanbanCardProps) {
       >
         <div className="flex items-start justify-between mb-2">
           <div className="flex-1 min-w-0">
-            {application.applicantName && (
+            {application.applicantName && userRole === 'recruiter' && (
               <p className="text-xs font-medium text-primary mb-1">
                 {application.applicantName}
               </p>
@@ -136,7 +138,7 @@ function KanbanCard({ application, onEdit }: KanbanCardProps) {
   );
 }
 
-function KanbanColumn({ applications, title, count, color, onEdit }: KanbanColumnProps) {
+function KanbanColumn({ applications, title, count, color, onEdit, userRole }: KanbanColumnProps) {
   return (
     <div className="flex flex-col min-w-[320px] max-w-[320px]">
       <div className={cn('rounded-t-lg p-3 border-b-2 bg-card', color)}>
@@ -162,7 +164,7 @@ function KanbanColumn({ applications, title, count, color, onEdit }: KanbanColum
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                 >
-                  <KanbanCard application={app} onEdit={onEdit} />
+                  <KanbanCard application={app} onEdit={onEdit} userRole={userRole} />
                 </motion.div>
               ))
             )}
@@ -249,6 +251,7 @@ export function KanbanBoard({ applications, onStatusChange, onEdit, userRole }: 
               count={columnApps.length}
               color={column.color}
               onEdit={onEdit}
+              userRole={userRole}
             />
           );
         })}

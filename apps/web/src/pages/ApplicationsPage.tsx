@@ -340,11 +340,13 @@ export function ApplicationsPage() {
       ) : filteredApplications.length === 0 ? (
         <EmptyState
           icon={FileText}
-          title="No applications yet"
+          title={applications.length === 0 ? "No applications yet" : "No matching applications"}
           description={
-            user?.role === UserRole.APPLICANT
-              ? 'Browse available jobs and apply to start tracking your applications'
-              : 'Applications to your company\'s job postings will appear here'
+            applications.length === 0
+              ? (user?.role === UserRole.APPLICANT
+                  ? 'Browse available jobs and apply to start tracking your applications'
+                  : 'Applications to your company\'s job postings will appear here')
+              : 'Try adjusting your filters to see more results'
           }
         />
       ) : (
