@@ -41,12 +41,6 @@ router.get('/', async (req: AuthRequest, res: Response, next) => {
         select: { company: true },
       });
       
-      console.log('🔍 Recruiter filtering:', {
-        userId: req.user.userId,
-        recruiterCompany: recruiter?.company,
-        userRole: req.user.role,
-      });
-      
       if (recruiter?.company) {
         where.company = recruiter.company;
       }
@@ -72,8 +66,6 @@ router.get('/', async (req: AuthRequest, res: Response, next) => {
       if (filters.startDate) where.createdAt.gte = new Date(filters.startDate);
       if (filters.endDate) where.createdAt.lte = new Date(filters.endDate);
     }
-
-    console.log('📋 Final WHERE clause for applications:', JSON.stringify(where, null, 2));
 
     // Get total count
     const totalItems = await prisma.jobApplication.count({ where });

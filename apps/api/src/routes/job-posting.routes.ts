@@ -31,14 +31,11 @@ router.post('/', requireRole('recruiter'), async (req: AuthRequest, res, next) =
       throw new AppError(400, 'Recruiter must have a company assigned');
     }
 
-    // Ensure posting is for recruiter's own company
-    if (data.company !== recruiter.company) {
-      throw new AppError(403, 'You can only create job postings for your own company');
-    }
-
+    // Always use recruiter's company (ignore any company in request body)
     const jobPosting = await prisma.jobPosting.create({
       data: {
         ...data,
+        company: recruiter.company, // Force use of recruiter's company
         recruiterId: req.user!.userId,
       },
     });
@@ -68,12 +65,6 @@ router.get('/', async (req: AuthRequest, res, next) => {
         select: { company: true },
       });
       
-      console.log('🔍 Job Posting - Recruiter filtering:', {
-        userId: req.user!.userId,
-        recruiterCompany: recruiter?.company,
-        userRole: req.user!.role,
-      });
-      
       where.company = recruiter?.company;
     }
 
@@ -87,8 +78,6 @@ router.get('/', async (req: AuthRequest, res, next) => {
     if (workMode) where.workMode = workMode;
     if (employmentType) where.employmentType = employmentType;
     if (status && req.user!.role === 'recruiter') where.status = status;
-    
-    console.log('📋 Final WHERE clause for job postings:', JSON.stringify(where, null, 2));
     
     if (search) {
       where.OR = [
@@ -186,9 +175,13 @@ router.put('/:id', requireRole('recruiter'), async (req: AuthRequest, res, next)
       throw new AppError(403, 'You can only update your own job postings');
     }
 
+    // Prevent changing company
+    const updateData = { ...data };
+    delete updateData.company;
+
     const jobPosting = await prisma.jobPosting.update({
       where: { id },
-      data,
+      data: updateData,
     });
 
     res.json({

@@ -4,7 +4,7 @@ import { COMPANIES, WORK_MODES, EMPLOYMENT_TYPES, JOB_POSTING_STATUSES, JobPosti
 
 // Create job posting
 export const createJobPostingSchema = z.object({
-  company: z.enum(COMPANIES),
+  company: z.enum(COMPANIES).optional(), // Auto-set from recruiter's company
   roleTitle: z.string().min(1, 'Role title is required').max(200),
   location: z.string().max(200).optional(),
   workMode: z.enum(WORK_MODES),
