@@ -164,6 +164,27 @@ export function ApplicationsPage() {
     );
   }
 
+  // Add defensive check
+  if (!data && !isLoading) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold flex items-center gap-2">
+            <FileText className="h-8 w-8 text-primary" />
+            Applications
+          </h1>
+        </div>
+        <Card className="p-8">
+          <EmptyState
+            icon={FileText}
+            title="No data available"
+            description="Unable to load applications. Please try refreshing the page."
+          />
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
