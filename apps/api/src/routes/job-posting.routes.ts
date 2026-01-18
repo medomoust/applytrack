@@ -67,6 +67,13 @@ router.get('/', async (req: AuthRequest, res, next) => {
         where: { id: req.user!.userId },
         select: { company: true },
       });
+      
+      console.log('🔍 Job Posting - Recruiter filtering:', {
+        userId: req.user!.userId,
+        recruiterCompany: recruiter?.company,
+        userRole: req.user!.role,
+      });
+      
       where.company = recruiter?.company;
     }
 
@@ -80,6 +87,9 @@ router.get('/', async (req: AuthRequest, res, next) => {
     if (workMode) where.workMode = workMode;
     if (employmentType) where.employmentType = employmentType;
     if (status && req.user!.role === 'recruiter') where.status = status;
+    
+    console.log('📋 Final WHERE clause for job postings:', JSON.stringify(where, null, 2));
+    
     if (search) {
       where.OR = [
         { roleTitle: { contains: search, mode: 'insensitive' } },

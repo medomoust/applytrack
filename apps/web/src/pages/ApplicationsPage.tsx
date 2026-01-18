@@ -189,21 +189,34 @@ export function ApplicationsPage() {
         transition={{ delay: 0.1 }}
         className="grid grid-cols-1 md:grid-cols-4 gap-4"
       >
-        {[
-          { label: 'Total', count: applications.length, color: 'blue' },
-          { label: 'Applied', count: applications.filter((a: any) => a.status === 'applied').length, color: 'green' },
-          { label: 'Interviews', count: applications.filter((a: any) => a.status === 'interview').length, color: 'purple' },
-          { label: 'Offers', count: applications.filter((a: any) => a.status === 'offer').length, color: 'yellow' },
-        ].map((stat) => (
-          <Card key={stat.label} className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
-                <p className="text-2xl font-bold mt-1">{stat.count}</p>
+        {(() => {
+          const stats = [
+            { label: 'Total', count: applications.length, color: 'blue' },
+            { label: 'Applied', count: applications.filter((a: any) => a.status === 'applied').length, color: 'green' },
+            { label: 'Interviews', count: applications.filter((a: any) => a.status === 'interview').length, color: 'purple' },
+            { label: 'Offers', count: applications.filter((a: any) => a.status === 'offer').length, color: 'yellow' },
+          ];
+          
+          // Add wishlist stat for applicants only
+          if (user?.role === 'applicant') {
+            stats.splice(1, 0, { 
+              label: 'Wishlist', 
+              count: applications.filter((a: any) => a.status === 'wishlist').length, 
+              color: 'gray' 
+            });
+          }
+          
+          return stats.map((stat) => (
+            <Card key={stat.label} className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">{stat.label}</p>
+                  <p className="text-2xl font-bold mt-1">{stat.count}</p>
+                </div>
               </div>
-            </div>
-          </Card>
-        ))}
+            </Card>
+          ));
+        })()}
       </motion.div>
 
       {/* Filters & View Toggle */}
@@ -347,6 +360,7 @@ export function ApplicationsPage() {
                 applications={filteredApplications as any}
                 onStatusChange={handleStatusChange}
                 onEdit={handleEdit}
+                userRole={user?.role}
               />
             </motion.div>
           ) : (
@@ -361,6 +375,7 @@ export function ApplicationsPage() {
                   <table className="w-full">
                     <thead className="border-b bg-muted/50">
                       <tr className="text-left">
+                        {user?.role === 'recruiter' && <th className="p-4 font-semibold">Applicant</th>}
                         <th className="p-4 font-semibold">Company</th>
                         <th className="p-4 font-semibold">Role</th>
                         <th className="p-4 font-semibold">Status</th>
@@ -377,6 +392,11 @@ export function ApplicationsPage() {
                           animate={{ opacity: 1 }}
                           className="border-b hover:bg-muted/50 transition-colors"
                         >
+                          {user?.role === 'recruiter' && (
+                            <td className="p-4 font-medium text-primary">
+                              {app.applicantName || 'N/A'}
+                            </td>
+                          )}
                           <td className="p-4 font-medium">{app.company}</td>
                           <td className="p-4">{app.roleTitle}</td>
                           <td className="p-4">

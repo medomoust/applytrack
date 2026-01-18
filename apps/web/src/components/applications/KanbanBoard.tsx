@@ -28,6 +28,7 @@ interface Application {
   appliedDate: string;
   location?: string;
   salaryRange?: { min: number; max: number };
+  applicantName?: string;
   [key: string]: any;
 }
 
@@ -81,6 +82,11 @@ function KanbanCard({ application, onEdit }: KanbanCardProps) {
       >
         <div className="flex items-start justify-between mb-2">
           <div className="flex-1 min-w-0">
+            {application.applicantName && (
+              <p className="text-xs font-medium text-primary mb-1">
+                {application.applicantName}
+              </p>
+            )}
             <h3 className="font-semibold text-foreground truncate">
               {application.roleTitle}
             </h3>
@@ -171,9 +177,10 @@ interface KanbanBoardProps {
   applications: Application[];
   onStatusChange: (appId: string, newStatus: typeof ApplicationStatus[keyof typeof ApplicationStatus]) => void;
   onEdit: (app: Application) => void;
+  userRole?: string;
 }
 
-export function KanbanBoard({ applications, onStatusChange, onEdit }: KanbanBoardProps) {
+export function KanbanBoard({ applications, onStatusChange, onEdit, userRole }: KanbanBoardProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
   
   const sensors = useSensors(
@@ -184,7 +191,7 @@ export function KanbanBoard({ applications, onStatusChange, onEdit }: KanbanBoar
     })
   );
 
-  const columns: { status: typeof ApplicationStatus[keyof typeof ApplicationStatus]; title: string; color: string }[] = [
+  const allColumns: { status: typeof ApplicationStatus[keyof typeof ApplicationStatus]; title: string; color: string }[] = [
     { status: 'wishlist' as typeof ApplicationStatus[keyof typeof ApplicationStatus], title: 'Wishlist', color: 'border-gray-300' },
     { status: 'applied' as typeof ApplicationStatus[keyof typeof ApplicationStatus], title: 'Applied', color: 'border-blue-400' },
     { status: 'interview' as typeof ApplicationStatus[keyof typeof ApplicationStatus], title: 'Interview', color: 'border-purple-400' },
@@ -192,6 +199,11 @@ export function KanbanBoard({ applications, onStatusChange, onEdit }: KanbanBoar
     { status: 'rejected' as typeof ApplicationStatus[keyof typeof ApplicationStatus], title: 'Rejected', color: 'border-red-400' },
     { status: 'ghosted' as typeof ApplicationStatus[keyof typeof ApplicationStatus], title: 'Ghosted', color: 'border-orange-400' },
   ];
+
+  // Filter out wishlist column for recruiters
+  const columns = userRole === 'recruiter' 
+    ? allColumns.filter(col => col.status !== 'wishlist')
+    : allColumns;
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string);
