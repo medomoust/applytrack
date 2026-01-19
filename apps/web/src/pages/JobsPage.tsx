@@ -67,6 +67,132 @@ export function JobsPage() {
     console.log('JobsPage - first job:', jobs[0]);
   }
 
+  // Early return for loading state
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-between"
+        >
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-2">
+              <Building2 className="h-8 w-8 text-primary" />
+              Browse Jobs
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Find and apply to open positions
+            </p>
+          </div>
+        </motion.div>
+        <Card className="p-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search by role or company..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+        </Card>
+        <div className="space-y-4">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-32 w-full" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Early return for error state
+  if (isError) {
+    return (
+      <div className="space-y-6">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-between"
+        >
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-2">
+              <Building2 className="h-8 w-8 text-primary" />
+              Browse Jobs
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Find and apply to open positions
+            </p>
+          </div>
+        </motion.div>
+        <Card className="p-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search by role or company..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+        </Card>
+        <Card className="p-8">
+          <EmptyState
+            icon={Briefcase}
+            title="Failed to load jobs"
+            description={error instanceof Error ? error.message : 'Please try again'}
+            action={
+              <Button onClick={() => window.location.reload()} variant="outline">
+                Reload Page
+              </Button>
+            }
+          />
+        </Card>
+      </div>
+    );
+  }
+
+  // Early return for empty state
+  if (!data || !jobs || jobs.length === 0) {
+    return (
+      <div className="space-y-6">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-between"
+        >
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-2">
+              <Building2 className="h-8 w-8 text-primary" />
+              Browse Jobs
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Find and apply to open positions
+            </p>
+          </div>
+        </motion.div>
+        <Card className="p-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search by role or company..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+        </Card>
+        <Card className="p-8">
+          <EmptyState
+            icon={Briefcase}
+            title={search ? "No results found" : "No jobs available"}
+            description={search ? `No job postings match "${search}"` : "Check back later for new opportunities"}
+          />
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -100,36 +226,8 @@ export function JobsPage() {
       </Card>
 
       {/* Jobs List */}
-      {isLoading ? (
-        <div className="space-y-4">
-          {[1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-32 w-full" />
-          ))}
-        </div>
-      ) : isError ? (
-        <Card className="p-8">
-          <EmptyState
-            icon={Briefcase}
-            title="Failed to load jobs"
-            description={error instanceof Error ? error.message : 'Please try again'}
-            action={
-              <Button onClick={() => window.location.reload()} variant="outline">
-                Reload Page
-              </Button>
-            }
-          />
-        </Card>
-      ) : !data || !jobs || jobs.length === 0 ? (
-        <Card className="p-8">
-          <EmptyState
-            icon={Briefcase}
-            title={search ? "No results found" : "No jobs available"}
-            description={search ? `No job postings match "${search}"` : "Check back later for new opportunities"}
-          />
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {jobs.map((job: any) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {jobs.map((job: any) => (
             <motion.div
               key={job.id}
               initial={{ opacity: 0, scale: 0.95 }}
@@ -181,7 +279,6 @@ export function JobsPage() {
             </motion.div>
           ))}
         </div>
-      )}
 
       {/* Application Dialog */}
       {selectedJob && (
