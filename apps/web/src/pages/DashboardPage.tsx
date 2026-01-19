@@ -58,19 +58,29 @@ export function DashboardPage() {
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('File size must be less than 5MB');
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('File size must be less than 2MB. Please compress your resume or use the URL option for larger files.');
       return;
     }
+
+    // Show loading toast
+    const loadingToast = toast.loading('Uploading resume...');
 
     // Convert to base64 for simple storage
     const reader = new FileReader();
     reader.onload = async (e) => {
-      const base64 = e.target?.result as string;
-      updateProfileMutation.mutate({ resumeUrl: base64 });
+      try {
+        const base64 = e.target?.result as string;
+        toast.dismiss(loadingToast);
+        updateProfileMutation.mutate({ resumeUrl: base64 });
+      } catch (error) {
+        toast.dismiss(loadingToast);
+        toast.error('Failed to process file. Please try again or use the URL option.');
+      }
     };
     reader.onerror = () => {
-      toast.error('Failed to read file');
+      toast.dismiss(loadingToast);
+      toast.error('Failed to read file. Please try again.');
     };
     reader.readAsDataURL(file);
   };
@@ -296,7 +306,7 @@ export function DashboardPage() {
                         Drag & drop your resume here
                       </p>
                       <p className="text-xs text-muted-foreground mb-4">
-                        or click to browse (PDF, DOC - Max 5MB)
+                        or click to browse (PDF, DOC - Max 2MB)
                       </p>
                       <Input
                         type="file"
@@ -361,7 +371,11 @@ export function DashboardPage() {
                     </div>
                   )}
 
-                  {uploadMethod === 'url' && (
+                  {uploadMethod === 'file' ? (
+                    <p className="text-sm text-muted-foreground">
+                      💡 Tip: File size limit is 2MB. For larger files, use the URL option instead.
+                    </p>
+                  ) : (
                     <p className="text-sm text-muted-foreground">
                       💡 Tip: Upload your resume to Google Drive or Dropbox, make it publicly viewable, and paste the link here
                     </p>
