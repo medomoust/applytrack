@@ -9,8 +9,9 @@ export function ProtectedLayout() {
   const { isAuthenticated, isLoading, checkAuth, user, accessToken } = useAuthStore();
 
   useEffect(() => {
-    // Always try to refresh the token on mount to ensure it's valid
-    if (accessToken || user) {
+    // Only check auth if we have stored credentials but might need refresh
+    // Don't check if already authenticated (just logged in)
+    if (!isAuthenticated && (accessToken || user)) {
       checkAuth();
     }
   }, []); // Empty dependency array - only run once on mount
