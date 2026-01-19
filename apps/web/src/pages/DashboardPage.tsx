@@ -262,7 +262,7 @@ export function DashboardPage() {
                     animate={{ scale: 1 }}
                     transition={{ delay: index * 0.1 + 0.2, type: "spring" }}
                   >
-                    {card.value}
+                    {typeof card.value === 'number' ? card.value : String(card.value || 0)}
                   </motion.div>
                   <div className={`mt-2 h-1 w-20 rounded-full bg-gradient-to-r ${card.gradient}`} />
                 </CardContent>
