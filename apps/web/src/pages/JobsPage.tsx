@@ -285,10 +285,10 @@ export function JobsPage() {
         <Dialog open={!!selectedJob} onOpenChange={() => setSelectedJob(null)}>
           <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="text-2xl">{selectedJob.roleTitle}</DialogTitle>
+              <DialogTitle className="text-2xl">{String(selectedJob.roleTitle || '')}</DialogTitle>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Building2 className="h-4 w-4" />
-                <span className="font-medium">{selectedJob.company}</span>
+                <span className="font-medium">{String(selectedJob.company || '')}</span>
               </div>
             </DialogHeader>
 
@@ -296,17 +296,17 @@ export function JobsPage() {
               {/* Job Details */}
               <div>
                 <div className="flex gap-2 mb-3">
-                  <Badge variant="outline" className="capitalize">{selectedJob.workMode}</Badge>
-                  <Badge variant="outline" className="capitalize">{selectedJob.employmentType}</Badge>
+                  <Badge variant="outline" className="capitalize">{String(selectedJob.workMode || '')}</Badge>
+                  <Badge variant="outline" className="capitalize">{String(selectedJob.employmentType || '')}</Badge>
                 </div>
                 {selectedJob.location && (
                   <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                     <MapPin className="h-4 w-4" />
-                    <span>{selectedJob.location}</span>
+                    <span>{String(selectedJob.location)}</span>
                   </div>
                 )}
                 {selectedJob.salaryRange && (
-                  <p className="text-sm font-medium text-primary">{selectedJob.salaryRange}</p>
+                  <p className="text-sm font-medium text-primary">{String(selectedJob.salaryRange)}</p>
                 )}
               </div>
 
@@ -314,7 +314,7 @@ export function JobsPage() {
                 <div>
                   <h4 className="font-semibold mb-2">Description</h4>
                   <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                    {selectedJob.description}
+                    {String(selectedJob.description)}
                   </p>
                 </div>
               )}
@@ -323,7 +323,7 @@ export function JobsPage() {
                 <div>
                   <h4 className="font-semibold mb-2">Requirements</h4>
                   <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                    {selectedJob.requirements}
+                    {String(selectedJob.requirements)}
                   </p>
                 </div>
               )}
