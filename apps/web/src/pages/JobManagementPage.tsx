@@ -263,7 +263,7 @@ export function JobManagementPage() {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-lg font-semibold">{job.roleTitle}</h3>
+                      <h3 className="text-lg font-semibold">{String(job.roleTitle || '')}</h3>
                       <Badge variant={job.status === 'open' ? 'default' : 'secondary'}>
                         {job.status === 'open' ? 'Open' : 'Closed'}
                       </Badge>
@@ -273,21 +273,21 @@ export function JobManagementPage() {
                       {job.location && (
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <MapPin className="h-4 w-4" />
-                          <span>{job.location}</span>
+                          <span>{String(job.location)}</span>
                         </div>
                       )}
                       <div className="flex gap-2">
-                        <Badge variant="outline" className="capitalize">{job.workMode}</Badge>
-                        <Badge variant="outline" className="capitalize">{job.employmentType}</Badge>
+                        <Badge variant="outline" className="capitalize">{String(job.workMode || '')}</Badge>
+                        <Badge variant="outline" className="capitalize">{String(job.employmentType || '')}</Badge>
                       </div>
                       {job.salaryRange && (
-                        <p className="text-sm font-medium text-primary">{job.salaryRange}</p>
+                        <p className="text-sm font-medium text-primary">{String(job.salaryRange)}</p>
                       )}
                     </div>
 
                     {job.description && (
                       <p className="text-sm text-muted-foreground mt-3 line-clamp-2">
-                        {job.description}
+                        {String(job.description)}
                       </p>
                     )}
 

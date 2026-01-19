@@ -126,10 +126,10 @@ export function JobsPage() {
               <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setSelectedJob(job)}>
                 <div className="flex items-start justify-between mb-3">
                   <div>
-                    <h3 className="text-lg font-semibold mb-1">{job.roleTitle}</h3>
+                    <h3 className="text-lg font-semibold mb-1">{String(job.roleTitle || '')}</h3>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Building2 className="h-4 w-4" />
-                      <span className="font-medium">{job.company}</span>
+                      <span className="font-medium">{String(job.company || '')}</span>
                     </div>
                   </div>
                   <Badge variant="default">Open</Badge>
@@ -139,21 +139,21 @@ export function JobsPage() {
                   {job.location && (
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <MapPin className="h-4 w-4" />
-                      <span>{job.location}</span>
+                      <span>{String(job.location)}</span>
                     </div>
                   )}
                   <div className="flex gap-2">
-                    <Badge variant="outline" className="capitalize">{job.workMode}</Badge>
-                    <Badge variant="outline" className="capitalize">{job.employmentType}</Badge>
+                    <Badge variant="outline" className="capitalize">{String(job.workMode || '')}</Badge>
+                    <Badge variant="outline" className="capitalize">{String(job.employmentType || '')}</Badge>
                   </div>
                   {job.salaryRange && (
-                    <p className="text-sm font-medium text-primary">{job.salaryRange}</p>
+                    <p className="text-sm font-medium text-primary">{String(job.salaryRange)}</p>
                   )}
                 </div>
 
                 {job.description && (
                   <p className="text-sm text-muted-foreground line-clamp-2">
-                    {job.description}
+                    {String(job.description)}
                   </p>
                 )}
 
