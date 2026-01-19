@@ -288,19 +288,18 @@ ApplyTrack is a sophisticated two-sided marketplace job application tracking sys
 *Role selection during registration (Applicant vs Recruiter)*
 
 ### Applicant Dashboard
-![Applicant Dashboard](./docs/screenshots/applicant-dashboard.png)
-*Animated KPI cards, bar chart, pie chart, activity feed, and resume upload section*
+![Applicant Dashboard - Part 1](./docs/screenshots/applicant-dashboard-part1.png)
+*KPI cards and analytics with resume upload section*
 
-### Resume Management
-![Resume Upload](./docs/screenshots/resume-upload.png)
-*Drag-and-drop file upload or paste URL, supports PDF/DOC up to 2MB*
-
-![Resume Viewer](./docs/screenshots/resume-viewer.png)
-*One-click resume viewing with blob conversion in new tab*
+![Applicant Dashboard - Part 2](./docs/screenshots/applicant-dashboard-part2.png)
+*Charts and recent activity feed*
 
 ### Recruiter Dashboard
-![Recruiter Dashboard](./docs/screenshots/recruiter-dashboard.png)
-*Company-specific analytics showing recruitment pipeline*
+![Recruiter Dashboard - Part 1](./docs/screenshots/recruiter-dashboard-part1.png)
+*Company-specific analytics and recruitment metrics*
+
+![Recruiter Dashboard - Part 2](./docs/screenshots/recruiter-dashboard-part2.png)
+*Application pipeline visualization*
 
 ### Job Management
 ![Browse Jobs (Applicant)](./docs/screenshots/browse-jobs.png)
@@ -310,10 +309,13 @@ ApplyTrack is a sophisticated two-sided marketplace job application tracking sys
 *Create and manage job openings with full CRUD operations*
 
 ### Applications
-![Applications Kanban (Applicant)](./docs/screenshots/applicant-kanban.png)
+![Applications Kanban (Applicant) - Part 1](./docs/screenshots/applicant-kanban-part1.png)
 *Drag-and-drop personal applications through hiring stages*
 
-![Applications Kanban (Recruiter)](./docs/screenshots/recruiter-kanban.png)
+![Applications Kanban (Applicant) - Part 2](./docs/screenshots/applicant-kanban-part2.png)
+*Application details and status management*
+
+![Applications Table (Recruiter)](./docs/screenshots/recruiter-applications-tab.png)
 *View and manage all applicants to company jobs*
 
 ![CSV Export](./docs/screenshots/csv-export.png)
@@ -322,9 +324,6 @@ ApplyTrack is a sophisticated two-sided marketplace job application tracking sys
 ### Activity & Admin
 ![Activity Log](./docs/screenshots/activity-log.png)
 *Comprehensive audit trail with real-time updates*
-
-![Admin Panel (Optional)](./docs/screenshots/admin-panel.png)
-*User management dashboard for system administrators*
 
 ## �🛠 Tech Stack
 
