@@ -30,13 +30,6 @@ export function DashboardPage() {
     queryFn: () => apiClient.getRecentActivity(),
   });
 
-  // Debug logging
-  console.log('DashboardPage - stats:', stats);
-  console.log('DashboardPage - recentActivity:', recentActivity);
-  console.log('DashboardPage - isLoading:', isLoading);
-  console.log('DashboardPage - isError:', isError);
-  console.log('DashboardPage - error:', error);
-
   const updateProfileMutation = useMutation({
     mutationFn: (data: { resumeUrl: string | null }) => apiClient.updateProfile(data),
     onSuccess: (updatedUser) => {
@@ -218,14 +211,6 @@ export function DashboardPage() {
       bgGradient: 'from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20',
     },
   ];
-
-  // Debug logging for KPI cards
-  console.log('DashboardPage - kpiCards:', kpiCards);
-  kpiCards.forEach((card, index) => {
-    console.log(`Card ${index} - title:`, card.title);
-    console.log(`Card ${index} - value:`, card.value, '- type:', typeof card.value);
-    console.log(`Card ${index} - icon:`, card.icon);
-  });
 
   const activityIcons: Record<string, any> = {
     application_created: Briefcase,
@@ -590,13 +575,6 @@ export function DashboardPage() {
             <div className="space-y-4">
               {recentActivity?.slice(0, 5).map((activity: any, index: number) => {
                 const ActivityIcon = activityIcons[activity.eventType] || activityIcons.default;
-                
-                // Debug logging for each activity
-                console.log(`Activity ${index}:`, activity);
-                console.log(`Activity ${index} - description:`, activity.description, '- type:', typeof activity.description);
-                console.log(`Activity ${index} - eventType:`, activity.eventType);
-                console.log(`Activity ${index} - ActivityIcon:`, ActivityIcon);
-                
                 return (
                   <motion.div
                     key={activity.id}

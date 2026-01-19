@@ -53,25 +53,6 @@ export function ApplicationsPage() {
     staleTime: 0, // Always refetch to ensure fresh data
   });
 
-  // Debug logging
-  console.log('ApplicationsPage - raw data:', data);
-  console.log('ApplicationsPage - isLoading:', isLoading);
-  console.log('ApplicationsPage - isError:', isError);
-  console.log('ApplicationsPage - error:', error);
-  if (data?.data) {
-    console.log('ApplicationsPage - applications array:', data.data);
-    data.data.forEach((app: any, index: number) => {
-      console.log(`Application ${index}:`, app);
-      console.log(`Application ${index} - company:`, app.company, typeof app.company);
-      console.log(`Application ${index} - roleTitle:`, app.roleTitle, typeof app.roleTitle);
-      console.log(`Application ${index} - status:`, app.status, typeof app.status);
-      console.log(`Application ${index} - priority:`, app.priority, typeof app.priority);
-      if (app.applicantName) {
-        console.log(`Application ${index} - applicantName:`, app.applicantName, typeof app.applicantName);
-      }
-    });
-  }
-
   const updateStatusMutation = useMutation({
     mutationFn: ({ id, status }: { id: string; status: typeof ApplicationStatus[keyof typeof ApplicationStatus] }) =>
       apiClient.updateApplication(id, { status }),
