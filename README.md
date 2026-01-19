@@ -1,28 +1,54 @@
 # ApplyTrack
 
-> **Enterprise-Grade Job Application Tracker** — A production-ready, full-stack SaaS application featuring an intuitive Kanban board, command palette, real-time analytics, and comprehensive job application management with role-based authentication.
+> **Enterprise-Grade Job Application Tracker** — A production-ready, full-stack TypeScript application featuring two-sided marketplace functionality (applicant + recruiter portals), drag-and-drop Kanban boards, real-time analytics with interactive charts, comprehensive testing suite, and role-based admin system.
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18.2-blue.svg)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue.svg)](https://www.postgresql.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-5.0-2D3748.svg)](https://www.prisma.io/)
+[![Playwright](https://img.shields.io/badge/Playwright-1.57-45ba4b.svg)](https://playwright.dev/)
 
 ## 🎯 Overview
 
-ApplyTrack is a sophisticated job application tracking system designed to streamline the job search process. Built with modern technologies and best practices, it offers a seamless experience for managing job applications, tracking progress, and staying organized throughout your career journey.
+ApplyTrack is a sophisticated two-sided marketplace job application tracking system that serves both job applicants and recruiters. Built with modern TypeScript, microservices architecture, and enterprise best practices, it provides a complete hiring ecosystem with real-time analytics, automated testing, and comprehensive admin controls.
 
 **Perfect for:**
-- 🎓 Recent graduates tracking their job search
-- 💼 Professionals exploring new opportunities  
-- 🚀 Career changers managing multiple applications
-- 🏢 Career centers supporting students
+- 🎓 Job seekers tracking applications across multiple companies
+- 💼 Recruiters managing applicant pipelines for their organization
+- 🏢 Companies needing centralized recruitment management
+- 🔧 Developers showcasing full-stack TypeScript expertise
+
+**Key Differentiators:**
+- ✅ Dual-role system (Applicant + Recruiter portals)
+- ✅ Real-time visual analytics with Recharts
+- ✅ Production-ready with E2E testing (Playwright)
+- ✅ Admin dashboard for user management
+- ✅ CSV export functionality
+- ✅ Fully responsive with modern UI/UX
+
+## 🚀 Live Demo
+
+**Demo Credentials Available on Login Page**
+
+**Applicant Account:**
+- Email: `john.doe@email.com`
+- Password: `Password123!`
+
+**Recruiter Account:**
+- Email: `recruiter@meta.com`
+- Password: `Password123!`
+
+**Admin Account:** (Contact for credentials)
 
 ## 📋 Table of Contents
 
+- [Live Demo](#-live-demo)
 - [Features](#-features)
+- [Screenshots](#-screenshots)
 - [Tech Stack](#-tech-stack)
 - [Architecture](#-architecture)
+- [Testing](#-testing)
 - [Getting Started](#-getting-started)
 - [Environment Variables](#-environment-variables)
 - [API Documentation](#-api-documentation)
@@ -32,110 +58,142 @@ ApplyTrack is a sophisticated job application tracking system designed to stream
 
 ## ✨ Features
 
+### � Two-Sided Marketplace
+
+- **Applicant Portal**
+  - Browse open job postings from multiple companies
+  - Apply to jobs with custom notes and salary expectations
+  - Track applications through 6-stage pipeline (Wishlist → Applied → Interview → Offer → Rejected/Ghosted)
+  - Kanban board for visual application management
+  - Personal dashboard with analytics
+  - CSV export of all applications
+
+- **Recruiter Portal**
+  - Post and manage job openings for your company
+  - View all applicants to your company's jobs
+  - Drag-and-drop applicant management
+  - See applicant names and contact information
+  - Track recruitment pipeline efficiency
+  - Company-specific analytics dashboard
+
+- **Admin System**
+  - Master admin account with elevated privileges
+  - User management dashboard (view, edit, deactivate users)
+  - Role-based access control
+  - System-wide analytics and monitoring
+
 ### 🎨 Premium User Interface
 
 - **Interactive Kanban Board**
-  - Drag-and-drop functionality powered by dnd-kit
-  - Visual columns for each application status (Wishlist → Applied → Interview → Offer)
-  - Real-time updates and smooth animations
+  - Drag-and-drop functionality powered by @dnd-kit
+  - Visual columns for each application status
+  - Real-time updates and smooth animations with Framer Motion
   - Quick status transitions with visual feedback
+  - Role-specific views (applicants see their apps, recruiters see applicant names)
 
-- **Command Palette (⌘K / Ctrl+K)**
-  - Instant navigation across the application
-  - Quick actions: Create application, Search, Navigate
-  - Keyboard-first workflow for power users
-  - Fuzzy search with instant results
+- **Modern Dashboard with Data Visualization**
+  - Animated KPI cards with gradient orbs
+  - Interactive bar charts showing status distribution
+  - Pie chart for application overview
+  - Real-time activity feed with icons
+  - Responsive layout with mobile optimization
+  - Color-coded status indicators
 
 - **Advanced Table View**
   - Sortable columns
   - Inline editing capabilities
   - Bulk selection and actions
-  - Customizable column visibility
-  - Export functionality
-
+  - **CSV Export** - Download filtered data instantly
+  - Search and filter integration
 - **Modern UI/UX Design**
   - Smooth animations with Framer Motion
-  - Toast notifications for user feedback
+  - Toast notifications with Sonner
   - Responsive design (mobile, tablet, desktop)
   - Skeleton loading states
   - Empty state illustrations
-  - Contextual tooltips and help text
+  - Dark-themed interface with gradient accents
+  - Accessible design with Radix UI primitives
 
 ### 🔐 Authentication & Authorization
 
 - **Secure Authentication System**
   - JWT access tokens (15-minute expiry)
   - Refresh tokens with HTTP-only cookies (7-day expiry)
-  - Automatic token refresh mechanism
+  - Automatic token refresh with persistent login
   - Secure password hashing with bcrypt (10 rounds)
-  - Rate limiting on auth endpoints (5 attempts per 15 minutes)
+  - Rate limiting on auth endpoints (50 attempts per 15 minutes)
 
 - **Role-Based Access Control (RBAC)**
-  - **User Role**: Manage personal applications
-  - **Admin Role**: Full access + user management
+  - **Applicant Role**: Browse jobs, manage personal applications
+  - **Recruiter Role**: Post jobs, view applicants to company jobs
+  - **Admin Role**: Full system access + user management
   - Protected routes with middleware
   - Permission-based UI rendering
+
+- **Demo Credentials**
+  - Sleek gradient banner on login page
+  - Pre-configured test accounts for both roles
+  - Non-intrusive design with User and Lock icons
 
 ### 📊 Dashboard & Analytics
 
 - **Real-Time KPI Cards**
   - Total applications count
-  - Applications submitted this week
-  - Active interviews
-  - Job offers received
+  - Applications by status (Applied, Interview, Offers)
+  - Wishlist tracking (applicants only)
+  - Animated gradient background orbs
 
 - **Visual Analytics**
-  - Interactive bar charts showing status distribution
-  - Timeline view of application activity (30-day window)
-  - Trend analysis and insights
-  - Custom date range filtering
+  - **Bar Chart**: Status distribution with gradient fills (blue to purple)
+  - **Pie Chart**: Application overview with custom colors per status
+  - Interactive tooltips with dark theme (#1f2937)
+  - Recharts 2.x integration
+  - Responsive chart sizing
 
 - **Activity Feed**
-  - Real-time updates on all changes
+  - Real-time updates with event icons (➕✏️🔄📦♻️📝)
   - Recent activity with timestamps
   - Application-specific activity tracking
-  - Event type categorization
+  - Automatic refresh on data changes
 
-### 📝 Job Application Management
+### 📝 Job Application & Posting Management
 
-- **Comprehensive CRUD Operations**
-  - Create applications with 15+ fields
-  - Update any field with change tracking
+- **Job Postings (Recruiter)**
+  - Create and edit job openings
+  - Set company, role, location, work mode, employment type
+  - Define salary ranges
+  - Add detailed descriptions and requirements
+  - Open/Close status management
+  - View applicant count per posting
+
+- **Job Browsing (Applicant)**
+  - Browse all open positions
+  - Filter by company, work mode, employment type
+  - Search by role title or company name
+  - View detailed job descriptions
+  - One-click application with notes
+
+- **Application Management**
+  - Comprehensive CRUD operations
+  - 15+ data fields per application
   - Soft delete with archive functionality
   - Restore archived applications
-  - Hard delete with confirmation
-
-- **Rich Application Data**
-  - Company name and role title
-  - Location and work mode (Remote/Hybrid/Onsite)
-  - Employment type (Full-time/Contract/Intern)
-  - Application status tracking (6 stages)
-  - Priority levels (Low/Medium/High)
-  - Salary expectations
-  - Application URL
-  - Custom notes (rich text support)
-  - Follow-up date reminders
+  - **CSV Export** with role-specific columns
+  - Drag-and-drop status updates
 
 - **Advanced Filtering & Search**
   - Full-text search across company, role, and notes
   - Filter by status, work mode, employment type, priority
-  - Date range filtering (created date, applied date)
-  - Archive status toggle
   - Multiple filters can be combined
-  - Search debouncing for performance
-
-- **Smart Pagination**
-  - Configurable page size (20, 50, 100 items)
-  - Server-side pagination for performance
-  - Total count and page indicators
-  - Quick navigation controls
+  - Real-time filter updates
+  - Filter badge indicators
 
 ### 📜 Activity Logging & Audit Trail
 
 - **Automatic Change Tracking**
-  - Every modification is logged
+  - Every modification is logged automatically
   - User attribution for all changes
-  - Timestamp precision
+  - Real-time activity page updates (no refresh needed)
   - Metadata storage for detailed context
 
 - **Event Types**
@@ -147,10 +205,11 @@ ApplyTrack is a sophisticated job application tracking system designed to stream
   - `note_added` - Notes updated
 
 - **Activity Timeline**
-  - Chronological view of all activities
+  - Dedicated activity page with pagination
+  - Dashboard activity feed (recent 5 items)
+  - Real-time updates via React Query invalidation
   - Filter by application or event type
-  - Paginated for performance
-  - Detailed change descriptions
+  - Chronological view with timestamps
 
 ### 👥 Admin Panel
 
@@ -179,10 +238,10 @@ ApplyTrack is a sophisticated job application tracking system designed to stream
   - Secure HTTP headers
 
 - **Rate Limiting**
-  - Auth endpoints: 5 requests per 15 minutes
-  - API endpoints: 100 requests per minute
+  - Auth endpoints: 50 requests per 15 minutes
+  - API endpoints: 1000 requests per minute
   - IP-based tracking
-  - Customizable limits per endpoint
+  - Prevents abuse and DDoS attacks
 
 - **Input Validation**
   - Zod schema validation on frontend and backend
@@ -213,7 +272,48 @@ ApplyTrack is a sophisticated job application tracking system designed to stream
   - Auto-rebuild on changes
   - Comprehensive error messages
 
-## 🛠 Tech Stack
+## � Screenshots
+
+### Authentication & Onboarding
+![Login Page with Demo Credentials](./docs/screenshots/login-page.png)
+*Sleek gradient banner displaying demo credentials for easy testing*
+
+![Sign Up Page](./docs/screenshots/signup-page.png)
+*Role selection during registration (Applicant vs Recruiter)*
+
+### Applicant Dashboard
+![Applicant Dashboard](./docs/screenshots/applicant-dashboard.png)
+*Animated KPI cards, bar chart, pie chart, and activity feed*
+
+### Recruiter Dashboard
+![Recruiter Dashboard](./docs/screenshots/recruiter-dashboard.png)
+*Company-specific analytics showing recruitment pipeline*
+
+### Job Management
+![Browse Jobs (Applicant)](./docs/screenshots/browse-jobs.png)
+*Filter and search job postings, one-click apply*
+
+![Job Postings Management (Recruiter)](./docs/screenshots/job-management.png)
+*Create and manage job openings with full CRUD operations*
+
+### Applications
+![Applications Kanban (Applicant)](./docs/screenshots/applicant-kanban.png)
+*Drag-and-drop personal applications through hiring stages*
+
+![Applications Kanban (Recruiter)](./docs/screenshots/recruiter-kanban.png)
+*View and manage all applicants to company jobs*
+
+![CSV Export](./docs/screenshots/csv-export.png)
+*Export filtered applications with role-specific columns*
+
+### Activity & Admin
+![Activity Log](./docs/screenshots/activity-log.png)
+*Comprehensive audit trail with real-time updates*
+
+![Admin Panel (Optional)](./docs/screenshots/admin-panel.png)
+*User management dashboard for system administrators*
+
+## �🛠 Tech Stack
 
 ### Frontend Technologies
 - **Core Framework:** React 18.2 with TypeScript 5.3
@@ -235,7 +335,7 @@ ApplyTrack is a sophisticated job application tracking system designed to stream
   - Framer Motion (Smooth transitions, gestures)
   - CSS transitions for micro-interactions
 - **Drag & Drop:** @dnd-kit (Kanban board functionality)
-- **Data Visualization:** Recharts (Bar charts, line graphs)
+- **Data Visualization:** Recharts 2.x (Bar charts, pie charts with gradients)
 - **Form Handling:** 
   - Zod validation (Type-safe schemas)
   - React hooks for form state
@@ -298,6 +398,55 @@ ApplyTrack is a sophisticated job application tracking system designed to stream
 - **Middleware Pattern** (Express middleware chain)
 - **JWT + Refresh Token** authentication flow
 - **Role-Based Access Control** (RBAC)
+
+## 🧪 Testing
+
+### End-to-End Testing with Playwright
+
+- **Test Suite Coverage**
+  - Authentication flows (login, signup, invalid credentials)
+  - Complete job application flow (recruiter creates job → applicant applies → verification)
+  - Dashboard KPI cards and chart interactions
+  - Search and filter functionality
+  - Drag-and-drop Kanban operations
+
+- **Testing Infrastructure**
+  - Playwright 1.57.0 with Chromium
+  - Page Object Model pattern with helper functions
+  - Reusable authentication utilities
+  - Test isolation with independent user contexts
+
+- **CI/CD Integration**
+  - GitHub Actions workflow (`.github/workflows/e2e-tests.yml`)
+  - Automated test runs on push to main
+  - Matrix testing across multiple Node versions
+  - Playwright browser installation caching
+  - Detailed test reports and screenshots on failure
+
+- **Running Tests Locally**
+  ```bash
+  # Install Playwright browsers (first time only)
+  npx playwright install
+  
+  # Run all E2E tests
+  npm test
+  
+  # Run specific test file
+  npx playwright test tests/auth.spec.ts
+  
+  # Run tests in UI mode (interactive)
+  npx playwright test --ui
+  
+  # Generate HTML report
+  npx playwright show-report
+  ```
+
+- **Test Files**
+  - `tests/auth.spec.ts` - Authentication and authorization
+  - `tests/job-flow.spec.ts` - Complete hiring workflow
+  - `tests/dashboard.spec.ts` - Analytics and visualizations
+  - `tests/filters.spec.ts` - Search and filter operations
+  - `tests/helpers/auth.ts` - Reusable login utilities
 - **Server-side Pagination** for scalability
 - **Optimistic UI Updates** for responsiveness
 - **Error Boundaries** and graceful error handling
