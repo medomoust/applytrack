@@ -501,19 +501,19 @@ export function ApplicationsPage() {
                         >
                           {user?.role === 'recruiter' && (
                             <td className="p-4 font-medium text-primary">
-                              {app.applicantName || 'N/A'}
+                              {String(app.applicantName || 'N/A')}
                             </td>
                           )}
-                          <td className="p-4 font-medium">{app.company}</td>
-                          <td className="p-4">{app.roleTitle}</td>
+                          <td className="p-4 font-medium">{String(app.company || '')}</td>
+                          <td className="p-4">{String(app.roleTitle || '')}</td>
                           <td className="p-4">
                             <Badge variant={statusColors[app.status]}>
-                              {app.status}
+                              {String(app.status || '')}
                             </Badge>
                           </td>
                           <td className="p-4">
                             <Badge variant="outline" className="capitalize">
-                              {app.priority}
+                              {String(app.priority || '')}
                             </Badge>
                           </td>
                           <td className="p-4 text-sm text-muted-foreground">
