@@ -51,7 +51,7 @@ export function JobsPage() {
     });
   };
 
-  const jobs = data?.data || [];
+  const jobs = Array.isArray(data?.data) ? data.data : [];
 
   return (
     <div className="space-y-6">
