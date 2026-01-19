@@ -58,6 +58,7 @@ export function ApplicationsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['applications'] });
       queryClient.invalidateQueries({ queryKey: ['recent-activity'] });
+      queryClient.invalidateQueries({ queryKey: ['activity'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
       toast.success('Application status updated');
     },
@@ -71,6 +72,7 @@ export function ApplicationsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['applications'] });
       queryClient.invalidateQueries({ queryKey: ['recent-activity'] });
+      queryClient.invalidateQueries({ queryKey: ['activity'] });
       toast.success('Application archived');
     },
     onError: () => {
@@ -83,6 +85,7 @@ export function ApplicationsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['applications'] });
       queryClient.invalidateQueries({ queryKey: ['recent-activity'] });
+      queryClient.invalidateQueries({ queryKey: ['activity'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
       toast.success('Application deleted');
     },

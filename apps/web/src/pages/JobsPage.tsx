@@ -31,6 +31,7 @@ export function JobsPage() {
       queryClient.invalidateQueries({ queryKey: ['applications'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
       queryClient.invalidateQueries({ queryKey: ['recent-activity'] });
+      queryClient.invalidateQueries({ queryKey: ['activity'] });
       toast.success('Application submitted successfully!');
       setSelectedJob(null);
       setApplicationNotes('');
