@@ -192,6 +192,146 @@ export function JobManagementPage() {
     console.log('JobManagementPage - first job:', jobs[0]);
   }
 
+  // Early return for loading state
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold">Job Postings</h1>
+              <p className="text-muted-foreground mt-1">
+                Manage your company's open positions
+              </p>
+            </div>
+            <Button onClick={() => handleOpenDialog()} className="gap-2">
+              <Plus className="h-4 w-4" />
+              Create Posting
+            </Button>
+          </div>
+        </motion.div>
+        <Card className="p-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search job postings..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+        </Card>
+        <div className="space-y-4">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-32 w-full" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Early return for error state
+  if (isError) {
+    return (
+      <div className="space-y-6">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold">Job Postings</h1>
+              <p className="text-muted-foreground mt-1">
+                Manage your company's open positions
+              </p>
+            </div>
+            <Button onClick={() => handleOpenDialog()} className="gap-2">
+              <Plus className="h-4 w-4" />
+              Create Posting
+            </Button>
+          </div>
+        </motion.div>
+        <Card className="p-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search job postings..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+        </Card>
+        <Card className="p-8">
+          <EmptyState
+            icon={Briefcase}
+            title="Failed to load job postings"
+            description={error instanceof Error ? error.message : 'Please try again'}
+            action={
+              <Button onClick={() => window.location.reload()} variant="outline">
+                Reload Page
+              </Button>
+            }
+          />
+        </Card>
+      </div>
+    );
+  }
+
+  // Early return for empty state
+  if (!data || !jobs || jobs.length === 0) {
+    return (
+      <div className="space-y-6">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold">Job Postings</h1>
+              <p className="text-muted-foreground mt-1">
+                Manage your company's open positions
+              </p>
+            </div>
+            <Button onClick={() => handleOpenDialog()} className="gap-2">
+              <Plus className="h-4 w-4" />
+              Create Posting
+            </Button>
+          </div>
+        </motion.div>
+        <Card className="p-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search job postings..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+        </Card>
+        <Card className="p-8">
+          <EmptyState
+            icon={Briefcase}
+            title={search ? "No results found" : "No job postings yet"}
+            description={search ? `No job postings match "${search}"` : "Create your first job posting to start receiving applications"}
+            action={
+              !search ? (
+                <Button onClick={() => handleOpenDialog()} className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  Create Posting
+                </Button>
+              ) : undefined
+            }
+          />
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -229,44 +369,8 @@ export function JobManagementPage() {
       </Card>
 
       {/* Jobs List */}
-      {isLoading ? (
-        <div className="space-y-4">
-          {[1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-32 w-full" />
-          ))}
-        </div>
-      ) : isError ? (
-        <Card className="p-8">
-          <EmptyState
-            icon={Briefcase}
-            title="Failed to load job postings"
-            description={error instanceof Error ? error.message : 'Please try again'}
-            action={
-              <Button onClick={() => window.location.reload()} variant="outline">
-                Reload Page
-              </Button>
-            }
-          />
-        </Card>
-      ) : !data || !jobs || jobs.length === 0 ? (
-        <Card className="p-8">
-          <EmptyState
-            icon={Briefcase}
-            title={search ? "No results found" : "No job postings yet"}
-            description={search ? `No job postings match "${search}"` : "Create your first job posting to start receiving applications"}
-            action={
-              !search ? (
-                <Button onClick={() => handleOpenDialog()} className="gap-2">
-                  <Plus className="h-4 w-4" />
-                  Create Posting
-                </Button>
-              ) : undefined
-            }
-          />
-        </Card>
-      ) : (
-        <div className="space-y-4">
-          {jobs.map((job: any) => (
+      <div className="space-y-4">
+        {jobs.map((job: any) => (
             <motion.div
               key={job.id}
               initial={{ opacity: 0, y: 10 }}
@@ -358,7 +462,6 @@ export function JobManagementPage() {
             </motion.div>
           ))}
         </div>
-      )}
 
       {/* Create/Edit Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
