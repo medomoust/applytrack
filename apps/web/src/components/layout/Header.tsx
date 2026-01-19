@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/lib/auth';
 import { useThemeStore } from '@/lib/theme';
 import { Button } from '@/components/ui/Button';
@@ -16,11 +17,14 @@ const breadcrumbMap: Record<string, string> = {
 export function Header() {
   const navigate = useNavigate();
   const location = useLocation();
+  const queryClient = useQueryClient();
   const { logout } = useAuthStore();
   const { theme, toggleTheme } = useThemeStore();
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
 
   const handleLogout = async () => {
+    // Clear all cached data on logout
+    queryClient.clear();
     await logout();
     navigate('/login');
   };

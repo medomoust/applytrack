@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { LoginInput, loginSchema } from '@applytrack/shared';
 import { apiClient } from '@/lib/api';
 import { useAuthStore } from '@/lib/auth';
@@ -12,6 +13,7 @@ import { Briefcase, TrendingUp, Users, Sparkles, ArrowRight, User, Lock } from '
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { setUser, setAccessToken } = useAuthStore();
   const [formData, setFormData] = useState<LoginInput>({ email: '', password: '' });
   const [error, setError] = useState('');
@@ -23,6 +25,9 @@ export function LoginPage() {
     setIsLoading(true);
 
     try {
+      // Clear all cached data before logging in
+      queryClient.clear();
+      
       const validated = loginSchema.parse(formData);
       const response = await apiClient.login(validated);
       setUser(response.user);

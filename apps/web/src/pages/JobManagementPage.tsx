@@ -50,7 +50,7 @@ export function JobManagementPage() {
     salaryRange: '',
   });
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['job-postings', search],
     queryFn: () => apiClient.getJobPostings({ search, pageSize: 100 }),
   });
@@ -222,16 +222,31 @@ export function JobManagementPage() {
             <Skeleton key={i} className="h-32 w-full" />
           ))}
         </div>
-      ) : jobs.length === 0 ? (
+      ) : isError ? (
+        <Card className="p-8">
+          <EmptyState
+            icon={Briefcase}
+            title="Failed to load job postings"
+            description={error instanceof Error ? error.message : 'Please try again'}
+            action={
+              <Button onClick={() => window.location.reload()} variant="outline">
+                Reload Page
+              </Button>
+            }
+          />
+        </Card>
+      ) : !data || jobs.length === 0 ? (
         <EmptyState
           icon={Briefcase}
-          title="No job postings yet"
-          description="Create your first job posting to start receiving applications"
+          title={search ? "No results found" : "No job postings yet"}
+          description={search ? `No job postings match "${search}"` : "Create your first job posting to start receiving applications"}
           action={
-            <Button onClick={() => handleOpenDialog()} className="gap-2">
-              <Plus className="h-4 w-4" />
-              Create Posting
-            </Button>
+            !search ? (
+              <Button onClick={() => handleOpenDialog()} className="gap-2">
+                <Plus className="h-4 w-4" />
+                Create Posting
+              </Button>
+            ) : undefined
           }
         />
       ) : (

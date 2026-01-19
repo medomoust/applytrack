@@ -1,15 +1,22 @@
-import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api';
 import { useAuthStore } from '@/lib/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { motion } from 'framer-motion';
-import { Briefcase, TrendingUp, Users, Award, Clock, Target, Building2, Sparkles } from 'lucide-react';
+import { Briefcase, TrendingUp, Users, Award, Clock, Target, Building2, Sparkles, FileText, Check, X } from 'lucide-react';
+import { toast } from 'sonner';
 
 export function DashboardPage() {
   const user = useAuthStore((state) => state.user);
+  const queryClient = useQueryClient();
   const isRecruiter = user?.role === 'recruiter';
+  const [resumeUrl, setResumeUrl] = useState(user?.resumeUrl || '');
+  const [isEditingResume, setIsEditingResume] = useState(false);
+  
   const { data: stats, isLoading, error, isError } = useQuery({
     queryKey: ['dashboard-stats'],
     queryFn: () => apiClient.getDashboardStats(),
@@ -20,6 +27,28 @@ export function DashboardPage() {
     queryKey: ['recent-activity'],
     queryFn: () => apiClient.getRecentActivity(),
   });
+
+  const updateProfileMutation = useMutation({
+    mutationFn: (data: { resumeUrl: string | null }) => apiClient.updateProfile(data),
+    onSuccess: (updatedUser) => {
+      queryClient.setQueryData(['user'], updatedUser);
+      useAuthStore.setState({ user: updatedUser });
+      toast.success('Resume updated successfully!');
+      setIsEditingResume(false);
+    },
+    onError: (error: any) => {
+      toast.error(error.message || 'Failed to update resume');
+    },
+  });
+
+  const handleSaveResume = () => {
+    updateProfileMutation.mutate({ resumeUrl: resumeUrl || null });
+  };
+
+  const handleRemoveResume = () => {
+    setResumeUrl('');
+    updateProfileMutation.mutate({ resumeUrl: null });
+  };
 
   if (isError) {
     return (
@@ -168,6 +197,99 @@ export function DashboardPage() {
           );
         })}
       </div>
+
+      {/* Resume Section (Applicants Only) */}
+      {!isRecruiter && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <Card className="shadow-lg border-2 border-dashed border-blue-200 dark:border-blue-900">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg">
+                  <FileText className="h-4 w-4 text-white" />
+                </div>
+                Your Resume
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {isEditingResume || !user?.resumeUrl ? (
+                <div className="space-y-4">
+                  <div className="flex gap-2">
+                    <Input
+                      type="url"
+                      placeholder="Enter your resume URL (Google Drive, Dropbox, etc.)"
+                      value={resumeUrl}
+                      onChange={(e) => setResumeUrl(e.target.value)}
+                      className="flex-1"
+                    />
+                    <Button 
+                      onClick={handleSaveResume} 
+                      disabled={updateProfileMutation.isPending || !resumeUrl}
+                      className="gap-2"
+                    >
+                      <Check className="h-4 w-4" />
+                      Save
+                    </Button>
+                    {isEditingResume && (
+                      <Button 
+                        variant="outline" 
+                        onClick={() => {
+                          setIsEditingResume(false);
+                          setResumeUrl(user?.resumeUrl || '');
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    💡 Tip: Upload your resume to Google Drive or Dropbox, make it publicly viewable, and paste the link here
+                  </p>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-lg">
+                      <Check className="h-5 w-5 text-green-600 dark:text-green-400" />
+                    </div>
+                    <div>
+                      <p className="font-medium">Resume uploaded</p>
+                      <a 
+                        href={user.resumeUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+                      >
+                        View Resume →
+                      </a>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setIsEditingResume(true)}
+                    >
+                      Edit
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={handleRemoveResume}
+                      disabled={updateProfileMutation.isPending}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

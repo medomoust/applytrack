@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { SignUpInput, signUpSchema, UserRole, Company } from '@applytrack/shared';
 import { apiClient } from '@/lib/api';
 import { useAuthStore } from '@/lib/auth';
@@ -12,6 +13,7 @@ import { Sparkles, Rocket, Shield, Zap, ArrowRight, CheckCircle2 } from 'lucide-
 
 export function SignupPage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { setUser, setAccessToken } = useAuthStore();
   const [formData, setFormData] = useState<SignUpInput>({ 
     email: '', 
@@ -28,6 +30,9 @@ export function SignupPage() {
     setIsLoading(true);
 
     try {
+      // Clear all cached data before signing up
+      queryClient.clear();
+      
       const validated = signUpSchema.parse(formData);
       const response = await apiClient.signup(validated);
       setUser(response.user);

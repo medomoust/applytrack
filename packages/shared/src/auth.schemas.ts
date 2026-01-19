@@ -40,6 +40,7 @@ export const userSchema = z.object({
   name: z.string().nullable(),
   role: z.enum(USER_ROLES),
   company: z.enum(COMPANIES).nullable(),
+  resumeUrl: z.string().nullable().optional(),
   isActive: z.boolean(),
   isAdmin: z.boolean().optional(),
   createdAt: z.string(),

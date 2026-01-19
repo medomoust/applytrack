@@ -6,6 +6,7 @@ import {
   JobApplication,
   JobPosting,
   UpdateJobApplicationInput,
+  UpdateProfileInput,
   CreateJobPostingInput,
   UpdateJobPostingInput,
   ApplyToJobPostingInput,
@@ -83,6 +84,13 @@ class ApiClient {
 
   async me(): Promise<User> {
     return this.request<User>('/api/auth/me');
+  }
+
+  async updateProfile(data: UpdateProfileInput): Promise<User> {
+    return this.request<User>('/api/auth/profile', {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
   }
 
   // Job Postings

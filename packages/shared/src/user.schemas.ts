@@ -2,6 +2,14 @@ import { z } from 'zod';
 import type { UserRole } from './types.js';
 import { USER_ROLES } from './constants.js';
 
+// Update own profile
+export const updateProfileSchema = z.object({
+  name: z.string().min(2).optional(),
+  resumeUrl: z.string().url().optional().nullable(),
+});
+
+export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
+
 // Update user (admin only)
 export const updateUserSchema = z.object({
   name: z.string().min(2).optional(),
