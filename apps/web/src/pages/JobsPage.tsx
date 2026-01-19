@@ -24,6 +24,13 @@ export function JobsPage() {
     queryFn: () => apiClient.getJobPostings({ search, pageSize: 100, status: 'open' }),
   });
 
+  // Debug logging
+  console.log('JobsPage - search:', search);
+  console.log('JobsPage - data:', data);
+  console.log('JobsPage - isLoading:', isLoading);
+  console.log('JobsPage - isError:', isError);
+  console.log('JobsPage - error:', error);
+
   const applyMutation = useMutation({
     mutationFn: ({ jobId, notes, salary }: { jobId: string; notes?: string; salary?: number }) =>
       apiClient.applyToJobPosting(jobId, { notes, salaryTarget: salary }),
@@ -52,6 +59,13 @@ export function JobsPage() {
   };
 
   const jobs = Array.isArray(data?.data) ? data.data : [];
+  
+  // Debug logging
+  console.log('JobsPage - jobs array:', jobs);
+  console.log('JobsPage - jobs length:', jobs.length);
+  if (jobs.length > 0) {
+    console.log('JobsPage - first job:', jobs[0]);
+  }
 
   return (
     <div className="space-y-6">

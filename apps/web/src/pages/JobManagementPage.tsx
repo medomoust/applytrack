@@ -55,6 +55,12 @@ export function JobManagementPage() {
     queryFn: () => apiClient.getJobPostings({ search, pageSize: 100 }),
   });
 
+  // Debug logging
+  console.log('JobManagementPage - search:', search);
+  console.log('JobManagementPage - data:', data);
+  console.log('JobManagementPage - isLoading:', isLoading);
+  console.log('JobManagementPage - isError:', isError);
+
   const createMutation = useMutation({
     mutationFn: apiClient.createJobPosting,
     onSuccess: () => {
@@ -178,6 +184,13 @@ export function JobManagementPage() {
   };
 
   const jobs = Array.isArray(data?.data) ? data.data : [];
+  
+  // Debug logging
+  console.log('JobManagementPage - jobs array:', jobs);
+  console.log('JobManagementPage - jobs length:', jobs.length);
+  if (jobs.length > 0) {
+    console.log('JobManagementPage - first job:', jobs[0]);
+  }
 
   return (
     <div className="space-y-6">
