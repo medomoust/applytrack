@@ -87,15 +87,15 @@ function KanbanCard({ application, onEdit, userRole }: KanbanCardProps) {
           <div className="flex-1 min-w-0">
             {application.applicantName && userRole === 'recruiter' && (
               <p className="text-xs font-medium text-primary mb-1">
-                {application.applicantName}
+                {String(application.applicantName)}
               </p>
             )}
             <h3 className="font-semibold text-foreground truncate">
-              {application.roleTitle}
+              {String(application.roleTitle || '')}
             </h3>
             <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
               <Building2 className="h-3 w-3" />
-              {application.company}
+              {String(application.company || '')}
             </p>
           </div>
           <div
@@ -112,10 +112,10 @@ function KanbanCard({ application, onEdit, userRole }: KanbanCardProps) {
           {application.location && (
             <div className="flex items-center gap-1">
               <MapPin className="h-3 w-3" />
-              <span>{application.location}</span>
+              <span>{String(application.location)}</span>
             </div>
           )}
-          {application.salaryRange && (
+          {application.salaryRange && typeof application.salaryRange === 'object' && application.salaryRange.min && application.salaryRange.max && (
             <div className="flex items-center gap-1">
               <DollarSign className="h-3 w-3" />
               <span>
@@ -131,7 +131,7 @@ function KanbanCard({ application, onEdit, userRole }: KanbanCardProps) {
 
         <div className="mt-3 flex items-center justify-between">
           <Badge variant={priorityColors[application.priority] as any} className="text-xs capitalize">
-            {application.priority}
+            {String(application.priority || '')}
           </Badge>
         </div>
       </Card>
