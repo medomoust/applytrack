@@ -589,7 +589,7 @@ export function DashboardPage() {
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm">{activity.description}</p>
+                      <p className="font-medium text-sm">{String(activity.description || '')}</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         {new Date(activity.createdAt).toLocaleString()}
                       </p>
