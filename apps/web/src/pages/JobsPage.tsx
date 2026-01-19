@@ -105,12 +105,14 @@ export function JobsPage() {
             }
           />
         </Card>
-      ) : !data || jobs.length === 0 ? (
-        <EmptyState
-          icon={Briefcase}
-          title={search ? "No results found" : "No jobs available"}
-          description={search ? `No job postings match "${search}"` : "Check back later for new opportunities"}
-        />
+      ) : !data || !jobs || jobs.length === 0 ? (
+        <Card className="p-8">
+          <EmptyState
+            icon={Briefcase}
+            title={search ? "No results found" : "No jobs available"}
+            description={search ? `No job postings match "${search}"` : "Check back later for new opportunities"}
+          />
+        </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {jobs.map((job: any) => (

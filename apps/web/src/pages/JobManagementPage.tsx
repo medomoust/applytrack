@@ -235,20 +235,22 @@ export function JobManagementPage() {
             }
           />
         </Card>
-      ) : !data || jobs.length === 0 ? (
-        <EmptyState
-          icon={Briefcase}
-          title={search ? "No results found" : "No job postings yet"}
-          description={search ? `No job postings match "${search}"` : "Create your first job posting to start receiving applications"}
-          action={
-            !search ? (
-              <Button onClick={() => handleOpenDialog()} className="gap-2">
-                <Plus className="h-4 w-4" />
-                Create Posting
-              </Button>
-            ) : undefined
-          }
-        />
+      ) : !data || !jobs || jobs.length === 0 ? (
+        <Card className="p-8">
+          <EmptyState
+            icon={Briefcase}
+            title={search ? "No results found" : "No job postings yet"}
+            description={search ? `No job postings match "${search}"` : "Create your first job posting to start receiving applications"}
+            action={
+              !search ? (
+                <Button onClick={() => handleOpenDialog()} className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  Create Posting
+                </Button>
+              ) : undefined
+            }
+          />
+        </Card>
       ) : (
         <div className="space-y-4">
           {jobs.map((job: any) => (
