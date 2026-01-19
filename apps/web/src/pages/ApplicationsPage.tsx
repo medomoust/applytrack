@@ -23,7 +23,8 @@ import {
   Trash2,
   Edit,
   FileText,
-  X
+  X,
+  Download
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -145,6 +146,69 @@ export function ApplicationsPage() {
       priority: undefined,
       archived: false,
     });
+  };
+
+  const exportToCSV = () => {
+    if (!filteredApplications.length) {
+      toast.error('No applications to export');
+      return;
+    }
+
+    // Define CSV headers based on user role
+    const headers = user?.role === 'applicant'
+      ? ['Company', 'Role Title', 'Location', 'Work Mode', 'Employment Type', 'Status', 'Priority', 'Applied Date', 'Next Follow-up', 'Salary Target', 'Notes']
+      : ['Applicant Name', 'Company', 'Role Title', 'Location', 'Work Mode', 'Employment Type', 'Status', 'Priority', 'Applied Date', 'Notes'];
+
+    // Convert applications to CSV rows
+    const rows = filteredApplications.map((app: any) => {
+      const baseData = [
+        app.company || '',
+        app.roleTitle || '',
+        app.location || '',
+        app.workMode || '',
+        app.employmentType || '',
+        app.status || '',
+        app.priority || '',
+        app.appliedDate ? new Date(app.appliedDate).toLocaleDateString() : '',
+      ];
+
+      if (user?.role === 'applicant') {
+        return [
+          ...baseData,
+          app.nextFollowUpDate ? new Date(app.nextFollowUpDate).toLocaleDateString() : '',
+          app.salaryTarget || '',
+          app.notes ? `"${app.notes.replace(/"/g, '""')}"` : '',
+        ];
+      } else {
+        return [
+          app.applicantName || '',
+          ...baseData,
+          app.notes ? `"${app.notes.replace(/"/g, '""')}"` : '',
+        ];
+      }
+    });
+
+    // Create CSV content
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.join(','))
+    ].join('\n');
+
+    // Create and trigger download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    const timestamp = new Date().toISOString().split('T')[0];
+    const filename = `applications-${timestamp}.csv`;
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast.success(`Exported ${filteredApplications.length} applications to ${filename}`);
   };
 
   const activeFilterCount = [
@@ -343,6 +407,15 @@ export function ApplicationsPage() {
                 </div>
               </SheetContent>
             </Sheet>
+            <Button 
+              variant="outline" 
+              className="gap-2" 
+              onClick={exportToCSV}
+              disabled={!filteredApplications.length}
+            >
+              <Download className="h-4 w-4" />
+              Export CSV
+            </Button>
           </div>
           
           <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)}>
