@@ -29,6 +29,8 @@ export function JobsPage() {
       apiClient.applyToJobPosting(jobId, { notes, salaryTarget: salary }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['applications'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
+      queryClient.invalidateQueries({ queryKey: ['recent-activity'] });
       toast.success('Application submitted successfully!');
       setSelectedJob(null);
       setApplicationNotes('');

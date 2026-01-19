@@ -8,6 +8,7 @@ import {
   useSensor,
   useSensors,
   closestCorners,
+  useDroppable,
 } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useSortable } from '@dnd-kit/sortable';
@@ -138,7 +139,12 @@ function KanbanCard({ application, onEdit, userRole }: KanbanCardProps) {
   );
 }
 
-function KanbanColumn({ applications, title, count, color, onEdit, userRole }: KanbanColumnProps) {
+function KanbanColumn({ status, applications, title, count, color, onEdit, userRole }: KanbanColumnProps) {
+  const { setNodeRef } = useDroppable({
+    id: status,
+    data: { status },
+  });
+
   return (
     <div className="flex flex-col min-w-[320px] max-w-[320px]">
       <div className={cn('rounded-t-lg p-3 border-b-2 bg-card', color)}>
@@ -149,7 +155,7 @@ function KanbanColumn({ applications, title, count, color, onEdit, userRole }: K
           </Badge>
         </div>
       </div>
-      <div className="flex-1 bg-muted/30 rounded-b-lg p-3 min-h-[500px]">
+      <div ref={setNodeRef} className="flex-1 bg-muted/30 rounded-b-lg p-3 min-h-[500px]">
         <SortableContext items={applications.map((a) => a.id)} strategy={verticalListSortingStrategy}>
           <div className="space-y-3">
             {applications.length === 0 ? (

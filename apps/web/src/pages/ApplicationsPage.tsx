@@ -57,6 +57,8 @@ export function ApplicationsPage() {
       apiClient.updateApplication(id, { status }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['applications'] });
+      queryClient.invalidateQueries({ queryKey: ['recent-activity'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
       toast.success('Application status updated');
     },
     onError: () => {
@@ -68,6 +70,7 @@ export function ApplicationsPage() {
     mutationFn: (id: string) => apiClient.archiveApplication(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['applications'] });
+      queryClient.invalidateQueries({ queryKey: ['recent-activity'] });
       toast.success('Application archived');
     },
     onError: () => {
@@ -79,6 +82,8 @@ export function ApplicationsPage() {
     mutationFn: (id: string) => apiClient.deleteApplication(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['applications'] });
+      queryClient.invalidateQueries({ queryKey: ['recent-activity'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
       toast.success('Application deleted');
     },
     onError: () => {
