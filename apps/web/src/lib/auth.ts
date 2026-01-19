@@ -69,6 +69,10 @@ export const useAuthStore = create<AuthStore>()(
         // Restore access token to API client when store rehydrates
         if (state?.accessToken) {
           apiClient.setAccessToken(state.accessToken);
+          // Set isAuthenticated if we have a user
+          if (state.user) {
+            state.isAuthenticated = true;
+          }
         }
       },
     }

@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuthStore } from '@/lib/auth';
 import { Sidebar } from '@/components/layout/Sidebar';
@@ -6,15 +5,7 @@ import { Header } from '@/components/layout/Header';
 import { DemoBanner } from '@/components/layout/DemoBanner';
 
 export function ProtectedLayout() {
-  const { isAuthenticated, isLoading, checkAuth, user, accessToken } = useAuthStore();
-
-  useEffect(() => {
-    // Only check auth if we have stored credentials but might need refresh
-    // Don't check if already authenticated (just logged in)
-    if (!isAuthenticated && (accessToken || user)) {
-      checkAuth();
-    }
-  }, []); // Empty dependency array - only run once on mount
+  const { isAuthenticated, isLoading, user } = useAuthStore();
 
   if (isLoading) {
     return (
@@ -27,7 +18,7 @@ export function ProtectedLayout() {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !user) {
     return <Navigate to="/login" replace />;
   }
 
