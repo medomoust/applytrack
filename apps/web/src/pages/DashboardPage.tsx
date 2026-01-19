@@ -52,6 +52,30 @@ export function DashboardPage() {
     updateProfileMutation.mutate({ resumeUrl: null });
   };
 
+  const handleViewResume = () => {
+    if (!user?.resumeUrl) return;
+    
+    // Check if it's a base64 data URL
+    if (user.resumeUrl.startsWith('data:')) {
+      // Create a blob and download it
+      const base64Data = user.resumeUrl.split(',')[1];
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+      // Clean up after a delay
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+    } else {
+      // It's a regular URL
+      window.open(user.resumeUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   const handleFileUpload = async (file: File) => {
     if (!file.type.includes('pdf') && !file.type.includes('doc')) {
       toast.error('Please upload a PDF or DOC file');
@@ -389,14 +413,12 @@ export function DashboardPage() {
                     </div>
                     <div>
                       <p className="font-medium">Resume uploaded</p>
-                      <a 
-                        href={user.resumeUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+                      <button
+                        onClick={handleViewResume}
+                        className="text-sm text-blue-600 hover:underline dark:text-blue-400 cursor-pointer"
                       >
                         View Resume →
-                      </a>
+                      </button>
                     </div>
                   </div>
                   <div className="flex gap-2">
