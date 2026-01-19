@@ -5,7 +5,7 @@ import { USER_ROLES } from './constants.js';
 // Update own profile
 export const updateProfileSchema = z.object({
   name: z.string().min(2).optional(),
-  resumeUrl: z.string().url().optional().nullable(),
+  resumeUrl: z.string().optional().nullable(), // Can be URL or base64 data
 });
 
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
