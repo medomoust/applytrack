@@ -63,6 +63,12 @@ ApplyTrack is a sophisticated two-sided marketplace job application tracking sys
 - **Applicant Portal**
   - Browse open job postings from multiple companies
   - Apply to jobs with custom notes and salary expectations
+  - **Resume Upload & Management**
+    - Upload resume via drag-and-drop or file picker (PDF/DOC, up to 2MB)
+    - Alternative: Paste resume URL from cloud storage
+    - Base64 encoding for secure storage
+    - One-click resume viewer with blob conversion
+    - Update or replace resume anytime from dashboard
   - Track applications through 6-stage pipeline (Wishlist → Applied → Interview → Offer → Rejected/Ghosted)
   - Kanban board for visual application management
   - Personal dashboard with analytics
@@ -283,7 +289,14 @@ ApplyTrack is a sophisticated two-sided marketplace job application tracking sys
 
 ### Applicant Dashboard
 ![Applicant Dashboard](./docs/screenshots/applicant-dashboard.png)
-*Animated KPI cards, bar chart, pie chart, and activity feed*
+*Animated KPI cards, bar chart, pie chart, activity feed, and resume upload section*
+
+### Resume Management
+![Resume Upload](./docs/screenshots/resume-upload.png)
+*Drag-and-drop file upload or paste URL, supports PDF/DOC up to 2MB*
+
+![Resume Viewer](./docs/screenshots/resume-viewer.png)
+*One-click resume viewing with blob conversion in new tab*
 
 ### Recruiter Dashboard
 ![Recruiter Dashboard](./docs/screenshots/recruiter-dashboard.png)
@@ -1347,7 +1360,7 @@ Future improvements that could be implemented:
 ### Features
 - [ ] Email notifications for follow-up reminders
 - [ ] Calendar integration for interview scheduling
-- [ ] Document uploads (resume, cover letter)
+- [x] ~~Document uploads (resume, cover letter)~~ ✅ **IMPLEMENTED** - Resume upload with file picker and URL option
 - [ ] Application status automation (webhooks)
 - [ ] Export data to CSV/PDF
 - [ ] Analytics dashboard with charts and insights
