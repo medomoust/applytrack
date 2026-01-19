@@ -12,7 +12,7 @@ interface EmptyStateProps {
 
 export function EmptyState({ icon, title, description, action, className }: EmptyStateProps) {
   const Icon = icon as LucideIcon;
-  const isComponent = typeof icon === 'function';
+  const isComponent = typeof icon === 'function' || (icon && typeof icon === 'object' && '$$typeof' in icon);
   
   return (
     <div className={cn('flex flex-col items-center justify-center py-12 px-4 text-center', className)}>
