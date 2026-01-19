@@ -1,5 +1,5 @@
 import { Router, Response } from 'express';
-import { signUpSchema, loginSchema } from '@applytrack/shared';
+import { signUpSchema, loginSchema, updateProfileSchema } from '@applytrack/shared';
 import prisma from '../db/prisma';
 import { AppError } from '../middleware/error-handler';
 import {
@@ -276,7 +276,10 @@ router.get('/me', authenticate, async (req: AuthRequest, res: Response, next) =>
         email: true,
         name: true,
         role: true,
+        company: true,
+        resumeUrl: true,
         isActive: true,
+        isAdmin: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -290,6 +293,45 @@ router.get('/me', authenticate, async (req: AuthRequest, res: Response, next) =>
       ...user,
       createdAt: user.createdAt.toISOString(),
       updatedAt: user.updatedAt.toISOString(),
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Update own profile
+router.patch('/profile', authenticate, async (req: AuthRequest, res: Response, next) => {
+  try {
+    if (!req.user) {
+      throw new AppError(401, 'Authentication required');
+    }
+
+    const data = updateProfileSchema.parse(req.body);
+
+    const updatedUser = await prisma.user.update({
+      where: { id: req.user.userId },
+      data: {
+        ...(data.name && { name: data.name }),
+        ...(data.resumeUrl !== undefined && { resumeUrl: data.resumeUrl }),
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        company: true,
+        resumeUrl: true,
+        isActive: true,
+        isAdmin: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    res.json({
+      ...updatedUser,
+      createdAt: updatedUser.createdAt.toISOString(),
+      updatedAt: updatedUser.updatedAt.toISOString(),
     });
   } catch (error) {
     next(error);
