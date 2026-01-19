@@ -19,7 +19,7 @@ export function JobsPage() {
   const [applicationNotes, setApplicationNotes] = useState('');
   const [salaryTarget, setSalaryTarget] = useState<string>('');
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['job-postings', search],
     queryFn: () => apiClient.getJobPostings({ search, pageSize: 100, status: 'open' }),
   });
@@ -92,11 +92,24 @@ export function JobsPage() {
             <Skeleton key={i} className="h-32 w-full" />
           ))}
         </div>
-      ) : jobs.length === 0 ? (
+      ) : isError ? (
+        <Card className="p-8">
+          <EmptyState
+            icon={Briefcase}
+            title="Failed to load jobs"
+            description={error instanceof Error ? error.message : 'Please try again'}
+            action={
+              <Button onClick={() => window.location.reload()} variant="outline">
+                Reload Page
+              </Button>
+            }
+          />
+        </Card>
+      ) : !data || jobs.length === 0 ? (
         <EmptyState
           icon={Briefcase}
-          title="No jobs found"
-          description="Try adjusting your search criteria"
+          title={search ? "No results found" : "No jobs available"}
+          description={search ? `No job postings match "${search}"` : "Check back later for new opportunities"}
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

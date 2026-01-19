@@ -16,6 +16,8 @@ export function DashboardPage() {
   const isRecruiter = user?.role === 'recruiter';
   const [resumeUrl, setResumeUrl] = useState(user?.resumeUrl || '');
   const [isEditingResume, setIsEditingResume] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [uploadMethod, setUploadMethod] = useState<'file' | 'url'>('file');
   
   const { data: stats, isLoading, error, isError } = useQuery({
     queryKey: ['dashboard-stats'],
@@ -48,6 +50,47 @@ export function DashboardPage() {
   const handleRemoveResume = () => {
     setResumeUrl('');
     updateProfileMutation.mutate({ resumeUrl: null });
+  };
+
+  const handleFileUpload = async (file: File) => {
+    if (!file.type.includes('pdf') && !file.type.includes('doc')) {
+      toast.error('Please upload a PDF or DOC file');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('File size must be less than 5MB');
+      return;
+    }
+
+    // Convert to base64 for simple storage
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const base64 = e.target?.result as string;
+      updateProfileMutation.mutate({ resumeUrl: base64 });
+    };
+    reader.onerror = () => {
+      toast.error('Failed to read file');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      handleFileUpload(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
   };
 
   if (isError) {
@@ -217,37 +260,112 @@ export function DashboardPage() {
             <CardContent>
               {isEditingResume || !user?.resumeUrl ? (
                 <div className="space-y-4">
-                  <div className="flex gap-2">
-                    <Input
-                      type="url"
-                      placeholder="Enter your resume URL (Google Drive, Dropbox, etc.)"
-                      value={resumeUrl}
-                      onChange={(e) => setResumeUrl(e.target.value)}
-                      className="flex-1"
-                    />
-                    <Button 
-                      onClick={handleSaveResume} 
-                      disabled={updateProfileMutation.isPending || !resumeUrl}
-                      className="gap-2"
+                  {/* Toggle between file upload and URL */}
+                  <div className="flex gap-2 mb-4">
+                    <Button
+                      type="button"
+                      variant={uploadMethod === 'file' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setUploadMethod('file')}
                     >
-                      <Check className="h-4 w-4" />
-                      Save
+                      Upload File
                     </Button>
-                    {isEditingResume && (
-                      <Button 
-                        variant="outline" 
-                        onClick={() => {
-                          setIsEditingResume(false);
-                          setResumeUrl(user?.resumeUrl || '');
-                        }}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    )}
+                    <Button
+                      type="button"
+                      variant={uploadMethod === 'url' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setUploadMethod('url')}
+                    >
+                      Add URL
+                    </Button>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    💡 Tip: Upload your resume to Google Drive or Dropbox, make it publicly viewable, and paste the link here
-                  </p>
+
+                  {uploadMethod === 'file' ? (
+                    <div
+                      onDrop={handleDrop}
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+                        isDragging
+                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/20'
+                          : 'border-gray-300 dark:border-gray-700'
+                      }`}
+                    >
+                      <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                      <p className="text-sm font-medium mb-2">
+                        Drag & drop your resume here
+                      </p>
+                      <p className="text-xs text-muted-foreground mb-4">
+                        or click to browse (PDF, DOC - Max 5MB)
+                      </p>
+                      <Input
+                        type="file"
+                        accept=".pdf,.doc,.docx"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleFileUpload(file);
+                        }}
+                        className="hidden"
+                        id="resume-upload"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => document.getElementById('resume-upload')?.click()}
+                      >
+                        Choose File
+                      </Button>
+                      {isEditingResume && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="mt-2 ml-2"
+                          onClick={() => {
+                            setIsEditingResume(false);
+                            setResumeUrl(user?.resumeUrl || '');
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex gap-2">
+                      <Input
+                        type="url"
+                        placeholder="Enter your resume URL (Google Drive, Dropbox, etc.)"
+                        value={resumeUrl}
+                        onChange={(e) => setResumeUrl(e.target.value)}
+                        className="flex-1"
+                      />
+                      <Button
+                        onClick={handleSaveResume}
+                        disabled={updateProfileMutation.isPending || !resumeUrl}
+                        className="gap-2"
+                      >
+                        <Check className="h-4 w-4" />
+                        Save
+                      </Button>
+                      {isEditingResume && (
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            setIsEditingResume(false);
+                            setResumeUrl(user?.resumeUrl || '');
+                          }}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  )}
+
+                  {uploadMethod === 'url' && (
+                    <p className="text-sm text-muted-foreground">
+                      💡 Tip: Upload your resume to Google Drive or Dropbox, make it publicly viewable, and paste the link here
+                    </p>
+                  )}
                 </div>
               ) : (
                 <div className="flex items-center justify-between">
