@@ -29,6 +29,8 @@ ApplyTrack is a sophisticated two-sided marketplace job application tracking sys
 
 ## 🚀 Live Demo
 
+🌐 **Live Application:** [https://applytrack-api.vercel.app](https://applytrack-api.vercel.app)
+
 **Demo Credentials Available on Login Page**
 
 **Applicant Account:**
