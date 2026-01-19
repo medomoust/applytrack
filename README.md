@@ -1085,115 +1085,6 @@ docker run -d -p 3001:3001 --env-file .env applytrack-api
 docker run -d -p 80:80 applytrack-web
 ```
 
-## 📸 Screenshots
-
-### Authentication
-
-<div align="center">
-
-#### Login Page
-![Login Page](docs/screenshots/applyTrackLoginPage.png)
-*Secure authentication with JWT tokens and refresh token rotation*
-
-#### Sign Up Page
-![Sign Up Page](docs/screenshots/applyTrackSignUpPage.png)
-*User registration with validation and immediate feedback*
-
-</div>
-
----
-
-### Dashboard Views
-
-<div align="center">
-
-#### Admin Dashboard
-![Admin Dashboard](docs/screenshots/adminUserDashboard.png)
-*Real-time KPIs, analytics charts, and activity timeline for administrators*
-
-#### User Dashboard
-![User Dashboard](docs/screenshots/demoUserDashboard.png)
-*Personalized metrics and insights for tracking job search progress*
-
-</div>
-
----
-
-### Application Management
-
-<div align="center">
-
-#### Kanban Board View
-![Kanban View](docs/screenshots/demoUserApplicationsKanbanView.png)
-*Interactive drag-and-drop board for visual application tracking across stages*
-
-#### Drag & Drop in Action
-![Drag and Drop](docs/screenshots/dragAndDropMidActionAdminUserApplicationsPage.png)
-*Smooth drag-and-drop interaction with visual feedback - move applications between stages effortlessly*
-
-#### Table View
-![Table View](docs/screenshots/adminUserAplicationsPageTableView.png)
-*Comprehensive table view with sorting, filtering, and inline actions*
-
-#### Application Modal
-![Application Modal](docs/screenshots/newApplicationModal.png)
-*Full-featured form for creating and editing applications with rich field options*
-
-</div>
-
----
-
-### Advanced Features
-
-<div align="center">
-
-#### Command Palette (⌘K)
-![Command Palette](docs/screenshots/commandPalette.png)
-*Keyboard-first navigation - access any feature instantly with fuzzy search*
-
-</div>
-
----
-
-### Activity & Admin Features
-
-<div align="center">
-
-#### Activity Log (Admin)
-![Admin Activity](docs/screenshots/adminUserActivityPage.png)
-*Complete audit trail of all system activities with user attribution*
-
-#### Activity Log (User)
-![User Activity](docs/screenshots/demoUserActivity.png)
-*Personal activity timeline showing all changes to applications*
-
-#### Admin Panel
-![Admin Panel](docs/screenshots/adminUserAdminPage.png)
-*User management interface with role assignment and account controls*
-
-</div>
-
----
-
-### Key UI Features Demonstrated
-
-- ✨ **Modern Design**: Clean, professional interface with consistent styling
-- 🎨 **Responsive Layout**: Adapts seamlessly to different screen sizes
-- 📊 **Data Visualization**: Interactive charts and KPI cards for insights
-- 🎯 **Dual View Modes**: Kanban board for visual workflow, table for detailed management
-- 🔍 **Advanced Filtering**: Multiple filter options with real-time search
-- 📱 **Mobile-Friendly**: Collapsible sidebar and responsive components
-- 🎭 **Role-Based UI**: Tailored experiences for admin and regular users
-- 💡 **Smooth Animations**: Framer Motion for professional transitions
-- 🎉 **Toast Notifications**: Non-intrusive success/error feedback
-- ⌨️ **Keyboard Shortcuts**: Command palette (⌘K) for power users
-- 🖱️ **Drag & Drop**: Intuitive application movement between stages
-- 📝 **Rich Forms**: Comprehensive modals with validation and auto-save
-- 🎪 **Empty States**: Helpful prompts when no data exists (described in Features section)
-- ⚠️ **Error Handling**: Graceful error states with actionable messages (see API error handling)
-- 🔄 **Loading States**: Skeleton screens for perceived performance (implemented throughout)
-- 📲 **Mobile Responsive**: Touch-friendly interfaces work on all devices (adaptive layout shown above)
-
 ## 🧪 Testing
 
 ### Run Tests
@@ -1284,9 +1175,8 @@ This project showcases expertise in:
 - Performance optimization techniques
 - Security best practices
 
-**Portfolio:** [Your Portfolio URL]  
-**LinkedIn:** [Your LinkedIn URL]  
-**GitHub:** [Your GitHub URL]
+**LinkedIn:** [linkedin.com/in/medo-moustafa](https://www.linkedin.com/in/medo-moustafa)  
+**GitHub:** [github.com/medomoust](https://github.com/medomoust)
 
 ## 🎯 Key Technical Highlights
 
@@ -1453,9 +1343,8 @@ Attribution is appreciated but not required.
 
 **Questions or feedback?** Feel free to reach out!
 
-- **Email:** [your.email@example.com]
-- **LinkedIn:** [Your LinkedIn Profile]
-- **Portfolio:** [Your Portfolio Website]
+- **GitHub Issues:** [github.com/medomoust/applytrack/issues](https://github.com/medomoust/applytrack/issues)
+- **LinkedIn:** [linkedin.com/in/medo-moustafa](https://www.linkedin.com/in/medo-moustafa)
 
 **Found a bug?** Please open an issue on GitHub with:
 - Description of the bug
