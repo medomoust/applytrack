@@ -128,7 +128,7 @@ router.get('/stats', async (req: AuthRequest, res: Response, next) => {
           uniqueApplicants: await prisma.jobApplication.findMany({
             where: { company: recruiter.company },
             distinct: ['userId'],
-          }).then(apps => apps.length),
+          }).then((apps: any) => apps.length),
         };
       }
     }
