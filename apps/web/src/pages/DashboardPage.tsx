@@ -227,7 +227,8 @@ export function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Overview</p>
+        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">
           Dashboard
         </h1>
         <p className="text-muted-foreground mt-1">
@@ -246,29 +247,26 @@ export function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className={`relative overflow-hidden border-0 bg-gradient-to-br ${card.bgGradient}`}>
+              <Card className="border border-zinc-200 shadow-none rounded-xl">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground flex items-center justify-between">
                     {card.title}
-                    <div className={`p-2 rounded-lg bg-gradient-to-br ${card.gradient}`}>
+                    <div className="p-2 rounded-lg bg-teal-600">
                       <Icon className="h-4 w-4 text-white" />
                     </div>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <motion.div
-                    className="text-3xl font-bold"
+                    className="text-3xl font-bold text-zinc-900"
                     initial={{ scale: 0.5 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: index * 0.1 + 0.2, type: "spring" }}
                   >
                     {typeof card.value === 'number' ? card.value : String(card.value || 0)}
                   </motion.div>
-                  <div className={`mt-2 h-1 w-20 rounded-full bg-gradient-to-r ${card.gradient}`} />
+                  <div className="mt-2 h-1 w-20 rounded-full bg-teal-600" />
                 </CardContent>
-                
-                {/* Decorative gradient orb */}
-                <div className={`absolute -right-8 -bottom-8 w-32 h-32 rounded-full bg-gradient-to-br ${card.gradient} opacity-10 blur-2xl`} />
               </Card>
             </motion.div>
           );
@@ -282,10 +280,10 @@ export function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card className="shadow-lg border-2 border-dashed border-blue-200 dark:border-blue-900">
+          <Card className="border border-zinc-200 shadow-none">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg">
+                <div className="p-2 bg-teal-600 rounded-lg">
                   <FileText className="h-4 w-4 text-white" />
                 </div>
                 Your Resume
@@ -453,10 +451,10 @@ export function DashboardPage() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card className="shadow-lg">
+          <Card className="border border-zinc-200 shadow-none rounded-xl">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg">
+                <div className="p-2 bg-teal-600 rounded-lg">
                   <TrendingUp className="h-4 w-4 text-white" />
                 </div>
                 Applications by Status
@@ -465,12 +463,6 @@ export function DashboardPage() {
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={statusData}>
-                  <defs>
-                    <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.8}/>
-                      <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                    </linearGradient>
-                  </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.3} />
                   <XAxis 
                     dataKey="name" 
@@ -493,7 +485,7 @@ export function DashboardPage() {
                   />
                   <Bar 
                     dataKey="count" 
-                    fill="url(#barGradient)" 
+                    fill="#0d9488" 
                     radius={[8, 8, 0, 0]}
                   />
                 </BarChart>
@@ -508,10 +500,10 @@ export function DashboardPage() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <Card className="shadow-lg">
+          <Card className="border border-zinc-200 shadow-none rounded-xl">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <div className="p-2 bg-gradient-to-br from-pink-500 to-orange-500 rounded-lg">
+                <div className="p-2 bg-teal-600 rounded-lg">
                   <Target className="h-4 w-4 text-white" />
                 </div>
                 Distribution Overview
@@ -562,10 +554,10 @@ export function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
       >
-        <Card className="shadow-lg">
+        <Card className="border border-zinc-200 shadow-none rounded-xl">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <div className="p-2 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg">
+              <div className="p-2 bg-teal-600 rounded-lg">
                 <Clock className="h-4 w-4 text-white" />
               </div>
               Recent Activity
@@ -584,8 +576,8 @@ export function DashboardPage() {
                     className="flex items-start gap-4 p-3 rounded-lg hover:bg-muted/50 transition-colors"
                   >
                     <div className="flex-shrink-0">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
-                        <ActivityIcon className="h-5 w-5 text-white" />
+                      <div className="w-10 h-10 rounded-full bg-teal-50 border border-teal-100 flex items-center justify-center">
+                        <ActivityIcon className="h-5 w-5 text-teal-600" />
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">
@@ -599,10 +591,10 @@ export function DashboardPage() {
               })}
               {!recentActivity?.length && (
                 <div className="text-center py-8">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 flex items-center justify-center">
-                    <Sparkles className="h-8 w-8 text-muted-foreground" />
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-teal-50 border border-teal-100 flex items-center justify-center">
+                    <Sparkles className="h-8 w-8 text-teal-600" />
                   </div>
-                  <p className="text-muted-foreground">No recent activity</p>
+                  <p className="text-zinc-500">No recent activity</p>
                 </div>
               )}
             </div>

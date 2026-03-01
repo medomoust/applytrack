@@ -221,10 +221,8 @@ export function ApplicationsPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <FileText className="h-8 w-8 text-primary" />
-            Applications
-          </h1>
+          <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">My Applications</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Applications</h1>
         </div>
         <Card className="p-8">
           <div className="text-center">
@@ -242,10 +240,8 @@ export function ApplicationsPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <FileText className="h-8 w-8 text-primary" />
-            Applications
-          </h1>
+          <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">My Applications</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Applications</h1>
         </div>
         <Card className="p-8">
           <EmptyState
@@ -265,11 +261,11 @@ export function ApplicationsPage() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1 className="text-3xl font-bold flex items-center gap-2">
-          <FileText className="h-8 w-8 text-primary" />
+        <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">My Applications</p>
+        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">
           Applications
         </h1>
-        <p className="text-muted-foreground mt-1">
+        <p className="text-zinc-500 mt-1">
           {user?.role === 'applicant'
             ? 'Track and manage your job applications'
             : 'View and manage applications to your company\'s jobs'}
