@@ -59,18 +59,19 @@ export function LoginPage() {
       >
         {/* Typographic wordmark */}
         <div className="mb-8 text-center">
-          <p className="text-2xl font-bold tracking-tight text-foreground">
-            Apply<span className="text-primary">Track</span>
+          <p className="text-2xl font-bold tracking-tight text-zinc-900">
+            Apply<span className="text-teal-600">Track</span>
           </p>
-          <p className="text-sm text-muted-foreground mt-1">Sign in to your workspace</p>
+          <p className="text-sm text-zinc-500 mt-1">Sign in to your workspace</p>
         </div>
 
-        <Card className="border shadow-sm">
-          <CardHeader className="pb-2 pt-6 px-6">
-            <h2 className="text-xl font-semibold tracking-tight">Welcome back</h2>
-            <p className="text-sm text-muted-foreground">Enter your credentials to continue</p>
+        <Card className="border border-zinc-200 shadow-none">
+          <CardHeader className="pb-2 pt-8 px-8">
+            <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Welcome back</p>
+            <h2 className="text-4xl font-extrabold tracking-tight text-zinc-900">Sign in</h2>
+            <p className="text-sm text-zinc-500 mt-1">Enter your credentials to continue</p>
           </CardHeader>
-          <CardContent className="px-6 pb-6 pt-4">
+          <CardContent className="px-8 pb-8 pt-4">
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
                 <motion.div
@@ -111,7 +112,7 @@ export function LoginPage() {
               </div>
               <Button
                 type="submit"
-                className="w-full h-10"
+                className="w-full h-10 rounded-full bg-zinc-900 text-white hover:bg-zinc-700"
                 disabled={isLoading}
               >
                 {isLoading ? 'Signing in…' : (
@@ -145,41 +146,41 @@ export function LoginPage() {
           transition={{ delay: 0.2 }}
           className="mt-4"
         >
-          <Card className="border bg-muted/40">
+          <Card className="border border-zinc-200 shadow-none bg-zinc-50">
             <CardContent className="p-4">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
+              <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-3">
                 Demo accounts
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="rounded-md border border-border bg-card p-3">
+                <div className="rounded-md border border-zinc-200 bg-white p-3">
                   <div className="flex items-center gap-2 mb-2">
-                    <Briefcase className="h-3.5 w-3.5 text-primary" />
-                    <span className="text-xs font-semibold text-primary">Recruiter</span>
+                    <Briefcase className="h-3.5 w-3.5 text-teal-600" />
+                    <span className="text-xs font-semibold text-teal-600">Recruiter</span>
                   </div>
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <User className="h-3 w-3 text-muted-foreground" />
-                      <code className="text-xs text-foreground">recruiter@meta.com</code>
+                      <User className="h-3 w-3 text-zinc-400" />
+                      <code className="text-xs text-zinc-700">recruiter@meta.com</code>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Lock className="h-3 w-3 text-muted-foreground" />
-                      <code className="text-xs text-foreground">Password123!</code>
+                      <Lock className="h-3 w-3 text-zinc-400" />
+                      <code className="text-xs text-zinc-700">Password123!</code>
                     </div>
                   </div>
                 </div>
-                <div className="rounded-md border border-border bg-card p-3">
+                <div className="rounded-md border border-zinc-200 bg-white p-3">
                   <div className="flex items-center gap-2 mb-2">
-                    <Users className="h-3.5 w-3.5 text-primary" />
-                    <span className="text-xs font-semibold text-primary">Applicant</span>
+                    <Users className="h-3.5 w-3.5 text-teal-600" />
+                    <span className="text-xs font-semibold text-teal-600">Applicant</span>
                   </div>
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <User className="h-3 w-3 text-muted-foreground" />
-                      <code className="text-xs text-foreground">john.doe@email.com</code>
+                      <User className="h-3 w-3 text-zinc-400" />
+                      <code className="text-xs text-zinc-700">john.doe@email.com</code>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Lock className="h-3 w-3 text-muted-foreground" />
-                      <code className="text-xs text-foreground">Password123!</code>
+                      <Lock className="h-3 w-3 text-zinc-400" />
+                      <code className="text-xs text-zinc-700">Password123!</code>
                     </div>
                   </div>
                 </div>

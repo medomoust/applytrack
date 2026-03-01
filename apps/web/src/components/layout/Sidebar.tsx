@@ -34,7 +34,7 @@ export function Sidebar() {
       <div className="px-5 py-5 border-b border-border">
         <div className="flex items-center gap-2.5">
           {/* Lettermark */}
-          <div className="w-7 h-7 rounded-md bg-primary flex items-center justify-center flex-shrink-0">
+          <div className="w-7 h-7 rounded-md bg-teal-600 flex items-center justify-center flex-shrink-0">
             <span className="text-[11px] font-bold text-primary-foreground tracking-tight">AT</span>
           </div>
           <span className="text-base font-semibold tracking-tight text-foreground">ApplyTrack</span>
