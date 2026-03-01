@@ -16,7 +16,24 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: config.corsOrigin,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, Postman)
+    if (!origin) return callback(null, true);
+
+    const allowed = (process.env.CORS_ORIGIN || 'http://localhost:5173')
+      .split(',')
+      .map(o => o.trim());
+
+    // Allow any Vercel preview deployment for this project
+    const isVercelPreview = /^https:\/\/applytrack(-[a-z0-9]+)*-medomousts-projects\.vercel\.app$/.test(origin);
+
+    if (allowed.includes(origin) || isVercelPreview) {
+      callback(null, true);
+    } else {
+      logger.warn(`CORS: blocked origin ${origin}`);
+      callback(new Error('CORS: origin not allowed'));
+    }
+  },
   credentials: true,
 }));
 app.use(express.json({ limit: '5mb' })); // Increase limit for base64 file uploads
