@@ -189,12 +189,13 @@ export function JobManagementPage() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold">Job Postings</h1>
-              <p className="text-muted-foreground mt-1">
+              <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Manage</p>
+              <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Job Postings</h1>
+              <p className="text-zinc-500 mt-1">
                 Manage your company's open positions
               </p>
             </div>
-            <Button onClick={() => handleOpenDialog()} className="gap-2">
+            <Button onClick={() => handleOpenDialog()} className="gap-2 rounded-full bg-zinc-900 text-white hover:bg-zinc-700">
               <Plus className="h-4 w-4" />
               Create Posting
             </Button>
@@ -230,12 +231,13 @@ export function JobManagementPage() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold">Job Postings</h1>
-              <p className="text-muted-foreground mt-1">
+              <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Manage</p>
+              <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Job Postings</h1>
+              <p className="text-zinc-500 mt-1">
                 Manage your company's open positions
               </p>
             </div>
-            <Button onClick={() => handleOpenDialog()} className="gap-2">
+            <Button onClick={() => handleOpenDialog()} className="gap-2 rounded-full bg-zinc-900 text-white hover:bg-zinc-700">
               <Plus className="h-4 w-4" />
               Create Posting
             </Button>
@@ -278,12 +280,13 @@ export function JobManagementPage() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold">Job Postings</h1>
-              <p className="text-muted-foreground mt-1">
+              <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Manage</p>
+              <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Job Postings</h1>
+              <p className="text-zinc-500 mt-1">
                 Manage your company's open positions
               </p>
             </div>
-            <Button onClick={() => handleOpenDialog()} className="gap-2">
+            <Button onClick={() => handleOpenDialog()} className="gap-2 rounded-full bg-zinc-900 text-white hover:bg-zinc-700">
               <Plus className="h-4 w-4" />
               Create Posting
             </Button>
@@ -328,11 +331,9 @@ export function JobManagementPage() {
         className="flex items-center justify-between"
       >
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Briefcase className="h-8 w-8 text-primary" />
-            Job Postings
-          </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Manage</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Job Postings</h1>
+          <p className="text-zinc-500 mt-1">
             Manage your company's open positions
           </p>
         </div>
@@ -549,7 +550,7 @@ export function JobManagementPage() {
 
             <div className="flex gap-3 pt-4">
               <Button
-                className="flex-1"
+                className="flex-1 rounded-full bg-zinc-900 text-white hover:bg-zinc-700"
                 onClick={handleSubmit}
                 disabled={createMutation.isPending || updateMutation.isPending}
               >

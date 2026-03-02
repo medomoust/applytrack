@@ -63,11 +63,9 @@ export function JobsPage() {
           className="flex items-center justify-between"
         >
           <div>
-            <h1 className="text-3xl font-bold flex items-center gap-2">
-              <Building2 className="h-8 w-8 text-primary" />
-              Browse Jobs
-            </h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Open Positions</p>
+            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Browse Jobs</h1>
+            <p className="text-zinc-500 mt-1">
               Find and apply to open positions
             </p>
           </div>
@@ -102,11 +100,9 @@ export function JobsPage() {
           className="flex items-center justify-between"
         >
           <div>
-            <h1 className="text-3xl font-bold flex items-center gap-2">
-              <Building2 className="h-8 w-8 text-primary" />
-              Browse Jobs
-            </h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Open Positions</p>
+            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Browse Jobs</h1>
+            <p className="text-zinc-500 mt-1">
               Find and apply to open positions
             </p>
           </div>
@@ -148,11 +144,9 @@ export function JobsPage() {
           className="flex items-center justify-between"
         >
           <div>
-            <h1 className="text-3xl font-bold flex items-center gap-2">
-              <Building2 className="h-8 w-8 text-primary" />
-              Browse Jobs
-            </h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Open Positions</p>
+            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Browse Jobs</h1>
+            <p className="text-zinc-500 mt-1">
               Find and apply to open positions
             </p>
           </div>
@@ -188,11 +182,9 @@ export function JobsPage() {
         className="flex items-center justify-between"
       >
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Building2 className="h-8 w-8 text-primary" />
-            Browse Jobs
-          </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Open Positions</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Browse Jobs</h1>
+          <p className="text-zinc-500 mt-1">
             Find and apply to open positions
           </p>
         </div>
@@ -221,7 +213,7 @@ export function JobsPage() {
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setSelectedJob(job)}>
+              <Card className="p-6 border border-zinc-200 shadow-none cursor-pointer" onClick={() => setSelectedJob(job)}>
                 <div className="flex items-start justify-between mb-3">
                   <div>
                     <h3 className="text-lg font-semibold mb-1">{String(job.roleTitle || '')}</h3>
@@ -255,7 +247,7 @@ export function JobsPage() {
                   </p>
                 )}
 
-                <Button className="w-full mt-4" onClick={(e) => {
+                <Button className="w-full mt-4 rounded-full bg-zinc-900 text-white hover:bg-zinc-700" onClick={(e) => {
                   e.stopPropagation();
                   setSelectedJob(job);
                 }}>
@@ -344,7 +336,7 @@ export function JobsPage() {
 
                 <div className="flex gap-3">
                   <Button
-                    className="flex-1"
+                    className="flex-1 rounded-full bg-zinc-900 text-white hover:bg-zinc-700"
                     onClick={handleApply}
                     disabled={applyMutation.isPending}
                   >

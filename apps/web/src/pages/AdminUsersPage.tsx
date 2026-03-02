@@ -33,8 +33,9 @@ export function AdminUsersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">User Management</h1>
-        <p className="text-muted-foreground">Manage users and their permissions</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Administration</p>
+        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">User Management</h1>
+        <p className="text-zinc-500">Manage users and their permissions</p>
       </div>
 
       <Card className="p-4">

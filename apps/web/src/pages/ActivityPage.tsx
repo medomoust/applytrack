@@ -25,8 +25,9 @@ export function ActivityPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Activity Log</h1>
-        <p className="text-muted-foreground">Track all changes to your applications</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">History</p>
+        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Activity Log</h1>
+        <p className="text-zinc-500">Track all changes to your applications</p>
       </div>
 
       {isError ? (

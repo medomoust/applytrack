@@ -103,7 +103,7 @@ router.get('/', async (req: AuthRequest, res, next) => {
     const totalPages = Math.ceil(totalItems / pageSize);
 
     res.json({
-      data: jobPostings.map((posting) => ({
+      data: jobPostings.map((posting: any) => ({
         ...posting,
         createdAt: posting.createdAt.toISOString(),
         updatedAt: posting.updatedAt.toISOString(),

@@ -1,5 +1,5 @@
 import { ActivityEventType } from '@applytrack/shared';
-import prisma, { Prisma } from '../db/prisma';
+import prisma from '../db/prisma';
 
 interface CreateActivityLogParams {
   userId: string;
@@ -16,7 +16,7 @@ export const createActivityLog = async (params: CreateActivityLogParams) => {
       jobApplicationId: params.jobApplicationId,
       eventType: params.eventType,
       description: params.description,
-      metadata: (params.metadata as Prisma.InputJsonValue) ?? undefined,
+      metadata: (params.metadata as any) ?? undefined,
     },
   });
 };
