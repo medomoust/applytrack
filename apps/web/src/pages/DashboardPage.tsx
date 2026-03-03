@@ -163,6 +163,8 @@ export function DashboardPage() {
     count: value,
   }));
 
+  const totalApplications = stats?.kpis.total || 0;
+
   // Colors for different statuses
   const COLORS = {
     wishlist: '#94a3b8',
@@ -220,18 +222,20 @@ export function DashboardPage() {
   };
 
   return (
-    <div className="space-y-6 pb-8">
+    <div className="space-y-8 pb-10">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Overview</p>
-        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-2">
+          Overview
+        </p>
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
           Dashboard
         </h1>
-        <p className="text-muted-foreground mt-1">
+        <p className="text-sm text-slate-600 dark:text-slate-400 mt-2 max-w-2xl">
           {isRecruiter ? 'Overview of your company\'s recruitment' : 'Overview of your job applications'}
         </p>
       </motion.div>
@@ -247,25 +251,25 @@ export function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className="border border-zinc-200 shadow-none rounded-xl">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground flex items-center justify-between">
+              <Card className="border border-slate-200/80 dark:border-slate-800/80 shadow-sm rounded-2xl bg-white/80 dark:bg-slate-900/60">
+                <CardHeader className="pb-2 px-5 pt-5">
+                  <CardTitle className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide flex items-center justify-between">
                     {card.title}
-                    <div className="p-2 rounded-lg bg-teal-600">
-                      <Icon className="h-4 w-4 text-white" />
+                    <div className="p-2 rounded-lg bg-slate-900 dark:bg-slate-100">
+                      <Icon className="h-4 w-4 text-white dark:text-slate-900" />
                     </div>
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="px-5 pb-5">
                   <motion.div
-                    className="text-3xl font-bold text-zinc-900 dark:text-zinc-100"
+                    className="text-3xl font-semibold text-slate-900 dark:text-slate-100"
                     initial={{ scale: 0.5 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: index * 0.1 + 0.2, type: "spring" }}
                   >
                     {typeof card.value === 'number' ? card.value : String(card.value || 0)}
                   </motion.div>
-                  <div className="mt-2 h-1 w-20 rounded-full bg-teal-600" />
+                  <div className="mt-3 h-1 w-16 rounded-full bg-slate-900/80 dark:bg-slate-100/80" />
                 </CardContent>
               </Card>
             </motion.div>
@@ -280,11 +284,11 @@ export function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card className="border border-zinc-200 shadow-none">
+          <Card className="border border-slate-200/80 dark:border-slate-800/80 shadow-sm rounded-2xl bg-white/80 dark:bg-slate-900/60">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <div className="p-2 bg-teal-600 rounded-lg">
-                  <FileText className="h-4 w-4 text-white" />
+              <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-slate-100">
+                <div className="p-2 bg-slate-900 dark:bg-slate-100 rounded-lg">
+                  <FileText className="h-4 w-4 text-white dark:text-slate-900" />
                 </div>
                 Your Resume
               </CardTitle>
@@ -319,15 +323,15 @@ export function DashboardPage() {
                       onDragLeave={handleDragLeave}
                       className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
                         isDragging
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/20'
-                          : 'border-gray-300 dark:border-gray-700'
+                          ? 'border-slate-400 bg-slate-50 dark:bg-slate-900/50'
+                          : 'border-slate-200/80 dark:border-slate-700/80 bg-slate-50/60 dark:bg-slate-900/40'
                       }`}
                     >
-                      <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                      <p className="text-sm font-medium mb-2">
+                      <FileText className="h-12 w-12 mx-auto mb-4 text-slate-500 dark:text-slate-400" />
+                      <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">
                         Drag & drop your resume here
                       </p>
-                      <p className="text-xs text-muted-foreground mb-4">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
                         or click to browse (PDF, DOC - Max 2MB)
                       </p>
                       <Input
@@ -394,26 +398,26 @@ export function DashboardPage() {
                   )}
 
                   {uploadMethod === 'file' ? (
-                    <p className="text-sm text-muted-foreground">
-                      💡 Tip: File size limit is 2MB. For larger files, use the URL option instead.
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                      Tip: File size limit is 2MB. For larger files, use the URL option instead.
                     </p>
                   ) : (
-                    <p className="text-sm text-muted-foreground">
-                      💡 Tip: Upload your resume to Google Drive or Dropbox, make it publicly viewable, and paste the link here
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                      Tip: Upload your resume to Google Drive or Dropbox, make it publicly viewable, and paste the link here.
                     </p>
                   )}
                 </div>
               ) : (
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-lg">
-                      <Check className="h-5 w-5 text-green-600 dark:text-green-400" />
+                    <div className="p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
+                      <Check className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                     </div>
                     <div>
-                      <p className="font-medium">Resume uploaded</p>
+                      <p className="font-semibold text-slate-900 dark:text-slate-100">Resume uploaded</p>
                       <button
                         onClick={handleViewResume}
-                        className="text-sm text-blue-600 hover:underline dark:text-blue-400 cursor-pointer"
+                        className="text-sm text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 underline-offset-4 hover:underline"
                       >
                         View Resume →
                       </button>
@@ -451,11 +455,11 @@ export function DashboardPage() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card className="border border-zinc-200 shadow-none rounded-xl">
+          <Card className="border border-slate-200/80 dark:border-slate-800/80 shadow-sm rounded-2xl bg-white/80 dark:bg-slate-900/60">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <div className="p-2 bg-teal-600 rounded-lg">
-                  <TrendingUp className="h-4 w-4 text-white" />
+              <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-slate-100">
+                <div className="p-2 bg-slate-900 dark:bg-slate-100 rounded-lg">
+                  <TrendingUp className="h-4 w-4 text-white dark:text-slate-900" />
                 </div>
                 Applications by Status
               </CardTitle>
@@ -463,31 +467,43 @@ export function DashboardPage() {
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={statusData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.3} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={0.4} />
                   <XAxis 
                     dataKey="name" 
-                    stroke="#6b7280"
+                    stroke="#64748b"
                     style={{ fontSize: '12px' }}
                   />
                   <YAxis 
-                    stroke="#6b7280"
+                    stroke="#64748b"
                     style={{ fontSize: '12px' }}
                   />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                      border: 'none',
-                      borderRadius: '8px',
-                      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                      color: '#1f2937',
+                  <Tooltip
+                    content={(props: any) => {
+                      if (!props.active || !props.payload?.length) return null;
+                      const { name, count } = props.payload[0].payload;
+                      const color = COLORS[name.toLowerCase() as keyof typeof COLORS] || '#6366f1';
+                      return (
+                        <div className="rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-3 shadow-xl">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
+                            <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{name}</span>
+                          </div>
+                          <div className="text-xs text-slate-500 dark:text-slate-400">
+                            {count} application{count !== 1 ? 's' : ''}
+                          </div>
+                        </div>
+                      );
                     }}
-                    cursor={{ fill: 'rgba(139, 92, 246, 0.1)' }}
+                    cursor={{ fill: 'rgba(100, 116, 139, 0.08)' }}
                   />
-                  <Bar 
-                    dataKey="count" 
-                    fill="#0d9488" 
-                    radius={[8, 8, 0, 0]}
-                  />
+                  <Bar dataKey="count" radius={[8, 8, 0, 0]}>
+                    {statusData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[entry.name.toLowerCase() as keyof typeof COLORS] || '#6366f1'}
+                      />
+                    ))}
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -500,46 +516,91 @@ export function DashboardPage() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <Card className="border border-zinc-200 shadow-none rounded-xl">
+          <Card className="border border-slate-200/80 dark:border-slate-800/80 shadow-sm rounded-2xl bg-white/80 dark:bg-slate-900/60">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <div className="p-2 bg-teal-600 rounded-lg">
-                  <Target className="h-4 w-4 text-white" />
+              <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-slate-100">
+                <div className="p-2 bg-slate-900 dark:bg-slate-100 rounded-lg">
+                  <Target className="h-4 w-4 text-white dark:text-slate-900" />
                 </div>
                 Distribution Overview
               </CardTitle>
             </CardHeader>
             <CardContent>
               {pieData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={pieData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {pieData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                        border: 'none',
-                        borderRadius: '8px',
-                        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                        color: '#1f2937',
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
+                <div className="space-y-6">
+                  <ResponsiveContainer width="100%" height={260}>
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={68}
+                        outerRadius={100}
+                        paddingAngle={3}
+                        cornerRadius={10}
+                        startAngle={90}
+                        endAngle={-270}
+                        stroke="transparent"
+                        dataKey="value"
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <text
+                        x="50%"
+                        y="50%"
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                        className="fill-slate-900 dark:fill-slate-100"
+                      >
+                        {totalApplications}
+                      </text>
+                      <text
+                        x="50%"
+                        y="50%"
+                        dy={18}
+                        textAnchor="middle"
+                        className="fill-slate-500 dark:fill-slate-400 text-xs"
+                      >
+                        Total
+                      </text>
+                      <Tooltip
+                        content={(props: any) => {
+                          if (!props.active || !props.payload?.length) return null;
+                          const data = props.payload[0].payload;
+                          const pct = totalApplications > 0
+                            ? ((data.value / totalApplications) * 100).toFixed(1)
+                            : '0';
+                          return (
+                            <div className="rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-3 shadow-xl">
+                              <div className="flex items-center gap-2 mb-1.5">
+                                <span className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: data.color }} />
+                                <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{data.name}</span>
+                              </div>
+                              <div className="text-xs text-slate-500 dark:text-slate-400 pl-[18px]">
+                                {data.value} application{data.value !== 1 ? 's' : ''} · {pct}%
+                              </div>
+                            </div>
+                          );
+                        }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="grid grid-cols-2 gap-3">
+                    {pieData.map((item) => (
+                      <div key={item.name} className="flex items-center justify-between rounded-lg border border-slate-200/70 dark:border-slate-800/70 px-3 py-2">
+                        <div className="flex items-center gap-2">
+                          <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.color }} />
+                          <span className="text-xs font-medium text-slate-700 dark:text-slate-300">{item.name}</span>
+                        </div>
+                        <span className="text-xs font-semibold text-slate-900 dark:text-slate-100">{item.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               ) : (
-                <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+                <div className="h-[300px] flex items-center justify-center text-slate-500 dark:text-slate-400">
                   No data to display
                 </div>
               )}
@@ -554,11 +615,11 @@ export function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
       >
-        <Card className="border border-zinc-200 shadow-none rounded-xl">
+        <Card className="border border-slate-200/80 dark:border-slate-800/80 shadow-sm rounded-2xl bg-white/80 dark:bg-slate-900/60">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <div className="p-2 bg-teal-600 rounded-lg">
-                <Clock className="h-4 w-4 text-white" />
+            <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-slate-100">
+              <div className="p-2 bg-slate-900 dark:bg-slate-100 rounded-lg">
+                <Clock className="h-4 w-4 text-white dark:text-slate-900" />
               </div>
               Recent Activity
             </CardTitle>
@@ -573,16 +634,16 @@ export function DashboardPage() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.7 + index * 0.05 }}
-                    className="flex items-start gap-4 p-3 rounded-lg hover:bg-muted/50 transition-colors"
+                    className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
                   >
                     <div className="flex-shrink-0">
-                      <div className="w-10 h-10 rounded-full bg-teal-50 border border-teal-100 flex items-center justify-center">
-                        <ActivityIcon className="h-5 w-5 text-teal-600" />
+                      <div className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/70 flex items-center justify-center">
+                        <ActivityIcon className="h-5 w-5 text-slate-700 dark:text-slate-200" />
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm">{String(activity.description || '')}</p>
-                      <p className="text-xs text-muted-foreground mt-1">
+                      <p className="font-medium text-sm text-slate-900 dark:text-slate-100">{String(activity.description || '')}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                         {new Date(activity.createdAt).toLocaleString()}
                       </p>
                     </div>
@@ -591,10 +652,10 @@ export function DashboardPage() {
               })}
               {!recentActivity?.length && (
                 <div className="text-center py-8">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-teal-50 border border-teal-100 flex items-center justify-center">
-                    <Sparkles className="h-8 w-8 text-teal-600" />
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/70 flex items-center justify-center">
+                    <Sparkles className="h-8 w-8 text-slate-700 dark:text-slate-200" />
                   </div>
-                  <p className="text-zinc-500">No recent activity</p>
+                  <p className="text-slate-500 dark:text-slate-400">No recent activity</p>
                 </div>
               )}
             </div>
