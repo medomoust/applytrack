@@ -222,7 +222,7 @@ export function ApplicationsPage() {
       <div className="space-y-6">
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">My Applications</p>
-          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Applications</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">Applications</h1>
         </div>
         <Card className="p-8">
           <div className="text-center">
@@ -241,7 +241,7 @@ export function ApplicationsPage() {
       <div className="space-y-6">
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">My Applications</p>
-          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Applications</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">Applications</h1>
         </div>
         <Card className="p-8">
           <EmptyState
@@ -262,7 +262,7 @@ export function ApplicationsPage() {
         animate={{ opacity: 1, y: 0 }}
       >
         <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">My Applications</p>
-        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">
+        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
           Applications
         </h1>
         <p className="text-zinc-500 mt-1">

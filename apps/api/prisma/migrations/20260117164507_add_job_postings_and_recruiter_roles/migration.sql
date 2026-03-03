@@ -8,17 +8,23 @@ CREATE TYPE "JobPostingStatus" AS ENUM ('open', 'closed');
 -- First create new enum
 CREATE TYPE "UserRole_new" AS ENUM ('recruiter', 'applicant');
 
+-- Drop the default constraint first
+ALTER TABLE "users" ALTER COLUMN "role" DROP DEFAULT;
+
 -- Update existing data: admin -> recruiter, user -> applicant
 ALTER TABLE "users" ALTER COLUMN "role" TYPE "UserRole_new" 
   USING CASE 
-    WHEN "role"::text = 'admin' THEN 'recruiter'::UserRole_new
-    WHEN "role"::text = 'user' THEN 'applicant'::UserRole_new
-    ELSE 'applicant'::UserRole_new
-  END;
+    WHEN "role"::text = 'admin' THEN 'recruiter'
+    WHEN "role"::text = 'user' THEN 'applicant'
+    ELSE 'applicant'
+  END::"UserRole_new";
 
 -- Drop old enum and rename new one
 DROP TYPE "UserRole";
 ALTER TYPE "UserRole_new" RENAME TO "UserRole";
+
+-- Set new default
+ALTER TABLE "users" ALTER COLUMN "role" SET DEFAULT 'applicant'::"UserRole";
 
 -- AlterTable: Add company field to users
 ALTER TABLE "users" ADD COLUMN "company" "Company";

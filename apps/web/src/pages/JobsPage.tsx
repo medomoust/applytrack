@@ -64,7 +64,7 @@ export function JobsPage() {
         >
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Open Positions</p>
-            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Browse Jobs</h1>
+            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">Browse Jobs</h1>
             <p className="text-zinc-500 mt-1">
               Find and apply to open positions
             </p>
@@ -101,7 +101,7 @@ export function JobsPage() {
         >
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Open Positions</p>
-            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Browse Jobs</h1>
+            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">Browse Jobs</h1>
             <p className="text-zinc-500 mt-1">
               Find and apply to open positions
             </p>
@@ -145,7 +145,7 @@ export function JobsPage() {
         >
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Open Positions</p>
-            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Browse Jobs</h1>
+            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">Browse Jobs</h1>
             <p className="text-zinc-500 mt-1">
               Find and apply to open positions
             </p>
@@ -183,7 +183,7 @@ export function JobsPage() {
       >
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Open Positions</p>
-          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Browse Jobs</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">Browse Jobs</h1>
           <p className="text-zinc-500 mt-1">
             Find and apply to open positions
           </p>

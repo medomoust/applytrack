@@ -1,12 +1,10 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, UserRole, Company } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
-// Define constants directly since we're using String types
-const COMPANIES = ['GOOGLE', 'APPLE', 'MICROSOFT', 'AMAZON', 'META', 'NETFLIX', 'TESLA', 'TWITTER', 'SPOTIFY', 'ADOBE'];
-const USER_ROLES = { recruiter: 'recruiter', applicant: 'applicant' };
-type Company = typeof COMPANIES[number];
+// Define constants directly
+const COMPANIES = Object.values(Company);
 
 const roles = [
   'Senior Software Engineer',
@@ -75,9 +73,9 @@ async function main() {
       email: 'medomoust@gmail.com',
       password: adminPassword,
       name: 'Admin User',
-      role: 'recruiter', // Can access both recruiter and admin features
+      role: UserRole.recruiter, // Can access both recruiter and admin features
       isAdmin: true,
-      company: 'GOOGLE', // Placeholder company
+      company: Company.GOOGLE, // Placeholder company
     },
   });
   console.log('  ✓ Created admin account');
@@ -92,7 +90,7 @@ async function main() {
         email: `recruiter@${company.toLowerCase()}.com`,
         password: hashedPassword,
         name: `${company} Recruiter`,
-        role: USER_ROLES.recruiter,
+        role: UserRole.recruiter,
         company: company,
       },
     });
@@ -122,7 +120,7 @@ async function main() {
         email: `${name.toLowerCase().replace(' ', '.')}@email.com`,
         password: hashedPassword,
         name,
-        role: USER_ROLES.applicant,
+        role: UserRole.applicant,
       },
     });
     applicants.push(applicant);

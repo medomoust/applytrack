@@ -7,41 +7,50 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Temporarily using String instead of enums to match database
-// enum UserRole {
-//   applicant
-//   recruiter
-// }
+// Enums
+enum UserRole {
+  applicant
+  recruiter
+}
 
-// enum Company {
-//   GOOGLE
-//   APPLE
-//   MICROSOFT
-//   AMAZON
-//   META
-//   NETFLIX
-//   TESLA
-//   TWITTER
-//   SPOTIFY
-//   ADOBE
-// }
+enum Company {
+  GOOGLE
+  APPLE
+  MICROSOFT
+  AMAZON
+  META
+  NETFLIX
+  TESLA
+  TWITTER
+  SPOTIFY
+  ADOBE
+}
 
-// enum JobPostingStatus {
-//   open
-//   closed
-// }
+enum JobPostingStatus {
+  open
+  closed
+}
 
-// enum WorkMode {
-//   remote
-//   hybrid
-//   onsite
-// }
+enum WorkMode {
+  remote
+  hybrid
+  onsite
+}
 
-// enum EmploymentType {
-//   fulltime
-//   contract
-//   intern
-// }
+enum EmploymentType {
+  fulltime
+  contract
+  intern
+}
+
+enum ActivityEventType {
+  created
+  updated
+  status_changed
+  archived
+  restored
+  note_added
+}
 
 enum ApplicationStatus {
   wishlist
@@ -58,22 +67,13 @@ enum Priority {
   high
 }
 
-enum ActivityEventType {
-  created
-  updated
-  status_changed
-  archived
-  restored
-  note_added
-}
-
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
   name      String?
-  role      String   @default("applicant")
-  company   String? // Only for recruiters
+  role      UserRole @default(applicant)
+  company   Company? // Only for recruiters
   resumeUrl String? // Resume file URL for applicants
   isAdmin   Boolean  @default(false) // Master admin access
   isActive  Boolean  @default(true)
@@ -92,15 +92,15 @@ model User {
 model JobPosting {
   id             String           @id @default(uuid())
   recruiterId    String
-  company        String
+  company        Company
   roleTitle      String
   location       String?
-  workMode       String
-  employmentType String
+  workMode       WorkMode
+  employmentType EmploymentType
   description    String?
   requirements   String?
   salaryRange    String?
-  status         String           @default("open")
+  status         JobPostingStatus @default(open)
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
 
@@ -118,13 +118,13 @@ model JobApplication {
   userId           String
   jobPostingId     String
   applicantName    String
-  company          String // Denormalized from JobPosting
+  company          Company // Denormalized from JobPosting
   roleTitle        String // Denormalized from JobPosting
   location         String?
-  workMode         String
-  employmentType   String
-  status           String            @default("applied")
-  priority         String            @default("medium")
+  workMode         WorkMode
+  employmentType   EmploymentType
+  status           ApplicationStatus @default(applied)
+  priority         Priority          @default(medium)
   appliedDate      DateTime          @default(now())
   nextFollowUpDate DateTime?
   salaryTarget     Float?
@@ -146,13 +146,13 @@ model JobApplication {
 }
 
 model ActivityLog {
-  id               String            @id @default(uuid())
+  id               String              @id @default(uuid())
   userId           String
   jobApplicationId String?
-  eventType        String
+  eventType        ActivityEventType
   description      String
   metadata         Json?
-  createdAt        DateTime          @default(now())
+  createdAt        DateTime            @default(now())
 
   user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   jobApplication JobApplication? @relation(fields: [jobApplicationId], references: [id], onDelete: Cascade)

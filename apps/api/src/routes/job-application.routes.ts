@@ -193,13 +193,13 @@ router.patch('/:id', async (req: AuthRequest, res: Response, next) => {
     });
 
     // Log activity
-    let description = `Updated application for ${application.roleTitle} at ${application.company}`;
+    let description = `Updated · ${application.roleTitle} at ${application.company}`;
     if (data.status && data.status !== existing.status) {
       await createActivityLog({
         userId: req.user.userId,
         jobApplicationId: application.id,
         eventType: ActivityEventType.STATUS_CHANGED,
-        description: `Changed status from ${existing.status} to ${data.status}`,
+        description: `Status changed from ${existing.status} → ${data.status}`,
         metadata: { oldStatus: existing.status, newStatus: data.status },
       });
     } else {
@@ -254,7 +254,7 @@ router.post('/:id/archive', async (req: AuthRequest, res: Response, next) => {
       userId: req.user.userId,
       jobApplicationId: application.id,
       eventType: ActivityEventType.ARCHIVED,
-      description: `Archived application for ${application.roleTitle} at ${application.company}`,
+      description: `Archived · ${application.roleTitle} at ${application.company}`,
     });
 
     res.json({
@@ -300,7 +300,7 @@ router.post('/:id/restore', async (req: AuthRequest, res: Response, next) => {
       userId: req.user.userId,
       jobApplicationId: application.id,
       eventType: ActivityEventType.RESTORED,
-      description: `Restored application for ${application.roleTitle} at ${application.company}`,
+      description: `Restored · ${application.roleTitle} at ${application.company}`,
     });
 
     res.json({

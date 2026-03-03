@@ -66,17 +66,17 @@ export function SignupPage() {
       >
         {/* Typographic wordmark */}
         <div className="mb-8 text-center">
-          <p className="text-2xl font-bold tracking-tight text-zinc-900">
-            Apply<span className="text-teal-600">Track</span>
+          <p className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+            Apply<span className="text-teal-600 dark:text-teal-400">Track</span>
           </p>
-          <p className="text-sm text-zinc-500 mt-1">Create your free account</p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Create your free account</p>
         </div>
 
         <Card className="border border-zinc-200 shadow-none">
           <CardHeader className="pb-2 pt-8 px-8">
-            <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Get started</p>
-            <h2 className="text-4xl font-extrabold tracking-tight text-zinc-900">Sign up</h2>
-            <p className="text-sm text-zinc-500 mt-1">Start tracking your applications today</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 dark:text-teal-400 mb-1">Get started</p>
+            <h2 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">Sign up</h2>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Start tracking your applications today</p>
           </CardHeader>
           <CardContent className="px-8 pb-8 pt-4">
             <form onSubmit={handleSubmit} className="space-y-4">

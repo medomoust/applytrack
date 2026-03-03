@@ -34,7 +34,7 @@ export function AdminUsersPage() {
     <div className="space-y-6">
       <div>
         <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Administration</p>
-        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">User Management</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">User Management</h1>
         <p className="text-zinc-500">Manage users and their permissions</p>
       </div>
 

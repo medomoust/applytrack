@@ -228,7 +228,7 @@ export function DashboardPage() {
         transition={{ duration: 0.5 }}
       >
         <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Overview</p>
-        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">
+        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
           Dashboard
         </h1>
         <p className="text-muted-foreground mt-1">
@@ -258,7 +258,7 @@ export function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                   <motion.div
-                    className="text-3xl font-bold text-zinc-900"
+                    className="text-3xl font-bold text-zinc-900 dark:text-zinc-100"
                     initial={{ scale: 0.5 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: index * 0.1 + 0.2, type: "spring" }}

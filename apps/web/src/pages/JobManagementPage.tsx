@@ -190,7 +190,7 @@ export function JobManagementPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Manage</p>
-              <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Job Postings</h1>
+              <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">Job Postings</h1>
               <p className="text-zinc-500 mt-1">
                 Manage your company's open positions
               </p>
@@ -232,7 +232,7 @@ export function JobManagementPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Manage</p>
-              <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Job Postings</h1>
+              <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">Job Postings</h1>
               <p className="text-zinc-500 mt-1">
                 Manage your company's open positions
               </p>
@@ -281,7 +281,7 @@ export function JobManagementPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Manage</p>
-              <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Job Postings</h1>
+              <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">Job Postings</h1>
               <p className="text-zinc-500 mt-1">
                 Manage your company's open positions
               </p>
@@ -332,7 +332,7 @@ export function JobManagementPage() {
       >
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">Manage</p>
-          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Job Postings</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">Job Postings</h1>
           <p className="text-zinc-500 mt-1">
             Manage your company's open positions
           </p>
