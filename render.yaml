@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: applytrack-api
+    runtime: node
+    buildCommand: npm install && npm run build --workspace=@applytrack/shared && npm run build --workspace=@applytrack/api
+    startCommand: npm start --workspace=@applytrack/api
+    envVars:
+      - key: NODE_ENV
+        value: production
