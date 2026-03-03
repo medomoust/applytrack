@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "prisma generate && (prisma migrate resolve --rolled-back 20260303150000_fix_job_application_company_enum || true) && (prisma migrate resolve --rolled-back 20260303151000_fix_job_applications_company_enum_retry || true) && prisma migrate deploy && tsc",
+    "build": "prisma generate && (prisma migrate resolve --applied 20260303150000_fix_job_application_company_enum || true) && (prisma migrate resolve --applied 20260303151000_fix_job_applications_company_enum_retry || true) && prisma migrate deploy && tsc",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
     "db:generate": "prisma generate",
