@@ -3,6 +3,7 @@ import prisma from '../db/prisma';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/error-handler';
 import { apiLimiter } from '../middleware/rate-limit';
+import { logger } from '../utils/logger';
 
 const router = Router();
 
@@ -24,14 +25,18 @@ router.get('/stats', async (req: AuthRequest, res: Response, next) => {
     const where: any = { archived: false };
     
     if (isRecruiter) {
-      // Recruiters see applications to their company's jobs
-      const recruiter = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { company: true },
-      });
-      
-      if (recruiter?.company) {
-        where.company = recruiter.company;
+      try {
+        // Recruiters see applications to their company's jobs
+        const recruiter = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { company: true },
+        });
+        
+        if (recruiter?.company) {
+          where.company = recruiter.company;
+        }
+      } catch (e: any) {
+        logger.error('Failed to fetch recruiter company for where clause', { error: e.message });
       }
     } else {
       // Applicants see only their own applications
@@ -109,27 +114,31 @@ router.get('/stats', async (req: AuthRequest, res: Response, next) => {
     // Additional stats for recruiters
     let recruiterStats = {};
     if (isRecruiter) {
-      const recruiter = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { company: true },
-      });
-
-      if (recruiter?.company) {
-        // Count open job postings
-        const openPositions = await prisma.jobPosting.count({
-          where: {
-            company: recruiter.company,
-            status: 'open',
-          },
+      try {
+        const recruiter = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { company: true },
         });
 
-        recruiterStats = {
-          openPositions,
-          uniqueApplicants: await prisma.jobApplication.findMany({
-            where: { company: recruiter.company },
-            distinct: ['userId'],
-          }).then((apps: any) => apps.length),
-        };
+        if (recruiter?.company) {
+          const openPositions = await prisma.jobPosting.count({
+            where: {
+              company: recruiter.company,
+              status: 'open',
+            },
+          });
+
+          recruiterStats = {
+            openPositions,
+            uniqueApplicants: await prisma.jobApplication.findMany({
+              where: { company: recruiter.company },
+              distinct: ['userId'],
+            }).then((apps: any) => apps.length),
+          };
+        }
+      } catch (recruiterErr: any) {
+        logger.error('Recruiter stats failed', { error: recruiterErr.message });
+        recruiterStats = { openPositions: 0, uniqueApplicants: 0, _error: recruiterErr.message };
       }
     }
 

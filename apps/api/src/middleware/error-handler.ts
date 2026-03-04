@@ -43,5 +43,6 @@ export const errorHandler = (
 
   res.status(500).json({
     error: 'Internal server error',
+    detail: err.message, // temporary: remove after diagnosing production issue
   });
 };
