@@ -210,9 +210,13 @@ DO $$ BEGIN
     UPDATE "job_postings"
     SET "status" = 'open'
     WHERE "status" NOT IN ('open','closed');
+    -- Must drop default before changing type
+    ALTER TABLE "job_postings" ALTER COLUMN "status" DROP DEFAULT;
     ALTER TABLE "job_postings"
       ALTER COLUMN "status" TYPE "JobPostingStatus"
       USING "status"::"JobPostingStatus";
+    ALTER TABLE "job_postings"
+      ALTER COLUMN "status" SET DEFAULT 'open'::"JobPostingStatus";
   END IF;
 END $$;
 
