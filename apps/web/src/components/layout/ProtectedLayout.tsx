@@ -2,7 +2,6 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuthStore } from '@/lib/auth';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Header } from '@/components/layout/Header';
-import { DemoBanner } from '@/components/layout/DemoBanner';
 
 export function ProtectedLayout() {
   const { isAuthenticated, isLoading, user } = useAuthStore();
@@ -24,7 +23,6 @@ export function ProtectedLayout() {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
-      <DemoBanner />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
         <div className="flex-1 flex flex-col overflow-hidden">
