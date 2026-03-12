@@ -7,29 +7,27 @@ export function DemoBanner() {
   if (!isVisible) return null;
 
   return (
-    <div className="relative bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2">
-      <div className="flex items-center justify-center gap-4 text-sm">
-        <div className="flex items-center gap-6 flex-wrap justify-center">
-          <span className="font-semibold">🎯 Demo Mode</span>
-          <div className="flex items-center gap-2">
-            <span className="opacity-90">Recruiter:</span>
-            <code className="bg-white/20 px-2 py-0.5 rounded text-xs">recruiter@meta.com</code>
-            <span className="opacity-70">/</span>
-            <code className="bg-white/20 px-2 py-0.5 rounded text-xs">Password123!</code>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="opacity-90">Applicant:</span>
-            <code className="bg-white/20 px-2 py-0.5 rounded text-xs">john.doe@email.com</code>
-            <span className="opacity-70">/</span>
-            <code className="bg-white/20 px-2 py-0.5 rounded text-xs">Password123!</code>
-          </div>
+    <div className="relative bg-slate-900 dark:bg-slate-950 border-b border-slate-800 text-slate-300 px-4 py-2">
+      <div className="flex items-center justify-center gap-6 text-xs">
+        <span className="text-slate-500 uppercase tracking-widest font-medium text-[10px]">Demo</span>
+        <div className="flex items-center gap-1.5">
+          <span className="text-slate-500">Recruiter</span>
+          <code className="text-slate-200 font-mono">recruiter@meta.com</code>
+          <span className="text-slate-600">·</span>
+          <code className="text-slate-200 font-mono">Password123!</code>
+        </div>
+        <div className="hidden sm:flex items-center gap-1.5">
+          <span className="text-slate-500">Applicant</span>
+          <code className="text-slate-200 font-mono">john.doe@email.com</code>
+          <span className="text-slate-600">·</span>
+          <code className="text-slate-200 font-mono">Password123!</code>
         </div>
       </div>
       <button
         onClick={() => setIsVisible(false)}
-        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-white/20 rounded"
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-400 transition-colors"
       >
-        <X className="h-4 w-4" />
+        <X className="h-3.5 w-3.5" />
       </button>
     </div>
   );

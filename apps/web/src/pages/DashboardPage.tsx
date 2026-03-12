@@ -251,25 +251,22 @@ export function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className="border border-slate-200/80 dark:border-slate-800/80 shadow-sm rounded-2xl bg-white/80 dark:bg-slate-900/60">
-                <CardHeader className="pb-2 px-5 pt-5">
-                  <CardTitle className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide flex items-center justify-between">
-                    {card.title}
-                    <div className="p-2 rounded-lg bg-slate-900 dark:bg-slate-100">
-                      <Icon className="h-4 w-4 text-white dark:text-slate-900" />
-                    </div>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="px-5 pb-5">
+              <Card className="border border-slate-200/80 dark:border-slate-800/80 shadow-sm rounded-2xl bg-white dark:bg-slate-900/60">
+                <CardContent className="px-5 pt-5 pb-5">
+                  <div className="flex items-start justify-between mb-3">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500">
+                      {card.title}
+                    </p>
+                    <Icon className="h-4 w-4 text-slate-400 dark:text-slate-500 flex-shrink-0" />
+                  </div>
                   <motion.div
-                    className="text-3xl font-semibold text-slate-900 dark:text-slate-100"
-                    initial={{ scale: 0.5 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: index * 0.1 + 0.2, type: "spring" }}
+                    className="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: index * 0.1 + 0.2 }}
                   >
                     {typeof card.value === 'number' ? card.value : String(card.value || 0)}
                   </motion.div>
-                  <div className="mt-3 h-1 w-16 rounded-full bg-slate-900/80 dark:bg-slate-100/80" />
                 </CardContent>
               </Card>
             </motion.div>
@@ -284,12 +281,10 @@ export function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card className="border border-slate-200/80 dark:border-slate-800/80 shadow-sm rounded-2xl bg-white/80 dark:bg-slate-900/60">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-slate-100">
-                <div className="p-2 bg-slate-900 dark:bg-slate-100 rounded-lg">
-                  <FileText className="h-4 w-4 text-white dark:text-slate-900" />
-                </div>
+          <Card className="border border-slate-200/80 dark:border-slate-800/80 shadow-sm rounded-2xl bg-white dark:bg-slate-900/60">
+            <CardHeader className="pb-2">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500">Documents</p>
+              <CardTitle className="text-base font-semibold text-slate-900 dark:text-slate-100">
                 Your Resume
               </CardTitle>
             </CardHeader>
@@ -455,13 +450,11 @@ export function DashboardPage() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card className="border border-slate-200/80 dark:border-slate-800/80 shadow-sm rounded-2xl bg-white/80 dark:bg-slate-900/60">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-slate-100">
-                <div className="p-2 bg-slate-900 dark:bg-slate-100 rounded-lg">
-                  <TrendingUp className="h-4 w-4 text-white dark:text-slate-900" />
-                </div>
-                Applications by Status
+          <Card className="border border-slate-200/80 dark:border-slate-800/80 shadow-sm rounded-2xl bg-white dark:bg-slate-900/60">
+            <CardHeader className="pb-2">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500">By Status</p>
+              <CardTitle className="text-base font-semibold text-slate-900 dark:text-slate-100">
+                Applications
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -516,13 +509,11 @@ export function DashboardPage() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <Card className="border border-slate-200/80 dark:border-slate-800/80 shadow-sm rounded-2xl bg-white/80 dark:bg-slate-900/60">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-slate-100">
-                <div className="p-2 bg-slate-900 dark:bg-slate-100 rounded-lg">
-                  <Target className="h-4 w-4 text-white dark:text-slate-900" />
-                </div>
-                Distribution Overview
+          <Card className="border border-slate-200/80 dark:border-slate-800/80 shadow-sm rounded-2xl bg-white dark:bg-slate-900/60">
+            <CardHeader className="pb-2">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500">Distribution</p>
+              <CardTitle className="text-base font-semibold text-slate-900 dark:text-slate-100">
+                Overview
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -615,12 +606,10 @@ export function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
       >
-        <Card className="border border-slate-200/80 dark:border-slate-800/80 shadow-sm rounded-2xl bg-white/80 dark:bg-slate-900/60">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-slate-100">
-              <div className="p-2 bg-slate-900 dark:bg-slate-100 rounded-lg">
-                <Clock className="h-4 w-4 text-white dark:text-slate-900" />
-              </div>
+        <Card className="border border-slate-200/80 dark:border-slate-800/80 shadow-sm rounded-2xl bg-white dark:bg-slate-900/60">
+          <CardHeader className="pb-2">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500">Timeline</p>
+            <CardTitle className="text-base font-semibold text-slate-900 dark:text-slate-100">
               Recent Activity
             </CardTitle>
           </CardHeader>
