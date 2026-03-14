@@ -1,0 +1,1 @@
+{"mcpServers":{"vercel":{"type":"http","url":"https://vercel.com/api/mcp","tools":["*"],"headers":{"Authorization":"Bearer $COPILOT_MCP_VERCEL_API_TOKEN"}},"figma":{"type":"http","url":"https://figma.com/api/mcp","tools":["*"],"headers":{"Authorization":"Bearer $COPILOT_MCP_FIGMA_API_TOKEN"}}}}
